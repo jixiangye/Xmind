@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD><TITLE>物业管理系统</TITLE>
+<META content="text/html; charset=utf-8" http-equiv=Content-Type>
+<link type="text/css" rel="stylesheet" href="tenement/css/jquery-ui.css" />
+	<link type="text/css" rel="stylesheet" href="tenement/css/ui.css">
+<STYLE type="text/css">
+A: link{COLOR: #ffffff;FONT-SIZE: 12px;TEXT-DECORATION: none}
+A: visited{COLOR: #ffffff;FONT-SIZE: 12px;TEXT-DECORATION: none}
+A: hover{COLOR: #ffffff}
+BODY input{MARGIN-TOP: 2px;FONT: 12px "微软雅黑";}
+TD{LINE-HEIGHT: 15px;FONT-SIZE: 12px}
+</STYLE>
+	
+	<script type="text/javascript" src="tenement/js/jquery.js"></script>
+	<script type="text/javascript" src="tenement/js/jquery-ui.js"></script>
+	<script type="text/javascript" src="tenement/js/ui.js"></script>
+	<script type="text/javascript" src="tenement/js/app-utils.js"></script>
+	<script type="text/javascript" src="tenement/js/desktop-utils.js"></script>
+</HEAD>
+<BODY>
+<DIV align=center><BR><BR><BR><BR><BR>
+<TABLE id=__01 border=0 cellSpacing=1 cellPadding=0 width=668 align=center>
+  <TBODY>
+  <TR>
+    <TD>
+      <TABLE border=0 cellSpacing=1 cellPadding=0 width="667" background="banner.jpg" height="408">
+        <TBODY>
+        <TR>
+          <TD>
+            <P><BR><BR><BR><BR><BR><BR><BR><BR></P>
+            <P>　</P>
+            <P>　</P>
+            <P>　</P>
+            <TABLE border=0 cellSpacing=0 cellPadding=2 width=660>
+              <TBODY>
+              <TR>
+                <TD height=25 width="37%">
+                  <DIV align=right>帐号：</DIV></TD>
+                <TD width="63%">
+                  <DIV align=left><INPUT style="WIDTH: 200px" id=username 
+                  size=25 name=username></DIV></TD></TR>
+              <TR>
+                <TD height=25>
+                  <DIV align=right>密码：</DIV></TD>
+                <TD>
+                  <DIV align=left><INPUT style="WIDTH: 200px" id=password 
+                  size=25 type=password name=password></DIV></TD></TR>
+              <TR>
+                <TD height=37>
+                  <DIV align=left></DIV></TD>
+                <TD>
+                  <DIV align=left><P><INPUT value="登录" type="submit" name="submit"></P></DIV>
+				</TD>
+			</TR>
+		</TBODY>
+	</TABLE>
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+</TD>
+</TR>
+</TBODY>
+</TABLE>
+</DIV>
+</BODY>
+<script type="text/javascript">
+$("input[name='submit']").click(function(){
+	if($("#username").val()==="admin"&&$("#password").val()==="admin"){
+		window.location.href="tenement/html/index.html";
+	}else{
+		$.msg("用户名或密码无效！");
+	}
+});
+
+</script>
+</HTML>
