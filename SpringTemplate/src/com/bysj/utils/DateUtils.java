@@ -1,6 +1,7 @@
 package com.bysj.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +29,7 @@ public class DateUtils {
             return null;
         }
     }
-    
+
     /**
      * Date对象转换为字符串
      * @param date              Date
@@ -47,8 +48,14 @@ public class DateUtils {
             return null;
         }
     }
-    
+
+    public static Date getLastTimeOfMonth() {
+        Calendar c = Calendar.getInstance();
+        c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.getActualMaximum(Calendar.DATE), 23, 59, 59);
+        return c.getTime();
+    }
+
     public static void main(String[] args) {
-        System.out.println(format(new Date(),"yyyy-MM-dd HH:mm:ss"));
+        System.out.println(format(new Date(), "yyyy-MM-dd HH:mm:ss"));
     }
 }
