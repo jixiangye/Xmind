@@ -21,9 +21,6 @@ public class Basiccost implements Serializable {
 	@Column(name="BASIC_TOTAL_PRICE")
 	private BigDecimal basicTotalPrice;
 
-	@Column(name="BUILDING_NAME")
-	private String buildingName;
-
 	@Column(name="CLEAN_PRICE")
 	private BigDecimal cleanPrice;
 
@@ -33,17 +30,8 @@ public class Basiccost implements Serializable {
 	@Column(name="CUST_ID")
 	private Integer custId;
 
-	@Column(name="CUST_NAME")
-	private String custName;
-
 	@Column(name="HOUSE_AREA")
 	private String houseArea;
-
-	@Column(name="HOUSE_ID")
-	private Integer houseId;
-
-	@Column(name="HOUSE_NUMBER")
-	private String houseNumber;
 
 	@Column(name="SECURITY_PRICE")
 	private BigDecimal securityPrice;
@@ -70,14 +58,6 @@ public class Basiccost implements Serializable {
 		this.basicTotalPrice = basicTotalPrice;
 	}
 
-	public String getBuildingName() {
-		return this.buildingName;
-	}
-
-	public void setBuildingName(String buildingName) {
-		this.buildingName = buildingName;
-	}
-
 	public BigDecimal getCleanPrice() {
 		return this.cleanPrice;
 	}
@@ -102,36 +82,12 @@ public class Basiccost implements Serializable {
 		this.custId = custId;
 	}
 
-	public String getCustName() {
-		return this.custName;
-	}
-
-	public void setCustName(String custName) {
-		this.custName = custName;
-	}
-
 	public String getHouseArea() {
 		return this.houseArea;
 	}
 
 	public void setHouseArea(String houseArea) {
 		this.houseArea = houseArea;
-	}
-
-	public Integer getHouseId() {
-		return this.houseId;
-	}
-
-	public void setHouseId(Integer houseId) {
-		this.houseId = houseId;
-	}
-
-	public String getHouseNumber() {
-		return this.houseNumber;
-	}
-
-	public void setHouseNumber(String houseNumber) {
-		this.houseNumber = houseNumber;
 	}
 
 	public BigDecimal getSecurityPrice() {

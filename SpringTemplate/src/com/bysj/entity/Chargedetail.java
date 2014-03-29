@@ -21,20 +21,8 @@ public class Chargedetail implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
-	@Column(name="BUILDING_NAME")
-	private String buildingName;
-
 	@Column(name="CUST_ID")
 	private Integer custId;
-
-	@Column(name="CUST_NAME")
-	private String custName;
-
-	@Column(name="HOUSE_ID")
-	private Integer houseId;
-
-	@Column(name="HOUSE_NUMBER")
-	private String houseNumber;
 
 	private String operater;
 
@@ -56,44 +44,12 @@ public class Chargedetail implements Serializable {
 		this.id = id;
 	}
 
-	public String getBuildingName() {
-		return this.buildingName;
-	}
-
-	public void setBuildingName(String buildingName) {
-		this.buildingName = buildingName;
-	}
-
 	public Integer getCustId() {
 		return this.custId;
 	}
 
 	public void setCustId(Integer custId) {
 		this.custId = custId;
-	}
-
-	public String getCustName() {
-		return this.custName;
-	}
-
-	public void setCustName(String custName) {
-		this.custName = custName;
-	}
-
-	public Integer getHouseId() {
-		return this.houseId;
-	}
-
-	public void setHouseId(Integer houseId) {
-		this.houseId = houseId;
-	}
-
-	public String getHouseNumber() {
-		return this.houseNumber;
-	}
-
-	public void setHouseNumber(String houseNumber) {
-		this.houseNumber = houseNumber;
 	}
 
 	public String getOperater() {
