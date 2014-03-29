@@ -1,18 +1,11 @@
 package com.bysj.entity;
 
 import java.io.Serializable;
+
+import javax.persistence.*;
+
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the CUSTOMER database table.
@@ -27,6 +20,9 @@ public class Customer implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
+	@Column(name="BUILDING_NAME")
+	private String buildingName;
+
 	@Temporal(TemporalType.DATE)
 	@Column(name="CHECKIN_TIME")
 	private Date checkinTime;
@@ -37,15 +33,14 @@ public class Customer implements Serializable {
 	@Column(name="HOUSE_ID")
 	private Integer houseId;
 
+	@Column(name="HOUSE_NUMBER")
+	private String houseNumber;
+
 	@Column(name="ID_NUMBER")
 	private String idNumber;
 
 	private String phone;
 
-	@OneToOne
-	@JoinColumn(name = "HOUSE_ID", insertable = false, updatable = false)
-	private Houseinfo houseinfo;
-	
 	public Customer() {
 	}
 
@@ -55,6 +50,14 @@ public class Customer implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getBuildingName() {
+		return this.buildingName;
+	}
+
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
 	}
 
 	public Date getCheckinTime() {
@@ -81,6 +84,14 @@ public class Customer implements Serializable {
 		this.houseId = houseId;
 	}
 
+	public String getHouseNumber() {
+		return this.houseNumber;
+	}
+
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
+	}
+
 	public String getIdNumber() {
 		return this.idNumber;
 	}
@@ -96,19 +107,5 @@ public class Customer implements Serializable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
-    /**
-     * @return 返回变量houseinfo的值
-     */
-    public Houseinfo getHouseinfo() {
-        return houseinfo;
-    }
-
-    /**
-     * @param houseinfo 设置houseinfo的值
-     */
-    public void setHouseinfo(Houseinfo houseinfo) {
-        this.houseinfo = houseinfo;
-    }
 
 }

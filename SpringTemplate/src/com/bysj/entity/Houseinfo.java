@@ -24,6 +24,9 @@ public class Houseinfo implements Serializable {
 	@Column(name="CUST_ID")
 	private Integer custId;
 
+	@Column(name="CUST_NAME")
+	private String custName;
+
 	@Column(name="DOOR_MODEL")
 	private String doorModel;
 
@@ -69,6 +72,14 @@ public class Houseinfo implements Serializable {
 
 	public void setCustId(Integer custId) {
 		this.custId = custId;
+	}
+
+	public String getCustName() {
+		return this.custName;
+	}
+
+	public void setCustName(String custName) {
+		this.custName = custName;
 	}
 
 	public String getDoorModel() {

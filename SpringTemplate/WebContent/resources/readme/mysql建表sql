@@ -19,7 +19,8 @@ CREATE TABLE app.HouseInfo
 (
 Id	int not null AUTO_INCREMENT,
 status	Varchar(2)	,
-Building_name	Varchar(100),
+Building_name	Varchar(100)	,
+Cust_name	Varchar(20)	,
 Cust_id	int	,
 Unit_number	Varchar(20)	,
 Floor_number	Varchar(20),
@@ -33,7 +34,11 @@ PRIMARY KEY (Id)
 CREATE TABLE app.instrumentCost
 (
 Id	int not null AUTO_INCREMENT,
+House_id	int,
 Cust_id	int	,
+Building_name	Varchar(100),
+House_number	Varchar(20)	,
+Cust_name	Varchar(20)	,
 Electri_price	DECIMAL(10,2)	,
 Public_Electri_amount	int	,
 Private_Electri_amount	int	,
@@ -47,7 +52,11 @@ PRIMARY KEY (Id)
 CREATE TABLE app.basicCost
 (
 Id	int not null AUTO_INCREMENT,
+House_id	int	,
 Cust_id	int	,
+Building_name	Varchar(100)	,
+House_number	Varchar(20)	,
+Cust_name	Varchar(20)	,
 House_area	Varchar(20)	,
 Clean_price	DECIMAL(10,2)	,
 Clean_total_price	DECIMAL(10,2)	,
@@ -74,7 +83,9 @@ PRIMARY KEY (Id)
 CREATE TABLE app.smsReminder
 (
 Id	int not null AUTO_INCREMENT,
-Cust_id	int,
+Building_name	Varchar(100)	,
+House_number	Varchar(20)	,
+Cust_name	Varchar(20)	,
 Owe_price	DECIMAL(10,2)	,
 deadline	Date	,
 Phone	Varchar(20)	,
@@ -84,7 +95,9 @@ PRIMARY KEY (Id)
 CREATE TABLE app.sysReminder
 (
 Id	int not null AUTO_INCREMENT,
-Cust_id	int,
+Building_name	Varchar(100)	,
+House_number	Varchar(20)	,
+Cust_name	Varchar(20)	,
 Owe_price	DECIMAL(10,2)	,
 deadline	Date	,
 Redminer_time	Date	,
@@ -96,7 +109,9 @@ PRIMARY KEY (Id)
 CREATE TABLE app.chargetotal 
 (
 Id	int not null AUTO_INCREMENT,
-Cust_id	int,
+Building_name	Varchar(100)	,
+House_number	Varchar(20)	,
+Cust_name	Varchar(20)	,
 Total_price	DECIMAL(10,2)	,
 Basic_total_price	DECIMAL(10,2)	,
 Instrument_Total_price	DECIMAL(10,2)	,
@@ -104,4 +119,3 @@ status	Varchar(2)	,
 deadline	Date	,
 PRIMARY KEY (Id)
 );
-

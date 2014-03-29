@@ -21,12 +21,18 @@ public class Smsreminder implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer id;
 
+	@Column(name="BUILDING_NAME")
+	private String buildingName;
+
+	@Column(name="CUST_NAME")
+	private String custName;
+
 	@Temporal(TemporalType.DATE)
 	private Date deadline;
 
-	@Column(name="CUST_ID")
-    private Integer custId;
-	
+	@Column(name="HOUSE_NUMBER")
+	private String houseNumber;
+
 	@Column(name="OWE_PRICE")
 	private BigDecimal owePrice;
 
@@ -43,20 +49,36 @@ public class Smsreminder implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getCustId() {
-        return this.custId;
-    }
+	public String getBuildingName() {
+		return this.buildingName;
+	}
 
-    public void setCustId(Integer custId) {
-        this.custId = custId;
-    }
-	
+	public void setBuildingName(String buildingName) {
+		this.buildingName = buildingName;
+	}
+
+	public String getCustName() {
+		return this.custName;
+	}
+
+	public void setCustName(String custName) {
+		this.custName = custName;
+	}
+
 	public Date getDeadline() {
 		return this.deadline;
 	}
 
 	public void setDeadline(Date deadline) {
 		this.deadline = deadline;
+	}
+
+	public String getHouseNumber() {
+		return this.houseNumber;
+	}
+
+	public void setHouseNumber(String houseNumber) {
+		this.houseNumber = houseNumber;
 	}
 
 	public BigDecimal getOwePrice() {
