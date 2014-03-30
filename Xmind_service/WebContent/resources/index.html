@@ -3,6 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="lib/jquery/1.11.0/jquery.js"></script>
+<script type="text/javascript">
+$.ajax({
+	type:"POST",
+	url:"../test/getAllCountries",
+	data:JSON.stringify({pageNum:1,pageSize:20}),
+	contentType:"application/json",
+	success:function(d){
+		for(var i=0;i<d.length;i++){
+			document.write("code:"+d[i].code+" name:"+d[i].name+"<br/>");
+		}
+	}
+});
+</script>
 </head>
 <body>
 Welcome!
