@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html ng-app>
 	<head>
 	<meta charset="UTF-8">
 	<title>todo</title>
 	</head>
 	<body>
-	Welcome!
+	<div>
+      <label>Name:</label>
+      <input type="text" ng-model="yourName" placeholder="Enter a name here">
+      <hr>
+      <h1>Hello {{yourName}}!</h1>
+    </div>
+	<script type="text/javascript" src="../../../lib/seajs/2.2.1/sea-debug.js" data-main="../js/main.js"></script>
+	<script type="text/javascript" src="../../../config/seajs.config.js"></script>
+	<script>
+		seajs.use(['../js/todo.js'],function(todo){
+			todo.run();
+		});
+	</script>
 	</body>
 </html>

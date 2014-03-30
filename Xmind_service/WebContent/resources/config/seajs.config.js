@@ -1,0 +1,9 @@
+seajs.config({
+    alias:{
+        'jquery':'../../../lib/jquery/1.11.0/jquery.js',
+        'bootstrapjs':'../../../lib/bootstrap/3.0.3/js/bootstrap.js',
+        'bootstrapcss':'../../../lib/bootstrap/3.0.3/js/bootstrap.css',
+        'angular':'../../../lib/angular/1.2.15/angular.js'
+    },
+    debug:true
+});
