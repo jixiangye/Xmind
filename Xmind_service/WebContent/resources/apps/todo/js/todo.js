@@ -1,6 +1,8 @@
 define(function(require,exports,module){
+	require('bootstrapcss');
 	require('jquery');
-	var angular = require('angular');
+	require('bootstrapjs');
+	require('angular');
 	exports.run = function(){
 		console.log($,angular);
 	};
