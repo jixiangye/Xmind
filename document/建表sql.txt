@@ -1,0 +1,8 @@
+CREATE TABLE test.user
+(
+id	int not null AUTO_INCREMENT,
+username	Varchar(20)	,
+password	Varchar(20)	,
+email	Varchar(50)	,
+PRIMARY KEY (Id)
+);
