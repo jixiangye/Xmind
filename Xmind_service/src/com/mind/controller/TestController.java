@@ -19,6 +19,11 @@ public class TestController {
 	@Autowired
 	private TestService testService;
 
+	/**
+	 * 查询国家列表（带分页）
+	 * @param countryRequestBean
+	 * @return
+	 */
 	@RequestMapping(value = "/getAllCountries", method = RequestMethod.POST)
 	@ResponseBody
 	public List<Country> getAllCountries(
