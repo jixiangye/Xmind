@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 public class CountryRequestBean implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	private Integer pageNum;
+
 	private Integer pageSize;
 
 	public Integer getPageNum() {
