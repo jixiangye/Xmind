@@ -1,12 +1,10 @@
 define(function(require,exports,module){
-	require('bootstrapcss');
 	require('bootstrapjs');
-	require('angular');
+	require('commonjs');
 	
 	angular
-		.module("todo",[])
-		.controller("todoList",function($scope,$element){
-			
+		.module("app-todo",["utils"])
+		.controller("todoList",["$scope","$element","$ajax",function($scope,$element,$ajax){
 			$scope.todos = [];
 			
 			$scope.addTodo = function(){
@@ -23,7 +21,7 @@ define(function(require,exports,module){
 					$scope.addTodo();
 				}
 			};
-		});
+		}]);
 	
 	exports.run = function(){
 // 		console.log($,angular);
