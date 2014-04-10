@@ -13,6 +13,7 @@ import com.mind.bean.BaseBean;
 import com.mind.bean.ErrorBean;
 import com.mind.bean.SessionInfoBean;
 import com.mind.entity.User;
+import com.mind.exception.NotLoggedInException;
 import com.mind.service.LoginService;
 import com.mind.utils.StringUtils;
 
@@ -56,12 +57,17 @@ public class LoginController {
 	public SessionInfoBean getSessionInfo(HttpSession session) {
 		SessionInfoBean sessionInfoBean = new SessionInfoBean();
 		try {
-			sessionInfoBean.setUsername(StringUtils.checkNull(session
-					.getAttribute("username")));
+			if (session.getAttribute("username") == null) {
+				throw new NotLoggedInException();
+			} else {
+				sessionInfoBean.setUsername(StringUtils.checkNull(session
+						.getAttribute("username")));
+			}
+		} catch (NotLoggedInException e) {
+			throw e;
 		} catch (Exception e) {
 			sessionInfoBean.setSuccess(false);
-			sessionInfoBean.getErrorBeanList().add(
-					new ErrorBean("", "获取session失败"));
+			sessionInfoBean.getErrorBeanList().add(new ErrorBean("", "获取session失败"));
 		}
 		return sessionInfoBean;
 	}

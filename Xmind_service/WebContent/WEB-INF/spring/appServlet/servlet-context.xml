@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
+	<!-- DispatcherServlet Context: defines this servlet's request-processing 
+		infrastructure -->
+
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
+		up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 
 	<context:component-scan base-package="com.mind" />
-	
+
 	<!-- Configuration -->
 	<beans:bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -26,6 +27,25 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
-	
+
+	<beans:bean id="exceptionResolver" class="com.mind.exception.XmindExceptionResolver">
+		<beans:property name="defaultErrorView">
+			<beans:value>error/error</beans:value>
+		</beans:property>
+		<beans:property name="defaultStatusCode">
+			<beans:value>200</beans:value>
+		</beans:property>
+		<beans:property name="exceptionMappings">
+			<beans:props>
+				<beans:prop key="com.mind.exception.NotLoggedInException">error/errorNotLoggedIn</beans:prop>
+			</beans:props>
+		</beans:property>
+		<beans:property name="statusCodes">
+			<beans:props>
+				<beans:prop key="error/errorNotLoggedIn">401</beans:prop>
+			</beans:props>
+		</beans:property>
+	</beans:bean>
+
 	<beans:import resource="springdata-context.xml" />
 </beans:beans>
