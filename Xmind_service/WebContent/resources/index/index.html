@@ -19,60 +19,72 @@
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="#">首页</a></li>
 					<li><a href="../apps/todo/html/todo.html">todo</a></li>
-					<!-- <li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else here</a></li>
-							<li class="divider"></li>
-							<li><a href="#">Separated link</a></li>
-							<li class="divider"></li>
-							<li><a href="#">One more separated link</a></li>
-						</ul>
-					</li> -->
+				</ul>
+				<ul class="nav navbar-nav  navbar-right">
+					<li>
+						<a href="#login-box" data-toggle="modal" data-target="#login-box">登录/注册</a>
+					</li>
 				</ul>
 		    </div>
 		</nav>
-		<div class="col-md-4 col-md-offset-8" ng-controller="loginAndRegister">
-			<ul class="nav nav-tabs">
-				 <li class="active"><a href="#login" data-toggle="tab">登录</a></li>
-				 <li><a href="#register" data-toggle="tab">注册</a></li>
-			</ul>
-			<div class="tab-content">
-				<br/>
-				<div class="tab-pane active" id="login">
-					<div class="form-group">
-						<label>用户名</label>
-		   				<input type="text" class="form-control" ng-model="loginUserName" placeholder="请输入用户名">
+		<!--登录/注册modal START-->
+		<div class="modal fade" id="login-box">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body" ng-controller="loginAndRegister">
+						<ul class="nav nav-tabs">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							 <li class="active"><a href="#login" data-toggle="tab">登录</a></li>
+							 <li><a href="#register" data-toggle="tab">注册</a></li>
+						</ul>
+						<div class="tab-content">
+							<br/>
+							<div class="tab-pane active clearfix" id="login">
+								<form name="loginBox">
+									<div class="form-group">
+										<label>用户名</label>
+										<input type="text" class="form-control" name="loginUserName" required ng-minlength=4 ng-maxlength=20 ng-model="login.username" placeholder="请输入用户名">
+										<div class="error" ng-show="loginBox.loginUserName.$error.minlength || loginBox.loginUserName.$error.maxlength">请输入4~20位字符</div>
+									</div>
+									<div class="form-group">
+										<label>密码</label>
+										<input type="password" class="form-control"  name="loginPW" required ng-minlength=8 ng-maxlength=20 ng-model="login.password" placeholder="请输入密码">
+										<div class="error" ng-show="loginBox.loginPW.$error.minlength || loginBox.loginPW.$error.maxlength">请输入8~20位字符</div>
+									</div>
+									<button type="submit" class="btn btn-primary col-md-12" ng-click="doLogin()">登录</button>
+								</form>
+							</div>
+							<div class="tab-pane clearfix" id="register">
+								<form name="regBox">
+									<div class="form-group">
+										<label>邮箱</label>
+										<input type="email" class="form-control" name="regEmail" required ng-model="reg.email" ng-model-options="{updateOn:'blur'}" placeholder="请输入邮箱">
+										<div class="error" ng-show="regBox.regEmail.$error.email">请输入正确的email地址</div>
+									</div>
+									<div class="form-group">
+										<label>用户名</label>
+										<input type="text" class="form-control" name="regUserName" required ng-minlength=4 ng-maxlength=20 ng-model="reg.username" placeholder="请输入用户名">
+										<div class="error" ng-show="regBox.regUserName.$error.minlength || regBox.regUserName.$error.maxlength">请输入4~20位字符</div>
+									</div>
+									<div class="form-group">
+										<label>密码</label>
+										<input type="password" class="form-control" name="regPW" required ng-minlength=8 ng-maxlength=20 ng-model="reg.password" placeholder="请输入密码">
+										<div class="error" ng-show="regBox.regPW.$error.minlength || regBox.regPW.$error.maxlength">请输入8~20位字符</div>
+									</div>
+									<div class="form-group">
+										<label>确认密码</label>
+										<input type="password" class="form-control" name="regCPW" required ng-model="regCPW" placeholder="请输入确认密码">
+										<div class="error" ng-show="regBox.regPW.$modelValue != regBox.regCPW.$modelValue">两次密码输入不一致</div>
+									</div>
+									<button type="submit" class="btn btn-primary col-md-12" ng-click="doRegister()">注册</button>
+								</form>
+							</div>
+						</div>
 					</div>
-					<div class="form-group">
-						<label>密码</label>
-		   				<input type="password" class="form-control" ng-model="loginPW" placeholder="请输入密码">
-					</div>
-					 <button type="submit" class="btn btn-primary col-md-12" ng-click="doLogin()">登录</button>
-				</div>
-				<div class="tab-pane" id="register">
-					<div class="form-group">
-						<label>邮箱</label>
-		   				<input type="email" class="form-control" ng-model="regEmail" placeholder="请输入邮箱">
-					</div>
-					<div class="form-group">
-						<label>用户名</label>
-		   				<input type="text" class="form-control" ng-model="regUserName" placeholder="请输入用户名">
-					</div>
-					<div class="form-group">
-						<label>密码</label>
-		   				<input type="password" class="form-control" ng-model="regPW" placeholder="请输入密码">
-					</div>
-					<div class="form-group">
-						<label>确认密码</label>
-		   				<input type="password" class="form-control" ng-model="regCPW" placeholder="请输入密码">
-					</div>
-					 <button type="submit" class="btn btn-primary col-md-12" ng-click="doRegister()">注册</button>
-				</div>
-			</div>
-		</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<!--登录/注册modal END-->
 		<script type="text/javascript" src="../lib/seajs/2.2.1/sea-debug.js"></script>
 		<script>
 			seajs.config({
