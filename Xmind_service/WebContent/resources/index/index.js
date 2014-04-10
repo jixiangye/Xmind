@@ -25,7 +25,7 @@ define(function(require,exports,module){
 					
 				});
 			};
-			
+			 
 			$scope.doRegister = function(){
 				var data = $scope.reg;
 				
