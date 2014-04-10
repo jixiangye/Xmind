@@ -3,7 +3,8 @@ seajs.config({
         'jquery':'../../../lib/jquery/1.11.0/jquery.js',
         'bootstrapjs':'../../../lib/bootstrap/3.0.3/js/bootstrap.js',
         'bootstrapcss':'../../../lib/bootstrap/3.0.3/css/bootstrap.css',
-        'angular':'../../../lib/angular/1.2.15/angular.js'
+        'angular':'../../lib/angular/1.2.15/angular.js',
+        'commonjs':'../../../common/js/common.js'
     },
     debug:true
 });

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="app-index">
 	<head>
 		<meta charset="UTF-8">
 		<title>Xmind</title>
@@ -34,7 +34,7 @@
 				</ul>
 		    </div>
 		</nav>
-		<div class="col-md-4 col-md-offset-8">
+		<div class="col-md-4 col-md-offset-8" ng-controller="loginAndRegister">
 			<ul class="nav nav-tabs">
 				 <li class="active"><a href="#login" data-toggle="tab">登录</a></li>
 				 <li><a href="#register" data-toggle="tab">注册</a></li>
@@ -44,48 +44,48 @@
 				<div class="tab-pane active" id="login">
 					<div class="form-group">
 						<label>用户名</label>
-		   				<input type="text" class="form-control"  placeholder="请输入用户名">
+		   				<input type="text" class="form-control" ng-model="loginUserName" placeholder="请输入用户名">
 					</div>
 					<div class="form-group">
 						<label>密码</label>
-		   				<input type="password" class="form-control"  placeholder="请输入密码">
+		   				<input type="password" class="form-control" ng-model="loginPW" placeholder="请输入密码">
 					</div>
-					 <button type="submit" class="btn btn-primary col-md-12">登录</button>
+					 <button type="submit" class="btn btn-primary col-md-12" ng-click="doLogin()">登录</button>
 				</div>
 				<div class="tab-pane" id="register">
 					<div class="form-group">
 						<label>邮箱</label>
-		   				<input type="email" class="form-control"  placeholder="请输入邮箱">
+		   				<input type="email" class="form-control" ng-model="regEmail" placeholder="请输入邮箱">
 					</div>
 					<div class="form-group">
 						<label>用户名</label>
-		   				<input type="text" class="form-control"  placeholder="请输入用户名">
+		   				<input type="text" class="form-control" ng-model="regUserName" placeholder="请输入用户名">
 					</div>
 					<div class="form-group">
 						<label>密码</label>
-		   				<input type="password" class="form-control"  placeholder="请输入密码">
+		   				<input type="password" class="form-control" ng-model="regPW" placeholder="请输入密码">
 					</div>
 					<div class="form-group">
 						<label>确认密码</label>
-		   				<input type="password" class="form-control"  placeholder="请输入密码">
+		   				<input type="password" class="form-control" ng-model="regCPW" placeholder="请输入密码">
 					</div>
-					 <button type="submit" class="btn btn-primary col-md-12">注册</button>
+					 <button type="submit" class="btn btn-primary col-md-12" ng-click="doRegister()">注册</button>
 				</div>
 			</div>
 		</div>
 		<script type="text/javascript" src="../lib/seajs/2.2.1/sea-debug.js"></script>
-		<script type="text/javascript" src="../lib/jquery/1.11.0/jquery.js"></script>
 		<script>
 			seajs.config({
 				alias:{
 			        'jquery':'../lib/jquery/1.11.0/jquery.js',
 			        'bootstrapjs':'../lib/bootstrap/3.0.3/js/bootstrap.js',
 			        'bootstrapcss':'../lib/bootstrap/3.0.3/css/bootstrap.css',
-			        'angular':'../lib/angular/1.2.15/angular.js'
+			        'angular':'../../lib/angular/1.2.15/angular.js',
+			        'commonjs':'../common/js/common.js'
 			    },
 			    debug:true
 			});
-			seajs.use(['./index.js'],function(index){
+			seajs.use(['bootstrapcss','./index.js','jquery'],function(_,index){
 				index.run();
 			});
 		</script>
