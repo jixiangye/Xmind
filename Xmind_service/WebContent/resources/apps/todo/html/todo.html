@@ -3,25 +3,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>todo</title>
+		<script type="text/javascript" src="../../../lib/seajs/2.2.1/sea-debug.js"></script>
+		<script type="text/javascript" src="../../../config/seajs.config.js"></script>
+		<script>
+			seajs.use(['bootstrapcss','../js/todo.js',"jquery"],function(_,todo){
+				todo.run();
+			});
+		</script>
 	</head>
 	<body>
-		<nav class="navbar navbar-default" role="navigation">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-			    </button>
-			    <a class="navbar-brand" href="#">Xmind</a>
-		    </div>
-		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a href="../../../index/index.html">首页</a></li>
-					<li class="active"><a href="../apps/todo/html/todo.html">todo</a></li>
-				</ul>
-			</div>
-		</nav>
+		<publicheader></publicheader>
 		<div class="col-md-8 col-md-offset-2" ng-controller="todoList">
 			<div class="clearfix">
 				<div class="form-group col-md-10">
@@ -80,12 +71,5 @@
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 		<!--时间选择modal END-->
-		<script type="text/javascript" src="../../../lib/seajs/2.2.1/sea-debug.js"></script>
-		<script type="text/javascript" src="../../../config/seajs.config.js"></script>
-		<script>
-			seajs.use(['bootstrapcss','../js/todo.js',"jquery"],function(_,todo){
-				todo.run();
-			});
-		</script>
 	</body>
 </html>
