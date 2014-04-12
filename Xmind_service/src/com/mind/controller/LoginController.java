@@ -39,6 +39,14 @@ public class LoginController {
 		return baseBean;
 	}
 
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	@ResponseBody
+	public BaseBean logout(HttpSession session) {
+		BaseBean baseBean = new BaseBean();
+		session.invalidate();
+		return baseBean;
+	}
+
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
 	public BaseBean register(@RequestBody User user) {
@@ -67,7 +75,8 @@ public class LoginController {
 			throw e;
 		} catch (Exception e) {
 			sessionInfoBean.setSuccess(false);
-			sessionInfoBean.getErrorBeanList().add(new ErrorBean("", "获取session失败"));
+			sessionInfoBean.getErrorBeanList().add(
+					new ErrorBean("", "获取session失败"));
 		}
 		return sessionInfoBean;
 	}
