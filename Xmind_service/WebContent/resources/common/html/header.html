@@ -1,31 +1,36 @@
 <!-- 网站公用头 -->
 <div  ng-controller="loginAndRegister">
-	<nav class="navbar navbar-default" role="navigation">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-		    </button>
-		    <a class="navbar-brand" href="#">Xmind</a>
-	    </div>
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li class="active"><a href="../../index/html/index.html">首页</a></li>
-				<li><a href="../../todo/html/todo.html">todo</a></li>
-			</ul>
-			<ul class="nav navbar-nav  navbar-right">
-				<li ng-show="!username">
-					<a href="#login-box" data-toggle="modal" data-target="#login-box">登录/注册</a>
-				</li>
-				<li ng-show="username">
-					<a href="#login-box">{{username}}</a>
-				</li>
-				<li ng-show="username">
-					<a href="#login-box">退出</a>
-				</li>
-			</ul>
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+			    </button>
+			    <a class="navbar-brand" href="#">Xmind</a>
+		    </div>
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li ng-class="{active:tab == 'index'}"><a href="../../index/html/index.html">首页</a></li>
+					<li ng-class="{active:tab == 'todo'}"><a href="../../todo/html/todo.html">todo</a></li>
+				</ul>
+				<ul class="nav navbar-nav  navbar-right">
+					<li ng-show="!username">
+						<a href="#login-box" data-toggle="modal" data-target="#login-box">登录/注册</a>
+					</li>
+					<li class="dropdown" ng-show="username">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{username}}</a>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">我的资料</a></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="#">我的应用</a></li>
+							<li role="presentation" class="divider"></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" ng-click="loginout()" href="#">登出</a></li>
+						</ul>
+					</li>
+				</ul>
+		    </div>
 	    </div>
 	</nav>
 	<!--登录/注册modal START-->
@@ -59,22 +64,22 @@
 							<form name="regBox">
 								<div class="form-group">
 									<label>邮箱</label>
-									<input type="email" class="form-control" name="regEmail" required ng-model="reg.email" ng-model-options="{updateOn:'blur'}" placeholder="请输入邮箱">
+									<input type="email" class="form-control" name="regEmail" required ng-model="reg.email" ng-model-options="{updateOn:'blur'}" placeholder="请输入邮箱" autocomplete="off">
 									<div class="error" ng-show="regBox.regEmail.$error.email">请输入正确的email地址</div>
 								</div>
 								<div class="form-group">
 									<label>用户名</label>
-									<input type="text" class="form-control" name="regUserName" required ng-minlength=4 ng-maxlength=20 ng-model="reg.username" placeholder="请输入用户名">
+									<input type="text" class="form-control" name="regUserName" required ng-minlength=4 ng-maxlength=20 ng-model="reg.username" placeholder="请输入用户名" autocomplete="off">
 									<div class="error" ng-show="regBox.regUserName.$error.minlength || regBox.regUserName.$error.maxlength">请输入4~20位字符</div>
 								</div>
 								<div class="form-group">
 									<label>密码</label>
-									<input type="password" class="form-control" name="regPW" required ng-minlength=8 ng-maxlength=20 ng-model="reg.password" placeholder="请输入密码">
+									<input type="password" class="form-control" name="regPW" required ng-minlength=8 ng-maxlength=20 ng-model="reg.password" placeholder="请输入密码" autocomplete="off">
 									<div class="error" ng-show="regBox.regPW.$error.minlength || regBox.regPW.$error.maxlength">请输入8~20位字符</div>
 								</div>
 								<div class="form-group">
 									<label>确认密码</label>
-									<input type="password" class="form-control" name="regCPW" required ng-model="regCPW" placeholder="请输入确认密码">
+									<input type="password" class="form-control" name="regCPW" required ng-model="regCPW" placeholder="请输入确认密码" autocomplete="off">
 									<div class="error" ng-show="regBox.regPW.$modelValue != regBox.regCPW.$modelValue">两次密码输入不一致</div>
 								</div>
 								<button type="submit" class="btn btn-primary col-md-12" ng-click="doRegister()">注册</button>
