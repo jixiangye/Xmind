@@ -4,7 +4,8 @@ seajs.config({
         'bootstrapjs':'../../../lib/bootstrap/3.0.3/js/bootstrap.js',
         'bootstrapcss':'../../../lib/bootstrap/3.0.3/css/bootstrap.css',
         'angular':'../../lib/angular/1.2.15/angular.js',
-        'commonjs':'../../../common/js/common.js'
+        'commonjs':'../../../common/js/common.js',
+        'commoncss':"../../../common/css/common.css"
     },
     debug:true
 });
