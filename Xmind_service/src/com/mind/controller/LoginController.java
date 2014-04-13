@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mind.bean.BaseBean;
 import com.mind.bean.ErrorBean;
+import com.mind.bean.LoginBean;
 import com.mind.bean.SessionInfoBean;
 import com.mind.entity.User;
 import com.mind.exception.NotLoggedInException;
@@ -28,10 +29,14 @@ public class LoginController {
 	public BaseBean login(@RequestBody User user, HttpSession session) {
 		BaseBean baseBean = new BaseBean();
 		try {
-			baseBean = loginService.checkUsernameAndPassword(user);
-			if (baseBean.isSuccess()) {
-				session.setAttribute("username", user.getUsername());
+			LoginBean loginBean = loginService.checkUsernameAndPassword(user);
+			if (loginBean.isSuccess()) {
+				session.setAttribute("username", loginBean.getUser()
+						.getUsername());
+				session.setAttribute("id", loginBean.getUser().getId());
 			}
+			baseBean.setSuccess(loginBean.isSuccess());
+			baseBean.getErrorBeanList().addAll(loginBean.getErrorBeanList());
 		} catch (Exception e) {
 			baseBean.setSuccess(false);
 			baseBean.getErrorBeanList().add(new ErrorBean("", "登录失败"));
