@@ -6,3 +6,26 @@ password	Varchar(20)	,
 email	Varchar(50)	,
 PRIMARY KEY (Id)
 );
+
+CREATE TABLE test.notes
+(
+id	int not null AUTO_INCREMENT,
+user_Id int,
+modify_time	Date ,
+content	Varchar(1000)	,
+status	Varchar(1) ,
+create_time	Date ,
+reminder_time Date,
+PRIMARY KEY (Id)
+);
+
+CREATE TABLE test.notes_history
+(
+id	int not null AUTO_INCREMENT,
+notes_id int ,
+modify_time	Date ,
+content	Varchar(1000) ,
+status	Varchar(1) ,
+reminder_time Date,
+PRIMARY KEY (Id)
+);
