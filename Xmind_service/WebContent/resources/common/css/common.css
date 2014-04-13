@@ -1,3 +1,8 @@
+body{
+	position:relative;
+	padding-top:60px;
+}
+
 input.ng-invalid.ng-dirty {
     border-color: #E9322D;
     -webkit-box-shadow: 0 0 6px #F8B9B7;

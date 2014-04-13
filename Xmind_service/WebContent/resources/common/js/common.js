@@ -52,8 +52,11 @@ define(function(require,exports,module){
 			var URL = {
 					LOGIN:"login/login",
 					REGISTER:"login/register",
-					GET_SESSION:"login/getSessionInfo"
+					GET_SESSION:"login/getSessionInfo",
+					LOGIN_OUT:"login/logout"
 				};
+			
+			$scope.tab = $location.absUrl().match(/(\w+)\.html/)[1];
 			
 			$ajax({url:URL.GET_SESSION,method:"post"})
 			.success(function(d){
@@ -86,7 +89,18 @@ define(function(require,exports,module){
 
 				$ajax({url:URL.REGISTER,data:data,method:"post"})
 				.success(function(data){
+					$scope.username = data.username;
+					$('#login-box').modal('hide');
+				})
+				.fail(function(data){
 
+				});
+			};
+			
+			$scope.loginout = function(){
+				$ajax({url:URL.LOGIN_OUT,method:"post"})
+				.success(function(d){
+					$scope.username = "";
 				})
 				.fail(function(data){
 
