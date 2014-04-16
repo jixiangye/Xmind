@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html ng-app="app-todo">
+<html>
 	<head>
 		<meta charset="UTF-8">
 		<title>todo</title>
 		<script type="text/javascript" src="../../../lib/seajs/2.2.1/sea-debug.js"></script>
 		<script type="text/javascript" src="../../../config/seajs.config.js"></script>
 		<script>
-			seajs.use(['bootstrapcss','../js/todo.js',"jquery"],function(_,todo){
+			seajs.use(['bootstrapcss',"jquery",'../js/todo.js'],function(_,$,todo){
 				todo.run();
 			});
 		</script>
@@ -16,7 +16,7 @@
 		<div class="col-md-8 col-md-offset-2" ng-controller="todoList">
 			<div class="clearfix">
 				<div class="form-group col-md-10">
-   					<input type="text" class="form-control" ng-model="text" placeholder="我想..." ng-keydown="todoKeyDown($event)">
+   					<input type="text" class="form-control" ng-model="content" placeholder="我想..." ng-keydown="todoKeyDown($event)">
 				</div>
 				<div class="form-group col-md-2">
 					<button type="submit" class="btn btn-primary col-md-12" ng-click="addTodo()">添加</button>
@@ -30,10 +30,10 @@
 				<br/>
 				<div class="tab-pane active" id="all-todo">
 					<div class="list-group">
-						<a href="#" class="list-group-item" ng-repeat="todo in todos track by $index">
+						<a href="#" class="list-group-item" ng-repeat="todo in todos track by $index" ng-click="viewDetail($index)">
 							<button type="button" class="close" aria-hidden="true" ng-click="removeTodo($index)">&times;</button>
 							<!--<span class="badge">{{todo.createDate}}</span>-->
-							{{todo.text}}
+							{{todo.content}}
 							<!--<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>-->
 						</a>
 						<!--<a href="#" class="list-group-item"><span class="badge">2014-04-14</span>Dapibus ac facilisis in</a>

@@ -23,3 +23,21 @@ input.ng-valid.ng-dirty {
     border: 1px solid rgba(0, 0, 0, 0);
     border-radius: 4px;
 }
+
+.prompt-box{
+	position: fixed;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	z-index: 1050;
+	width: auto;
+	margin: 10px;
+}
+
+@media screen and (min-width: 768px){
+	.prompt-box {
+		width: 600px;
+		margin: 30px auto;
+	}
+}
