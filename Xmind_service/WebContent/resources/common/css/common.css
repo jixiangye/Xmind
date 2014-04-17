@@ -26,8 +26,7 @@ input.ng-valid.ng-dirty {
 
 .prompt-box{
 	position: fixed;
-	top:0;
-	bottom:0;
+	top:30px;
 	left:0;
 	right:0;
 	z-index: 1050;
@@ -38,6 +37,6 @@ input.ng-valid.ng-dirty {
 @media screen and (min-width: 768px){
 	.prompt-box {
 		width: 600px;
-		margin: 30px auto;
+		margin: auto;
 	}
 }
