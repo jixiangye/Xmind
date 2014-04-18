@@ -7,7 +7,7 @@ define(function(require,exports,module){
 		.module("ui",[])
 		/**
 		 * @param options{
-		 * 		type:String "warning",String "info",String "danager",String "success"(default),
+		 * 		type:String "warning", "info", "danager", "success"(default)
 		 * 		title:String,
 		 * 		content:String
 		 * }
