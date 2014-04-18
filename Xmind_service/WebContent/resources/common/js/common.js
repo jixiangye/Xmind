@@ -3,7 +3,6 @@
  * 公共模块：common
  */
 define(function(require,exports,module){
-    require('angular');
     
     angular
         .module("utils",["ui"])

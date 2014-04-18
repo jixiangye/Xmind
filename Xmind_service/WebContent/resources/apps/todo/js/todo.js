@@ -2,7 +2,6 @@ define(function(require,exports,module){
 	require('bootstrapjs');
 	require('commonjs');
 	require('uijs');
-	require('commoncss');
 	
 	angular
 		.module("app-todo",["utils","common","ui"])
