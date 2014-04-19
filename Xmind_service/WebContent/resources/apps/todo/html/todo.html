@@ -12,47 +12,97 @@
 	<body>
 		<publicheader></publicheader>
 		<div class="col-md-8 col-md-offset-2" ng-controller="todoList">
-			<div class="clearfix">
-				<div class="form-group col-md-10">
-   					<input type="text" class="form-control" ng-model="content" required placeholder="我想..." ng-keydown="todoKeyDown($event)">
-				</div>
-				<div class="form-group col-md-2">
-					<button type="submit" class="btn btn-primary col-md-12" ng-click="addTodo()">添加</button>
+			<div class="todo-input-group">
+				<div class="input-group">
+   					<input type="text" class="form-control" ng-model="content" placeholder="我想..." ng-keydown="todoKeyDown($event)">
+  					<span class="input-group-addon remind-btn" title="添加提醒" ng-class="{active:reminderTime}" ng-click="openTimepicker()"><span class="glyphicon glyphicon-bell"></span></span>
+   					<span class="input-group-btn"><button type="submit" class="btn btn-primary col-md-12" ng-click="addTodo()">添加</button></span>
 				</div>
 			</div>
 			<ul class="nav nav-tabs nav-justified">
 				<li class="active"><a href="#all-todo" data-toggle="tab">所有<span class="badge">{{todos.length}}</span></a></li>
-				<li><a href="#delay-todo" data-toggle="tab">推迟</a></li>
+				<li><a href="#need-todo" data-toggle="tab">待处理</a></li>
 				<li><a href="#finish-todo" data-toggle="tab">完成</a></li>
 				<li><a href="#close-todo" data-toggle="tab">关闭</a></li>
+				<li><a href="#tag-todo" data-toggle="tab">标签</a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active todo-box" id="all-todo">
 					<ul class="todo-list">
-						<li ng-repeat="todo in todos track by $index" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'">
-							<button type="button" class="close" aria-hidden="true" ng-click="removeTodo($index)">&times;</button>
-							<span ng-show="!todo.editing">{{todo.content}}</span>
+						<li ng-repeat="todo in todos track by todo.id" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'" ng-class="{'close-todo':todo.status==3}">
+							<span class="pull-right todo-status" ng-show="!todo.editing && todo.status">
+								<span class="glyphicon" ng-class="{'glyphicon-bell remind-todo':todo.status==1,'glyphicon-ok finish-todo':todo.status==2,'glyphicon-remove close-todo':todo.status==3}"></span>
+								{{todo.status==1 ? todo.reminderTime : todo.modifyTime}}
+							</span>
+							<span class="todo-content" ng-show="!todo.editing">{{todo.content}}</span>
 							<input class="form-control" ng-model="todo.content" ng-show="todo.editing" ng-keydown="editKeyDown($event,todo)" ng-blur="endEdit($event,todo)" required>
 							<div class="todo-panel">
-								<span class="glyphicon glyphicon-list" ng-click="viewDetail($index)"></span>
-								<span class="glyphicon glyphicon-pencil" ng-click="editTodo(todo)"></span>
+								<span class="glyphicon glyphicon-list-alt" title="查看历史" ng-click="viewDetail(todo)"></span>
+								<span class="glyphicon glyphicon-pencil" title="编辑" ng-click="editTodo(todo)" ng-show="todo.status<2"></span>
+								<span class="glyphicon glyphicon-arrow-left" title="恢复" ng-click="endEdit($event,todo,'status',1)" ng-show="todo.status>1"></span>
+								<span class="glyphicon glyphicon-ok" title="完成" ng-click="endEdit($event,todo,'status',2)" ng-show="todo.status<2"></span>
+								<span class="glyphicon glyphicon-remove" title="关闭" ng-click="endEdit($event,todo,'status',3)" ng-show="todo.status!=3"></span>
+								<span class="glyphicon glyphicon-bell" title="提醒" ng-click="endEdit($event,todo,'status',1)" ng-show="todo.status<2"></span>
+								<span class="glyphicon glyphicon-trash" title="删除" ng-click="deleteTodo(todo.id)" ng-show="todo.status>1"></span>
 							</div>
 						</li>
 					</ul>
 				</div>
-				<div class="tab-pane" id="delay-todo">
+				<div class="tab-pane" id="need-todo">
 					<ul class="todo-list">
-						<li ng-repeat="todo in todos track by $index" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'">
-							<button type="button" class="close" aria-hidden="true" ng-click="removeTodo($index)">&times;</button>
-							<!-- <span class="badge" data-toggle="modal" data-target="#time-picker"><span class="glyphicon glyphicon-bell"></span> 2014-04-14</span> -->
-							{{todo.content}}
-							<span class="label label-warning"><span class="glyphicon glyphicon-share-alt"></span></span>
+						<li class="remind-todo" ng-repeat="todo in todos | status:1 track by todo.id" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'">
+							<span class="pull-right todo-status">
+								<span class="glyphicon glyphicon-bell remind-todo"></span>
+								{{todo.reminderTime}}
+							</span>
+							<span class="todo-content" ng-show="!todo.editing">{{todo.content}}</span>
+							<input class="form-control" ng-model="todo.content" ng-show="todo.editing" ng-keydown="editKeyDown($event,todo)" ng-blur="endEdit($event,todo)" required>
 							<div class="todo-panel">
-								<span class="glyphicon glyphicon-list" ng-click="viewDetail($index)"></span>
-								<span class="glyphicon glyphicon-pencil" ng-click="editTodo($index)"></span>
+								<span class="glyphicon glyphicon-list-alt" title="查看历史" ng-click="viewDetail(todo)"></span>
+								<span class="glyphicon glyphicon-pencil" title="编辑" ng-click="editTodo(todo)"></span>
+								<span class="glyphicon glyphicon-ok" title="完成" ng-click="endEdit($event,todo,'status',2)"></span>
+								<span class="glyphicon glyphicon-remove" title="关闭" ng-click="endEdit($event,todo,'status',3)"></span>
+								<span class="glyphicon glyphicon-bell" title="提醒" ng-click="endEdit($event,todo,'status',1)"></span>
 							</div>
 						</li>
 					</ul>
+				</div>
+				<div class="tab-pane" id="finish-todo">
+					<ul class="todo-list">
+						<li class="finish-todo" ng-repeat="todo in todos | status:2 track by todo.id" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'">
+							<span class="pull-right todo-status">
+								<span class="glyphicon glyphicon-ok finish-todo"></span>
+								{{todo.modifyTime}}
+							</span>
+							<span class="todo-content" ng-show="!todo.editing">{{todo.content}}</span>
+							<input class="form-control" ng-model="todo.content" ng-show="todo.editing" ng-keydown="editKeyDown($event,todo)" ng-blur="endEdit($event,todo)" required>
+							<div class="todo-panel">
+								<span class="glyphicon glyphicon-list-alt" title="查看历史" ng-click="viewDetail(todo)"></span>
+								<span class="glyphicon glyphicon-arrow-left" title="恢复" ng-click="endEdit($event,todo,'status',1)"></span>
+								<span class="glyphicon glyphicon-remove" title="关闭" ng-click="endEdit($event,todo,'status',3)"></span>
+								<span class="glyphicon glyphicon-trash" title="删除" ng-click="deleteTodo(todo.id)"></span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="tab-pane" id="close-todo">
+					<ul class="todo-list">
+						<li class="close-todo" ng-repeat="todo in todos | status:3 track by todo.id" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'">
+							<span class="pull-right todo-status">
+								<span class="glyphicon glyphicon-remove close-todo"></span>
+								{{todo.modifyTime}}
+							</span>
+							<span class="todo-content" ng-show="!todo.editing">{{todo.content}}</span>
+							<div class="todo-panel">
+								<span class="glyphicon glyphicon-list-alt" title="查看历史" ng-click="viewDetail(todo)"></span>
+								<span class="glyphicon glyphicon-arrow-left" title="恢复" ng-click="endEdit($event,todo,'status',1)"></span>
+								<span class="glyphicon glyphicon-trash" title="删除" ng-click="deleteTodo($index)"></span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="" id="tag-todo">
+					
 				</div>
 			</div>
 			<!--todo历史modal START-->
@@ -61,25 +111,26 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h4 class="modal-title">修改记录</h4>
+							<h4 class="modal-title">事项</h4>
 						</div>
-						<div class="modal-body">
+						<div class="history-box">
 							<div class="time-line">
 							</div>
 							<ul class="time-head">
 								<li>
 									<span class="todo-history-arrow"></span>
 									<span class="glyphicon glyphicon-time time-head-point"></span>
-									您在{{historySpan}}天前创建了该项目
+									您在{{historySpan}}创建了该事项
 								</li>
 							</ul>
 							<div ng-repeat="group in historyGroup">
 								<div class="group-head">{{group.time}}</div>
 								<ul class="todo-history-list">
-									<li ng-repeat="todo in group.historyTodos">
+									<li ng-repeat="todo in group.historyTodos" ng-class="{'remind-todo':todo.status==1,'finish-todo':todo.status==2,'close-todo':todo.status==3}">
 										<span class="todo-history-arrow"></span>
 										<span class="todo-history-point"></span>
-										{{todo.content}}
+										<p>{{todo.time}}</p>
+										{{todo.changeContent}}
 									</li>
 								</ul>
 							</div>
@@ -91,7 +142,6 @@
 				</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
 			<!--todo历史modal END-->
-		</div>
 		<!--时间选择modal START-->
 		<div class="modal fade" id="time-picker">
 			<div class="modal-dialog">
@@ -101,15 +151,16 @@
 						<h4 class="modal-title">时间选择器</h4>
 					</div>
 					<div class="modal-body">
-						<p>One fine body&hellip;</p>
+						<input type="text" class="form-control" ng-model="reminderTime" placeholder="请输入时间...">
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
-						<button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+						<!-- <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button> -->
+						<button type="button" class="btn btn-success" data-dismiss="modal" ng-click="addReminder()"><span class="glyphicon glyphicon-ok"></span></button>
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
 		<!--时间选择modal END-->
+		</div>
 	</body>
 </html>

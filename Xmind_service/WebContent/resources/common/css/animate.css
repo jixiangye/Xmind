@@ -79,6 +79,34 @@
         left: 0px;
     }
 }
+.todo-leave { 
+    -webkit-animation: todoleave 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    animation: todoleave 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    display: block;
+    position: relative;
+} 
+@-webkit-keyframes todoleave {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        height:0px;
+        padding-top:0;
+        padding-bottom:0;
+    }
+}
+@keyframes todoleave {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        height:0px;
+        padding-top:0;
+        padding-bottom:0;
+    }
+}
 .todo-history-enter { 
     -webkit-animation: todohistory 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
     animation: todohistory 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
