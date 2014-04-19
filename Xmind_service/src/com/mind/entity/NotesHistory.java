@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="test.notes_history")
+@Table(name="notes_history")
 public class NotesHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 

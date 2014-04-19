@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-@Table(name="test.notes")
+@Table(name="notes")
 public class Note implements Serializable {
 	private static final long serialVersionUID = 1L;
 
