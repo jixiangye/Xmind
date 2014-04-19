@@ -61,7 +61,13 @@ define(function(require,exports,module){
                 
                 return promise;
             };
-        }]);
+        }])
+        
+        .factory("formatDate",function(){
+        	return function(str){
+        		
+        	};
+        });
     
     angular
     	.module("common",["utils","ui"])

@@ -2,6 +2,36 @@
 	position:relative;
 }
 
+.todo-input-group{
+	margin-bottom:10px;
+}
+
+.todo-input-group input{
+	border-right:0;
+}
+
+.todo-input-group button{
+	width:100px;
+}
+
+.todo-input-group .remind-btn{
+	border-left:0;
+	cursor:pointer;
+}
+
+.todo-input-group .remind-btn span{
+	opacity:0.5;
+}
+
+.todo-input-group .remind-btn.active span{
+	color:#ed9c28;
+	opacity:1;
+}
+
+.todo-input-group .remind-btn:hover span{
+	opacity:1;
+}
+
 .todo-list{
 	padding-left:0;
 }
@@ -13,8 +43,7 @@
 	margin-bottom: -1px;
 	background-color: #fff;
 	border:solid #ddd;
-	border-width:1px 0 1px 5px;
-	border-left-color:#fff;
+	border-width:1px 0 1px 0;
 }
 
 .todo-list :first-child{
@@ -22,7 +51,7 @@
 }
 
 .primary-status{
-	border-left-color:##39b3d7;
+	border-left-color:#39b3d7;
 }
 
 .todo-list li:hover{
@@ -32,9 +61,30 @@
 .todo-list .active{
 }
 
+.todo-list .todo-status{
+	color:#aaa;
+}
+
+.todo-list .todo-status .remind-todo{
+	color:#ed9c28;
+}
+
+.todo-list .todo-status .finish-todo{
+	color:#47a447;
+}
+
+.todo-list .todo-status .close-todo{
+	color:#d2322d;
+}
+
+.todo-list li.close-todo .todo-content{
+	text-decoration: line-through;
+	color:#aaa;
+}
+
 .todo-list .todo-panel .glyphicon{
 	cursor:pointer;
-	margin-right:5px;
+	margin-right:10px;
 	opacity:0.5;
 }
 
@@ -49,6 +99,11 @@
 
 .todo-list .active .todo-panel{
 	display:block;
+}
+
+.history-box{
+	position: relative;
+	padding: 20px 20px 0;
 }
 
 .todo-history-arrow{
@@ -77,11 +132,19 @@
 
 .time-line{
 	width:3px;
-	background:#39b3d7;
+	background:#ccc;
 	position:absolute;
 	top:42px;
 	left:20px;
 	bottom:0px;
+}
+
+.group-head{
+	color: #ccc;
+	margin: 0 0 10px -10px;
+	background: #fff;
+	position: relative;
+	z-index: 1;
 }
 
 .todo-history-list{
@@ -104,14 +167,42 @@
 	left: -47px;
 	top: 6px;
 	border-radius: 8px;
-	color: #39b3d7;
+	color: #ccc;
 	font-size:1.2em;
 }
 
-.group-head{
-	color: #39b3d7;
-	margin: 0 0 10px -10px;
-	background: #fff;
-	position: relative;
-	z-index: 1;
+.todo-history-list li.remind-todo{
+	background:#ed9c28;
+}
+
+.todo-history-list li.remind-todo .todo-history-arrow{
+	border-right-color:#ed9c28;
+}
+
+.todo-history-list li.remind-todo .todo-history-point{
+	background:#ed9c28;
+}
+
+.todo-history-list li.finish-todo{
+	background:#47a447;
+}
+
+.todo-history-list li.finish-todo .todo-history-arrow{
+	border-right-color:#47a447;
+}
+
+.todo-history-list li.finish-todo .todo-history-point{
+	background:#47a447;
+}
+
+.todo-history-list li.close-todo{
+	background:#d2322d;
+}
+
+.todo-history-list li.close-todo .todo-history-arrow{
+	border-right-color:#d2322d;
+}
+
+.todo-history-list li.close-todo .todo-history-point{
+	background:#d2322d;
 }
