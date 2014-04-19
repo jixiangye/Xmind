@@ -11,11 +11,11 @@ CREATE TABLE test.notes
 (
 id	int not null AUTO_INCREMENT,
 user_Id int,
-modify_time	Date ,
+modify_time TIMESTAMP DEFAULT '0000-00-00 00:00:00' NOT NULL,
 content	Varchar(1000)	,
 status	Varchar(1) ,
-create_time	Date ,
-reminder_time Date,
+create_time TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP' NOT NULL,
+reminder_time TIMESTAMP DEFAULT '0000-00-00 00:00:00' NOT NULL,
 PRIMARY KEY (Id)
 );
 
@@ -23,9 +23,9 @@ CREATE TABLE test.notes_history
 (
 id	int not null AUTO_INCREMENT,
 notes_id int ,
-modify_time	Date ,
+modify_time TIMESTAMP DEFAULT '0000-00-00 00:00:00' NOT NULL,
 content	Varchar(1000) ,
 status	Varchar(1) ,
-reminder_time Date,
+reminder_time TIMESTAMP DEFAULT 'CURRENT_TIMESTAMP' NOT NULL,
 PRIMARY KEY (Id)
 );
