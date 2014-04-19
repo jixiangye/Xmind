@@ -49,6 +49,8 @@ public class NoteService {
 				note.setCreateTime(new Date());
 			}
 			note = noteDao.save(note);
+			noteBean.setNoteId(note.getId());
+			noteBean.setCreateTime(note.getCreateTime());
 
 			NotesHistory notesHistory = new NotesHistory();
 			notesHistory.setContent(noteBean.getContent());
@@ -65,13 +67,19 @@ public class NoteService {
 		return noteBean;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
+	public void delete(Integer noteId) {
+		noteDao.delete(noteId);
+	}
+
 	public NoteBean getNotes(HttpSession session) {
 		NoteBean noteBean = new NoteBean();
 		if (session.getAttribute("id") == null) {
 			noteBean.getErrorBeanList().add(new ErrorBean("", "用户未登录"));
 		} else {
-			List<Note> list = noteDao.findByUserId((Integer) session
-					.getAttribute("id"));
+			List<Note> list = noteDao
+					.findByUserIdOrderByCreateTimeDesc((Integer) session
+							.getAttribute("id"));
 			noteBean.getNoteList().addAll(list);
 		}
 		if (noteBean.getErrorBeanList().size() > 0) {
@@ -81,8 +89,8 @@ public class NoteService {
 	}
 
 	public NoteBean getNotesHistory(NoteBean noteBean) {
-		List<NotesHistory> list = notesHistoryDao.findByNotesId(noteBean
-				.getNoteId());
+		List<NotesHistory> list = notesHistoryDao
+				.findByNotesIdOrderByModifyTimeDesc(noteBean.getNoteId());
 		noteBean.getNoteHistoryList().addAll(list);
 		return noteBean;
 	}

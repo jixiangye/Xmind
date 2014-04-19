@@ -13,8 +13,11 @@ public interface INoteDao extends Repository<Note, Integer> {
 	Note findById(Integer id);
 
 	@Transactional(propagation = Propagation.SUPPORTS)
-	List<Note> findByUserId(Integer userId);
-	
+	List<Note> findByUserIdOrderByCreateTimeDesc(Integer userId);
+
 	@Transactional(propagation = Propagation.SUPPORTS)
 	Note save(Note note);
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	void delete(Integer id);
 }

@@ -21,6 +21,16 @@ public class NoteBean extends BaseBean {
 
 	private List<NotesHistory> noteHistoryList = new ArrayList<>();
 
+	private String createTime;
+	
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
 	public Integer getNoteId() {
 		return noteId;
 	}
