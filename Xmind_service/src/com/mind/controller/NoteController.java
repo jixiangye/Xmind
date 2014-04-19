@@ -23,14 +23,26 @@ public class NoteController {
 	@ResponseBody
 	public NoteBean save(@RequestBody NoteBean noteBean, HttpSession session) {
 		try {
-			noteBean = noteService.save(noteBean,session);
+			noteBean = noteService.save(noteBean, session);
 		} catch (Exception e) {
 			noteBean.setSuccess(false);
 			noteBean.getErrorBeanList().add(new ErrorBean("", "保存失败"));
 		}
 		return noteBean;
 	}
-	
+
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public NoteBean delete(@RequestBody NoteBean noteBean) {
+		try {
+			noteService.delete(noteBean.getNoteId());
+		} catch (Exception e) {
+			noteBean.setSuccess(false);
+			noteBean.getErrorBeanList().add(new ErrorBean("", "删除失败"));
+		}
+		return noteBean;
+	}
+
 	@RequestMapping(value = "/getNotes", method = RequestMethod.POST)
 	@ResponseBody
 	public NoteBean getNotes(@RequestBody NoteBean noteBean, HttpSession session) {
@@ -42,10 +54,11 @@ public class NoteController {
 		}
 		return noteBean;
 	}
-	
+
 	@RequestMapping(value = "/getNotesHistory", method = RequestMethod.POST)
 	@ResponseBody
-	public NoteBean getNotesHistory(@RequestBody NoteBean noteBean, HttpSession session) {
+	public NoteBean getNotesHistory(@RequestBody NoteBean noteBean,
+			HttpSession session) {
 		try {
 			noteBean = noteService.getNotesHistory(noteBean);
 		} catch (Exception e) {

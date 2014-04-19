@@ -1,7 +1,11 @@
 package com.mind.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import com.mind.utils.DateUtils;
+
 import java.util.Date;
 
 
@@ -20,15 +24,15 @@ public class Note implements Serializable {
 
 	private String content;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="create_time")
 	private Date createTime;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modify_time")
 	private Date modifyTime;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="reminder_time")
 	private Date reminderTime;
 
@@ -56,24 +60,24 @@ public class Note implements Serializable {
 		this.content = content;
 	}
 
-	public Date getCreateTime() {
-		return this.createTime;
+	public String getCreateTime() {
+		return DateUtils.format(this.createTime, "yyyy-MM-dd HH:mm:ss");
 	}
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 
-	public Date getModifyTime() {
-		return this.modifyTime;
+	public String getModifyTime() {
+		return DateUtils.format(this.modifyTime, "yyyy-MM-dd HH:mm:ss");
 	}
 
 	public void setModifyTime(Date modifyTime) {
 		this.modifyTime = modifyTime;
 	}
 
-	public Date getReminderTime() {
-		return this.reminderTime;
+	public String getReminderTime() {
+		return DateUtils.format(this.reminderTime, "yyyy-MM-dd HH:mm:ss");
 	}
 
 	public void setReminderTime(Date reminderTime) {
