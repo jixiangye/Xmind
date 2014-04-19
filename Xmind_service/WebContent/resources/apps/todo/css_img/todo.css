@@ -1,0 +1,117 @@
+.todo-box{
+	position:relative;
+}
+
+.todo-list{
+	padding-left:0;
+}
+
+.todo-list li{
+	position: relative;
+	display: block;
+	padding: 10px 15px; 
+	margin-bottom: -1px;
+	background-color: #fff;
+	border:solid #ddd;
+	border-width:1px 0 1px 5px;
+	border-left-color:#fff;
+}
+
+.todo-list :first-child{
+	border-top:0;
+}
+
+.primary-status{
+	border-left-color:##39b3d7;
+}
+
+.todo-list li:hover{
+	background-color:#fbfafe;
+}
+
+.todo-list .active{
+}
+
+.todo-list .todo-panel .glyphicon{
+	cursor:pointer;
+	margin-right:5px;
+	opacity:0.5;
+}
+
+.todo-list .todo-panel .glyphicon:hover{
+	opacity:1;
+}
+
+.todo-panel{
+	padding:5px 0 0;
+	display:none;
+}
+
+.todo-list .active .todo-panel{
+	display:block;
+}
+
+.todo-history-arrow{
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-top: 4px solid transparent;
+	border-bottom: 4px solid transparent;
+	border-right: 6px solid #39b3d7;
+	position:absolute;
+	top:10px;
+	left:-6px;
+}
+
+.todo-history-point{
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	border: 4px solid #fff;
+	left: -46px;
+	top: 6px;
+	border-radius: 8px;
+	background: #39b3d7;
+}
+
+.time-line{
+	width:3px;
+	background:#39b3d7;
+	position:absolute;
+	top:42px;
+	left:20px;
+	bottom:0px;
+}
+
+.todo-history-list{
+	
+}
+
+.todo-history-list li,.time-head li{
+	border-radius: 4px;
+	padding:10px 15px;
+	background:#39b3d7;
+	position:relative;
+	display:block;
+	color:#fff;
+	word-break:break-all;
+	margin-bottom:10px;
+}
+
+.time-head-point{
+	position: absolute;
+	left: -47px;
+	top: 6px;
+	border-radius: 8px;
+	color: #39b3d7;
+	font-size:1.2em;
+}
+
+.group-head{
+	color: #39b3d7;
+	margin: 0 0 10px -10px;
+	background: #fff;
+	position: relative;
+	z-index: 1;
+}

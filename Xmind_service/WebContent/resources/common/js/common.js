@@ -3,7 +3,8 @@
  * 公共模块：common
  */
 define(function(require,exports,module){
-    
+    require("angular");
+	
     angular
         .module("utils",["ui"])
         /**
@@ -12,7 +13,7 @@ define(function(require,exports,module){
          * 		errorHandler:"alert"警告,"prompt"提示（默认）,false不错处理
          * }
          */
-        .factory("$ajax",["$http","prompt",function($http,prompt){
+        .factory("xajax",["$http","prompt",function($http,prompt){
             return function(config){
             	config.url = "../../../../"+config.url;
                 var promise = $http(config);
@@ -70,7 +71,7 @@ define(function(require,exports,module){
     			templateUrl:"../../../common/html/header.html"
     		}
     	})
-    	.controller("loginAndRegister",['$scope','$ajax','$location','prompt',function($scope,$ajax,$location,prompt){
+    	.controller("loginAndRegister",['$scope','xajax','$location','prompt',function($scope,xajax,$location,prompt){
 			var URL = {
 					LOGIN:"login/login",
 					REGISTER:"login/register",
@@ -80,7 +81,7 @@ define(function(require,exports,module){
 			
 			$scope.tab = $location.absUrl().match(/(\w+)\.html/)[1];
 			
-			$ajax({url:URL.GET_SESSION,method:"post"})
+			xajax({url:URL.GET_SESSION,method:"post"})
 			.success(function(d){
 				if(d.username){
 					$scope.username = d.username;
@@ -93,10 +94,11 @@ define(function(require,exports,module){
 				if($scope.loginBox.$invalid)
 					return;
 
-				$ajax({url:URL.LOGIN,data:data,method:"post"})
+				xajax({url:URL.LOGIN,data:data,method:"post"})
 				.success(function(d){
 					$scope.username = data.username;
 					$('#login-box').modal('hide');
+					$scope.loginCallback && $scope.loginCallback();
 					prompt({
 						type:"success",
 						content:"登陆成功"
@@ -113,10 +115,11 @@ define(function(require,exports,module){
 				if($scope.regBox.$invalid)
 					return;
 
-				$ajax({url:URL.REGISTER,data:data,method:"post"})
+				xajax({url:URL.REGISTER,data:data,method:"post"})
 				.success(function(data){
 					$scope.username = data.username;
 					$('#login-box').modal('hide');
+					$scope.loginCallback && $scope.loginCallback();
 					prompt({
 						type:"success",
 						title:"恭喜你",
@@ -129,8 +132,9 @@ define(function(require,exports,module){
 			};
 			
 			$scope.loginout = function(){
-				$ajax({url:URL.LOGIN_OUT,method:"post"})
+				xajax({url:URL.LOGIN_OUT,method:"post"})
 				.success(function(d){
+					$scope.logoutCallback && $scope.logoutCallback();
 					$scope.username = "";
 				})
 				.fail(function(data){

@@ -6,9 +6,7 @@
 		<script type="text/javascript" src="../../../lib/seajs/2.2.1/sea-debug.js"></script>
 		<script type="text/javascript" src="../../../config/seajs.config.js"></script>
 		<script>
-			seajs.use(['../js/todo.js'],function(todo){
-				todo.run();
-			});
+			seajs.use(['../js/todo.js']);
 		</script>
 	</head>
 	<body>
@@ -16,7 +14,7 @@
 		<div class="col-md-8 col-md-offset-2" ng-controller="todoList">
 			<div class="clearfix">
 				<div class="form-group col-md-10">
-   					<input type="text" class="form-control" ng-model="content" placeholder="我想..." ng-keydown="todoKeyDown($event)">
+   					<input type="text" class="form-control" ng-model="content" required placeholder="我想..." ng-keydown="todoKeyDown($event)">
 				</div>
 				<div class="form-group col-md-2">
 					<button type="submit" class="btn btn-primary col-md-12" ng-click="addTodo()">添加</button>
@@ -25,32 +23,74 @@
 			<ul class="nav nav-tabs nav-justified">
 				<li class="active"><a href="#all-todo" data-toggle="tab">所有<span class="badge">{{todos.length}}</span></a></li>
 				<li><a href="#delay-todo" data-toggle="tab">推迟</a></li>
+				<li><a href="#finish-todo" data-toggle="tab">完成</a></li>
+				<li><a href="#close-todo" data-toggle="tab">关闭</a></li>
 			</ul>
 			<div class="tab-content">
-				<br/>
-				<div class="tab-pane active" id="all-todo">
-					<div class="list-group">
-						<a href="#" class="list-group-item" ng-repeat="todo in todos track by $index" ng-click="viewDetail($index)">
+				<div class="tab-pane active todo-box" id="all-todo">
+					<ul class="todo-list">
+						<li ng-repeat="todo in todos track by $index" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'">
 							<button type="button" class="close" aria-hidden="true" ng-click="removeTodo($index)">&times;</button>
-							<!--<span class="badge">{{todo.createDate}}</span>-->
-							{{todo.content}}
-							<!--<span class="label label-success"><span class="glyphicon glyphicon-ok"></span></span>-->
-						</a>
-						<!--<a href="#" class="list-group-item"><span class="badge">2014-04-14</span>Dapibus ac facilisis in</a>
-						<a href="#" class="list-group-item">Porta ac consectetur ac <span class="label label-danger"><span class="glyphicon glyphicon-remove"></span></span></a>
-						<a href="#" class="list-group-item">Vestibulum at eros <span class="label label-info"><span class="glyphicon glyphicon-ok"></span></span></a>-->
-					</div>
+							<span ng-show="!todo.editing">{{todo.content}}</span>
+							<input class="form-control" ng-model="todo.content" ng-show="todo.editing" ng-keydown="editKeyDown($event,todo)" ng-blur="endEdit($event,todo)" required>
+							<div class="todo-panel">
+								<span class="glyphicon glyphicon-list" ng-click="viewDetail($index)"></span>
+								<span class="glyphicon glyphicon-pencil" ng-click="editTodo(todo)"></span>
+							</div>
+						</li>
+					</ul>
 				</div>
 				<div class="tab-pane" id="delay-todo">
-					<div class="list-group">
-						<a href="#" class="list-group-item">
-							<span class="badge" data-toggle="modal" data-target="#time-picker"><span class="glyphicon glyphicon-bell"></span> 2014-04-14</span>
-							Morbi leo risus 
+					<ul class="todo-list">
+						<li ng-repeat="todo in todos track by $index" ng-mouseenter="enterTodo($event)" ng-mouseleave="leaveTodo($event)" ng-animate="'todo'">
+							<button type="button" class="close" aria-hidden="true" ng-click="removeTodo($index)">&times;</button>
+							<!-- <span class="badge" data-toggle="modal" data-target="#time-picker"><span class="glyphicon glyphicon-bell"></span> 2014-04-14</span> -->
+							{{todo.content}}
 							<span class="label label-warning"><span class="glyphicon glyphicon-share-alt"></span></span>
-						</a>
-					</div>
+							<div class="todo-panel">
+								<span class="glyphicon glyphicon-list" ng-click="viewDetail($index)"></span>
+								<span class="glyphicon glyphicon-pencil" ng-click="editTodo($index)"></span>
+							</div>
+						</li>
+					</ul>
 				</div>
 			</div>
+			<!--todo历史modal START-->
+			<div class="modal fade" id="todo-history">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">修改记录</h4>
+						</div>
+						<div class="modal-body">
+							<div class="time-line">
+							</div>
+							<ul class="time-head">
+								<li>
+									<span class="todo-history-arrow"></span>
+									<span class="glyphicon glyphicon-time time-head-point"></span>
+									您在{{historySpan}}天前创建了该项目
+								</li>
+							</ul>
+							<div ng-repeat="group in historyGroup">
+								<div class="group-head">{{group.time}}</div>
+								<ul class="todo-history-list">
+									<li ng-repeat="todo in group.historyTodos">
+										<span class="todo-history-arrow"></span>
+										<span class="todo-history-point"></span>
+										{{todo.content}}
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span></button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			<!--todo历史modal END-->
 		</div>
 		<!--时间选择modal START-->
 		<div class="modal fade" id="time-picker">
