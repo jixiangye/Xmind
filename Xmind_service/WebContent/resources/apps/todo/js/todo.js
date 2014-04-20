@@ -23,20 +23,42 @@ define(function(require,exports,module){
 					SAVE_TODO:"note/save",
 					GET_LIST:"note/getNotes",
 					GET_DETAIL:"note/getNotesHistory",
-					DELETE_TODO:"note/delete"
+					DELETE_TODO:"note/delete",
+					SAVE_TAG:"tag/save",
+					GET_TAGS:"tag/query",
+					SAVE_RELATION:"tag/saveRelation",
+					DELETE_RELATION:"tag/deleteRelation"
 				},
 				todoPanel = angular.element(".todo-panel");
 			
 			//初始化todo列表
 			xajax({url:URL.GET_LIST,method:"post",data:{}})
 			.success(function(d){
+				var len = 0;
 				$scope.todos = d.noteList;
+				angular.forEach(d.noteList,function(v,k){
+					if(v.status == 1 && v.reminderTime)
+						len++;
+				});
+				$scope.remindLength = len;
+			});
+			
+			//初始化标签
+			xajax({url:URL.GET_TAGS,method:"post",data:{}})
+			.success(function(d){
+				$scope.tags = d.list;
+				angular.forEach($scope.tags,function(v,k){
+					$scope.tagsMap[k] = v.tagColor;
+				});
 			});
 			
 			$scope.todos = [];
 			$scope.historyGroup = [];
 			$scope.historySpan = "";
 			$scope.todo = {};
+			$scope.remindLength = 0;
+			$scope.tags = [];
+			$scope.tagsMap = {};
 			
 			//添加
 			$scope.addTodo = function(){
@@ -81,7 +103,7 @@ define(function(require,exports,module){
 			
 			//查看历史
 			$scope.viewDetail = function(todo){
-				var data = {noteId:todo.id};
+				var data = {notesId:todo.notesId};
 				xajax({url:URL.GET_DETAIL,data:data,method:"post"})
 				.success(function(d){
 					var historyGroup = [],
@@ -135,7 +157,7 @@ define(function(require,exports,module){
 			
 			//结束编辑
 			$scope.endEdit = function($event,todo,key,value){
-				var data = {noteId:todo.id};
+				var data = {notesId:todo.notesId};
 				
 				data.content = todo.content;
 				data.reminderTime = todo.reminderTime;
@@ -171,12 +193,12 @@ define(function(require,exports,module){
 			};
 			
 			//删除todo
-			$scope.deleteTodo = function(id){
+			$scope.deleteTodo = function(notesId){
 				var data = {},
 					i;
 				angular.forEach($scope.todos,function(v,k){
-					if(v.id == id){
-						data.noteId = id;
+					if(v.notesId == notesId){
+						data.notesId = notesId;
 						i = k;
 						return false;
 					}
@@ -190,7 +212,7 @@ define(function(require,exports,module){
 			
 			//鼠标移入
 			$scope.enterTodo = function($event,todo){
-				var target = angular.element($event.target);
+				var target = angular.element($event.target).closest("li");
 				
 				target.addClass("active");
 				$scope.todo = todo;
@@ -214,11 +236,63 @@ define(function(require,exports,module){
 				
 			};
 			
-			function formatDate(str){
-				var reg = /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})/,
-					obj = reg.exec(str);
-				return obj;
-			}
+			//添加标签
+			$scope.addTag = function(){
+				var data = {tagName:$scope.tagName};
+				data.tagColor = "rgb("+[random(),random(),random()].join(",")+")";
+				xajax({url:URL.SAVE_TAG,data:data,method:"post"})
+				.success(function(d){
+					$scope.tags.unshift(data);
+					$scope.tagName = "";
+				});
+			};
+			
+			$scope.tagKeyDown = function($event){
+				if($event.keyCode === 13)
+					$scope.addTag();
+			};
+			
+			//标签与todo关联/取消关联
+			$scope.toggleTagToTodo = function(todo,tag){
+				var data = {notesId:todo.notesId},
+					i = $scope.inTags(todo.tags,tag.tagName),
+					tagColor = tag.tagColor,
+					type = i>-1 ? "d":"s",
+					url = type === "d" ? URL.DELETE_RELATION : URL.SAVE_RELATION;
+				
+				if(type === "d"){
+					//删除tag
+					data.tagId = tag.tagId;
+				}else{
+					//添加tag
+					data.tagName = tag.tagName;
+				}
+				
+				xajax({url:url,data:data,method:"post"})
+				.success(function(d){
+					if(type === "d"){
+						todo.tags.splice(i,1);
+					}else{
+						d.tagColor = tagColor;
+						todo.tags.push(d);
+					}
+				});
+			};
+			
+			$scope.inTags = function(tags,tagName){
+				var i = -1;
+				angular.forEach(tags,function(v,k){
+					if(v.tagName === tagName){
+						i = k;
+						return false;
+					}
+				});
+				return i;
+			};
+			
+			function random(){
+				return Math.ceil(Math.random()*255);
+			};
 		}]);
 	
 	angular.bootstrap(document,["app-todo"]);

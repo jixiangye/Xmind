@@ -36,6 +36,46 @@
 	padding:10px;
 }
 
+.tag-box .label{
+	margin-right:5px;
+	cursor:pointer;
+}
+
+.tag-add{
+	opacity:0.5;
+	cursor:pointer;
+}
+
+.tag-add-box:hover .tag-add{
+	opacity:1;
+}
+
+.tag-add-box input{
+	/* display:none; */
+	width:200px;
+	display:inline-block;
+}
+
+.tag-add-box:hover input{
+}
+
+.tag-panel{
+	display:inline-block;
+}
+
+.tag-panel span{
+	cursor:pointer;
+	margin-right:5px;
+}
+
+.tag-panel .invaild{
+	background:#ccc !important;
+}
+
+.tag-panel:hover .tag-icon{
+	opacity:1;
+}
+
 .todo-list{
 	padding-left:0;
 }
@@ -50,8 +90,8 @@
 	border-width:1px 0 1px 0;
 }
 
-.primary-status{
-	border-left-color:#39b3d7;
+.todo-list :first-child{
+	border-top:0;
 }
 
 .todo-list li:hover{
@@ -59,6 +99,19 @@
 }
 
 .todo-list .active{
+}
+
+.todo-list .tag-mark{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	width:3px;
+}
+
+.todo-list .tag-mark-item{
+	width:3px;
+	display:block;
 }
 
 .todo-list .todo-status{
