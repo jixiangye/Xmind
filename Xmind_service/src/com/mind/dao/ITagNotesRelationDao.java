@@ -14,10 +14,13 @@ public interface ITagNotesRelationDao extends
 	List<TagNotesRelation> findAll();
 
 	@Transactional(propagation = Propagation.SUPPORTS)
-	List<TagNotesRelation> findByTagName(String tagName);
+	List<TagNotesRelation> findByTagId(Integer tagId);
 
 	@Transactional(propagation = Propagation.SUPPORTS)
-	TagNotesRelation findByNotesIdAndTagName(Integer notesId, String tagName);
+	TagNotesRelation findByNotesIdAndTagId(Integer notesId, Integer tagId);
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	TagNotesRelation findByNotesIdAndTagTagName(Integer notesId, String tagName);
 
 	@Transactional(propagation = Propagation.SUPPORTS)
 	TagNotesRelation save(TagNotesRelation tagNotesRelation);

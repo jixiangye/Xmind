@@ -22,9 +22,13 @@ public class TagNotesRelation implements Serializable {
 	@Column(name="notes_id")
 	private Integer notesId;
 
-	@Column(name="tag_name")
-	private String tagName;
+	@Column(name="tag_id")
+	private Integer tagId;
 
+	@OneToOne
+	@JoinColumn(name="tag_id",insertable=false,updatable=false)
+	private Tag tag;
+	
 	public TagNotesRelation() {
 	}
 
@@ -44,11 +48,20 @@ public class TagNotesRelation implements Serializable {
 		this.notesId = notesId;
 	}
 
-	public String getTagName() {
-		return this.tagName;
+	public Integer getTagId() {
+		return tagId;
 	}
 
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
+	public void setTagId(Integer tagId) {
+		this.tagId = tagId;
 	}
+
+	public Tag getTag() {
+		return tag;
+	}
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+	
 }

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.mind.bean.ItemListBean;
+import com.mind.bean.TagBean;
+import com.mind.bean.TagNotesRelationBean;
 import com.mind.dao.ITagDao;
 import com.mind.dao.ITagNotesRelationDao;
 import com.mind.entity.Tag;
@@ -29,36 +31,47 @@ public class TagService {
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public void save(Tag tag) {
+	public TagBean save(Tag tag) {
+		TagBean tagBean = new TagBean();
 		tag = tagDao.save(tag);
+		tagBean.setTagId(tag.getTagId());
+		return tagBean;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public void delete(String tagName) {
-		tagDao.delete(tagName);
-		tagNotesRelationDao.delete(tagNotesRelationDao.findByTagName(tagName));
+	public void delete(Integer tagId) {
+		tagDao.delete(tagId);
+		tagNotesRelationDao.delete(tagNotesRelationDao.findByTagId(tagId));
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public void saveRelation(TagNotesRelation tagNotesRelation) {
-		Tag tag = tagDao.findByTagName(tagNotesRelation.getTagName());
+	public TagNotesRelationBean saveRelation(
+			TagNotesRelationBean tagNotesRelationBean) {
+		Tag tag = tagDao.findByTagName(tagNotesRelationBean.getTagName());
 		if (tag == null) {
 			tag = new Tag();
-			tag.setTagName(tagNotesRelation.getTagName());
-			tagDao.save(tag);
+			tag.setTagName(tagNotesRelationBean.getTagName());
+			tag.setTagColor(tagNotesRelationBean.getTagColor());
+			tag = tagDao.save(tag);
 		}
-		TagNotesRelation tagNotesRelation2 = tagNotesRelationDao
-				.findByNotesIdAndTagName(tagNotesRelation.getNotesId(),
-						tagNotesRelation.getTagName());
-		if (tagNotesRelation2 == null) {
-			tagNotesRelationDao.save(tagNotesRelation);
+		TagNotesRelation tagNotesRelation = tagNotesRelationDao
+				.findByNotesIdAndTagTagName(tagNotesRelationBean.getNotesId(),
+						tagNotesRelationBean.getTagName());
+		if (tagNotesRelation == null) {
+			tagNotesRelation = new TagNotesRelation();
+			tagNotesRelation.setNotesId(tagNotesRelationBean.getNotesId());
+			tagNotesRelation.setTagId(tag.getTagId());
+			tagNotesRelation = tagNotesRelationDao.save(tagNotesRelation);
+			tagNotesRelationBean.setTagNotesRelationId(tagNotesRelation
+					.getTagNotesRelationId());
 		}
+		return tagNotesRelationBean;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public void deleteRelation(TagNotesRelation tagNotesRelation) {
-		tagNotesRelation = tagNotesRelationDao.findByNotesIdAndTagName(
-				tagNotesRelation.getNotesId(), tagNotesRelation.getTagName());
+		tagNotesRelation = tagNotesRelationDao.findByNotesIdAndTagId(
+				tagNotesRelation.getNotesId(), tagNotesRelation.getTagId());
 		if (tagNotesRelation != null) {
 			tagNotesRelationDao
 					.delete(tagNotesRelation.getTagNotesRelationId());

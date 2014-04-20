@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mind.entity.Tag;
+
 public class NotesBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -19,9 +21,9 @@ public class NotesBean implements Serializable {
 
 	private String status;
 
-	private List<String> tags = new ArrayList<>();
+	private List<Tag> tags = new ArrayList<>();
 
-	public List<String> getTags() {
+	public List<Tag> getTags() {
 		return tags;
 	}
 

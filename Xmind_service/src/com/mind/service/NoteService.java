@@ -21,6 +21,7 @@ import com.mind.dao.INotesHistoryDao;
 import com.mind.dao.ITagNotesRelationDao;
 import com.mind.entity.Notes;
 import com.mind.entity.NotesHistory;
+import com.mind.entity.Tag;
 import com.mind.entity.TagNotesRelation;
 import com.mind.utils.DateUtils;
 
@@ -91,13 +92,17 @@ public class NoteService {
 					.findByUserIdOrderByCreateTimeDesc((Integer) session
 							.getAttribute("id"));
 			List<TagNotesRelation> tagList = tagNotesRelationDao.findAll();
-			Map<Integer, List<String>> tagMap = new HashMap<>();
+			Map<Integer, List<Tag>> tagMap = new HashMap<>();
 			for (TagNotesRelation tagNotesRelation : tagList) {
-				List<String> tags = tagMap.get(tagNotesRelation.getNotesId());
+				List<Tag> tags = tagMap.get(tagNotesRelation.getNotesId());
 				if (tags == null) {
 					tags = new ArrayList<>();
 				}
-				tags.add(tagNotesRelation.getTagName());
+				Tag tag = new Tag();
+				tag.setTagId(tagNotesRelation.getTagId());
+				tag.setTagName(tagNotesRelation.getTag().getTagName());
+				tag.setTagColor(tagNotesRelation.getTag().getTagColor());
+				tags.add(tag);
 				tagMap.put(tagNotesRelation.getNotesId(), tags);
 			}
 			for (Notes notes : entities) {
