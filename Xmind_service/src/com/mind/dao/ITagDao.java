@@ -6,18 +6,18 @@ import org.springframework.data.repository.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mind.entity.Notes;
+import com.mind.entity.Tag;
 
-public interface INoteDao extends Repository<Notes, Integer> {
+public interface ITagDao extends Repository<Tag, String> {
 	@Transactional(propagation = Propagation.SUPPORTS)
-	Notes findByNotesId(Integer notesId);
-
-	@Transactional(propagation = Propagation.SUPPORTS)
-	List<Notes> findByUserIdOrderByCreateTimeDesc(Integer userId);
+	List<Tag> findAll();
 
 	@Transactional(propagation = Propagation.SUPPORTS)
-	Notes save(Notes note);
+	Tag findByTagName(String tagName);
 
 	@Transactional(propagation = Propagation.SUPPORTS)
-	void delete(Integer id);
+	Tag save(Tag tag);
+
+	@Transactional(propagation = Propagation.SUPPORTS)
+	void delete(String tagName);
 }

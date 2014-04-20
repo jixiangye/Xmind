@@ -1,33 +1,28 @@
 package com.mind.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mind.entity.NotesHistory;
-
-public class NoteBean extends BaseBean {
+public class NotesBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer notesId;
 
 	private String content;
 
+	private String createTime;
+
+	private String modifyTime;
+
 	private String reminderTime;
 
 	private String status;
 
-	private List<NotesBean> noteList = new ArrayList<>();
+	private List<String> tags = new ArrayList<>();
 
-	private List<NotesHistory> noteHistoryList = new ArrayList<>();
-
-	private String createTime;
-
-	public String getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(String createTime) {
-		this.createTime = createTime;
+	public List<String> getTags() {
+		return tags;
 	}
 
 	public Integer getNotesId() {
@@ -46,6 +41,22 @@ public class NoteBean extends BaseBean {
 		this.content = content;
 	}
 
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getModifyTime() {
+		return modifyTime;
+	}
+
+	public void setModifyTime(String modifyTime) {
+		this.modifyTime = modifyTime;
+	}
+
 	public String getReminderTime() {
 		return reminderTime;
 	}
@@ -60,14 +71,6 @@ public class NoteBean extends BaseBean {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public List<NotesBean> getNoteList() {
-		return noteList;
-	}
-
-	public List<NotesHistory> getNoteHistoryList() {
-		return noteHistoryList;
 	}
 
 }

@@ -33,7 +33,7 @@ public class LoginController {
 			if (loginBean.isSuccess()) {
 				session.setAttribute("username", loginBean.getUser()
 						.getUsername());
-				session.setAttribute("id", loginBean.getUser().getId());
+				session.setAttribute("id", loginBean.getUser().getUserId());
 			}
 			baseBean.setSuccess(loginBean.isSuccess());
 			baseBean.getErrorBeanList().addAll(loginBean.getErrorBeanList());

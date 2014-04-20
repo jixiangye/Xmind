@@ -35,7 +35,7 @@ public class NoteController {
 	@ResponseBody
 	public NoteBean delete(@RequestBody NoteBean noteBean) {
 		try {
-			noteService.delete(noteBean.getNoteId());
+			noteService.delete(noteBean.getNotesId());
 		} catch (Exception e) {
 			noteBean.setSuccess(false);
 			noteBean.getErrorBeanList().add(new ErrorBean("", "删除失败"));
@@ -57,8 +57,7 @@ public class NoteController {
 
 	@RequestMapping(value = "/getNotesHistory", method = RequestMethod.POST)
 	@ResponseBody
-	public NoteBean getNotesHistory(@RequestBody NoteBean noteBean,
-			HttpSession session) {
+	public NoteBean getNotesHistory(@RequestBody NoteBean noteBean) {
 		try {
 			noteBean = noteService.getNotesHistory(noteBean);
 		} catch (Exception e) {
