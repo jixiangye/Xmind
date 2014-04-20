@@ -32,6 +32,10 @@
 	opacity:1;
 }
 
+.tag-box{
+	padding:10px;
+}
+
 .todo-list{
 	padding-left:0;
 }
@@ -44,10 +48,6 @@
 	background-color: #fff;
 	border:solid #ddd;
 	border-width:1px 0 1px 0;
-}
-
-.todo-list :first-child{
-	border-top:0;
 }
 
 .primary-status{
@@ -82,6 +82,21 @@
 	color:#aaa;
 }
 
+.todo-panel{
+	padding:5px 0 0;
+	display:none;
+	opacity:0;
+	transition: all 0.5s;
+	-moz-transition: all 0.5s; 
+	-webkit-transition: all 0.5s; 
+	-o-transition: all 0.5s; 
+}
+
+.todo-list .active .todo-panel{
+	display:block;
+	opacity:1;
+}
+
 .todo-list .todo-panel .glyphicon{
 	cursor:pointer;
 	margin-right:10px;
@@ -90,15 +105,6 @@
 
 .todo-list .todo-panel .glyphicon:hover{
 	opacity:1;
-}
-
-.todo-panel{
-	padding:5px 0 0;
-	display:none;
-}
-
-.todo-list .active .todo-panel{
-	display:block;
 }
 
 .history-box{
@@ -160,6 +166,14 @@
 	color:#fff;
 	word-break:break-all;
 	margin-bottom:10px;
+}
+
+.time-head li{
+	background:#ccc;
+}
+
+.time-head li .todo-history-arrow{
+	border-right-color:#ccc;
 }
 
 .time-head-point{

@@ -27,8 +27,10 @@ define(function(require,exports,module){
 							break;
 					}
 					
-					return "<div class='alert "+className+" animate-enter' ng-animate=\"'animate'\">"+
+					return "<div>" +
+							"<div class='alert "+className+" animate-enter' ng-animate=\"'animate'\">"+
 								"<strong>"+(obj.title||"")+"</strong>"+obj.content+
+							"</div>" +
 							"</div>";
 				},
 				queue = [],

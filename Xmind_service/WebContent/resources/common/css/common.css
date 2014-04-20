@@ -1,6 +1,5 @@
 body{
 	position:relative;
-	padding-top:60px;
 }
 
 input.ng-invalid.ng-dirty {
@@ -32,6 +31,12 @@ input.ng-valid.ng-dirty {
 	z-index: 1050;
 	width: auto;
 	margin: 10px;
+	text-align:center;
+}
+
+.prompt-box .alert{
+	display:inline-block;
+	padding:5px 20px;
 }
 
 @media screen and (min-width: 768px){
@@ -39,4 +44,26 @@ input.ng-valid.ng-dirty {
 		width: 600px;
 		margin: auto;
 	}
+}
+
+.navbar{
+	margin-bottom:0px;
+}
+
+.nav-slide-up{
+	text-align:center;
+	cursor:pointer;
+	margin-top:50px;
+}
+
+.nav-slide-up span{
+	opacity:0.3;
+}
+
+.nav-slide-up:hover span{
+	opacity:0.8;
+}
+
+.nav-slide-hide{
+	margin-top:0px;
 }
