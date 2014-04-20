@@ -1,12 +1,18 @@
 package com.mind.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.mind.utils.DateUtils;
-
-import java.util.Date;
 
 
 /**
@@ -15,12 +21,13 @@ import java.util.Date;
  */
 @Entity
 @Table(name="notes")
-public class Note implements Serializable {
+public class Notes implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	@Column(name="notes_id")
+	private Integer notesId;
 
 	private String content;
 
@@ -41,15 +48,15 @@ public class Note implements Serializable {
 	@Column(name="user_Id")
 	private Integer userId;
 
-	public Note() {
+	public Notes() {
 	}
 
-	public Integer getId() {
-		return this.id;
+	public Integer getNotesId() {
+		return this.notesId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setNotesId(Integer notesId) {
+		this.notesId = notesId;
 	}
 
 	public String getContent() {
