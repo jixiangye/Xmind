@@ -24,7 +24,8 @@ define(function(require,exports,module){
 					GET_LIST:"note/getNotes",
 					GET_DETAIL:"note/getNotesHistory",
 					DELETE_TODO:"note/delete"
-				};
+				},
+				todoPanel = angular.element(".todo-panel");
 			
 			//初始化todo列表
 			xajax({url:URL.GET_LIST,method:"post",data:{}})
@@ -35,6 +36,7 @@ define(function(require,exports,module){
 			$scope.todos = [];
 			$scope.historyGroup = [];
 			$scope.historySpan = "";
+			$scope.todo = {};
 			
 			//添加
 			$scope.addTodo = function(){
@@ -169,8 +171,17 @@ define(function(require,exports,module){
 			};
 			
 			//删除todo
-			$scope.deleteTodo = function(i){
-				var data = {noteId:$scope.todos[i].id};
+			$scope.deleteTodo = function(id){
+				var data = {},
+					i;
+				angular.forEach($scope.todos,function(v,k){
+					if(v.id == id){
+						data.noteId = id;
+						i = k;
+						return false;
+					}
+				});
+				
 				xajax({url:URL.DELETE_TODO,data:data,method:"post"})
 				.success(function(d){
 					$scope.todos.splice(i,1);
@@ -178,12 +189,12 @@ define(function(require,exports,module){
 			};
 			
 			//鼠标移入
-			$scope.enterTodo = function($event){
-				var target = angular.element($event.target),
-					top = target.position().top+target.height()+20;
+			$scope.enterTodo = function($event,todo){
+				var target = angular.element($event.target);
 				
 				target.addClass("active");
-//				angular.element(".todo-panel").css({top:top});
+				$scope.todo = todo;
+				target.append(todoPanel);
 			};
 			
 			//鼠标移出

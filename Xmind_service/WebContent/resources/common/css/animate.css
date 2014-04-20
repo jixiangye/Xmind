@@ -34,7 +34,7 @@
 @-webkit-keyframes leave {
     to {
         opacity: 0;
-        margin-top: -70px;
+        margin-top: -50px;
     }
     from {
         opacity: 1;
@@ -44,7 +44,7 @@
 @keyframes leave {
     to {
         opacity: 0;
-        margin-top: -70px;
+        margin-top: -50px;
     }
     from {
         opacity: 1;

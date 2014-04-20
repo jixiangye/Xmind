@@ -63,10 +63,23 @@ define(function(require,exports,module){
             };
         }])
         
-        .factory("formatDate",function(){
-        	return function(str){
-        		
+        .factory("notice",function(){
+        	var notice = {};
+        	
+        	notice.create = function(p,t,c){
+        		//@param 图片，标题，描述信息
+        		window.createNotification(p,t,c);
         	};
+        	
+        	notice.uncheck = function(){
+        		return window.webkitNotifications.checkPermission();
+        	};
+        	
+        	notice.request = function(){
+        		window.webkitNotifications.requestPermission();
+        	};
+        	
+        	return notice;
         });
     
     angular
@@ -86,6 +99,7 @@ define(function(require,exports,module){
 				};
 			
 			$scope.tab = $location.absUrl().match(/(\w+)\.html/)[1];
+			$scope.navHide = false;
 			
 			xajax({url:URL.GET_SESSION,method:"post"})
 			.success(function(d){

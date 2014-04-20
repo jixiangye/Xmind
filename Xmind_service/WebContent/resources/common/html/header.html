@@ -1,6 +1,6 @@
 <!-- 网站公用头 -->
 <div  ng-controller="loginAndRegister" class="public-header">
-	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation" ng-show="!navHide">
 		<div class="container">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -36,6 +36,9 @@
 		    </div>
 	    </div>
 	</nav>
+	<div class="nav-slide-up" ng-click="navHide = !navHide" ng-class="{'nav-slide-hide':navHide}">
+		<span class="glyphicon glyphicon-chevron-up" ng-class="{'glyphicon-chevron-down':navHide}"></span>
+	</div>
 	<!--登录/注册modal START-->
 	<div class="modal fade" id="login-box">
 		<div class="modal-dialog">
