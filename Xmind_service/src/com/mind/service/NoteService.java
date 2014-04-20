@@ -99,7 +99,8 @@ public class NoteService {
 					tags = new ArrayList<>();
 				}
 				Tag tag = new Tag();
-				tag.setTagName(tagNotesRelation.getTagName());
+				tag.setTagId(tagNotesRelation.getTagId());
+				tag.setTagName(tagNotesRelation.getTag().getTagName());
 				tag.setTagColor(tagNotesRelation.getTag().getTagColor());
 				tags.add(tag);
 				tagMap.put(tagNotesRelation.getNotesId(), tags);

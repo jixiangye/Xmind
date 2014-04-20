@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mind.bean.BaseBean;
 import com.mind.bean.ItemListBean;
+import com.mind.bean.TagBean;
+import com.mind.bean.TagNotesRelationBean;
 import com.mind.entity.Tag;
 import com.mind.entity.TagNotesRelation;
 import com.mind.service.TagService;
@@ -27,23 +29,22 @@ public class TagController {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
-	public BaseBean save(@RequestBody Tag tag) {
-		tagService.save(tag);
-		return new BaseBean();
+	public TagBean save(@RequestBody Tag tag) {
+		return tagService.save(tag);
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public BaseBean delete(@RequestBody Tag tag) {
-		tagService.delete(tag.getTagName());
+		tagService.delete(tag.getTagId());
 		return new BaseBean();
 	}
 
 	@RequestMapping(value = "/saveRelation", method = RequestMethod.POST)
 	@ResponseBody
-	public BaseBean saveRelation(@RequestBody TagNotesRelation tagNotesRelation) {
-		tagService.saveRelation(tagNotesRelation);
-		return new BaseBean();
+	public TagNotesRelationBean saveRelation(
+			@RequestBody TagNotesRelationBean tagNotesRelationBean) {
+		return tagService.saveRelation(tagNotesRelationBean);
 	}
 
 	@RequestMapping(value = "/deleteRelation", method = RequestMethod.POST)

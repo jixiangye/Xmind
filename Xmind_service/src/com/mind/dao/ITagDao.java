@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mind.entity.Tag;
 
-public interface ITagDao extends Repository<Tag, String> {
+public interface ITagDao extends Repository<Tag, Integer> {
 	@Transactional(propagation = Propagation.SUPPORTS)
 	List<Tag> findAll();
 
@@ -19,5 +19,5 @@ public interface ITagDao extends Repository<Tag, String> {
 	Tag save(Tag tag);
 
 	@Transactional(propagation = Propagation.SUPPORTS)
-	void delete(String tagName);
+	void delete(Integer tagId);
 }

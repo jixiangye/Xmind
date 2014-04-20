@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -18,6 +20,10 @@ public class Tag implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="tag_id")
+	private Integer tagId;
+	
 	@Column(name="tag_name")
 	private String tagName;
 
@@ -41,6 +47,14 @@ public class Tag implements Serializable {
 
 	public void setTagColor(String tagColor) {
 		this.tagColor = tagColor;
+	}
+
+	public Integer getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(Integer tagId) {
+		this.tagId = tagId;
 	}
 
 }
