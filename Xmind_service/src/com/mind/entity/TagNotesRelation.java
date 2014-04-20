@@ -25,6 +25,10 @@ public class TagNotesRelation implements Serializable {
 	@Column(name="tag_name")
 	private String tagName;
 
+	@OneToOne
+	@JoinColumn(name="tag_name",insertable=false,updatable=false)
+	private Tag tag;
+	
 	public TagNotesRelation() {
 	}
 
@@ -51,4 +55,13 @@ public class TagNotesRelation implements Serializable {
 	public void setTagName(String tagName) {
 		this.tagName = tagName;
 	}
+
+	public Tag getTag() {
+		return tag;
+	}
+
+	public void setTag(Tag tag) {
+		this.tag = tag;
+	}
+	
 }

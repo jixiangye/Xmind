@@ -21,6 +21,9 @@ public class Tag implements Serializable {
 	@Column(name="tag_name")
 	private String tagName;
 
+	@Column(name="tag_color")
+	private String tagColor;
+	
 	public Tag() {
 	}
 
@@ -30,6 +33,14 @@ public class Tag implements Serializable {
 
 	public void setTagName(String tagName) {
 		this.tagName = tagName;
+	}
+
+	public String getTagColor() {
+		return tagColor;
+	}
+
+	public void setTagColor(String tagColor) {
+		this.tagColor = tagColor;
 	}
 
 }
