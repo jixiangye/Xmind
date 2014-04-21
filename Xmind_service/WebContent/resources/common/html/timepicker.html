@@ -1,0 +1,28 @@
+<div class="aui-timepicker dropdown-menu">
+	<div class="aui-tpk-label">
+		<span class="label label-info">今天</span>
+		<span class="label label-default">明天</span>
+		<span class="label label-default">下周</span>
+	</div>
+	<div class="aui-tpk-time">
+		<input type="text" class="aui-tpk-time-ipt left-ipt" maxlength=2 ng-keydown="updateTime($event,23)" value="00">
+		:
+		<input type="text" class="aui-tpk-time-ipt right-ipt" maxlength=2 ng-keydown="updateTime($event,59)" value="00">
+	</div>
+	<div class="aui-tpk-toggle">
+		<span class="glyphicon glyphicon-chevron-up" ng-click="boxShow = !boxShow" ng-class="{'glyphicon-chevron-down':!boxShow}"></span>
+	</div>
+	<div class="aui-tpk-box clearfix" ng-class="{'active':boxShow}">
+		<div class="aui-tpk-title">
+			<span class="aui-tpk-last glyphicon glyphicon-chevron-left"></span>
+			<span class="aui-tpk-next glyphicon glyphicon-chevron-right"></span>
+			年月
+		</div>
+		<div class="aui-tpk-head">
+			<span ng-repeat="week in weeks">{{week}}</span>
+		</div>
+		<div class="aui-tpk-body">
+			<span ng-repeat="day in days" ng-class="{active:day==3}">{{day}}</span>
+		</div>
+	</div>
+</div>

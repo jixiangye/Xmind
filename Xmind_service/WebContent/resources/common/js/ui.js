@@ -82,5 +82,62 @@ define(function(require,exports,module){
 					queue.push(options);
 				}
 			};
+		}])
+		/**
+		 * 
+		 */
+		.directive("timepicker",[function(){
+			return {
+				restrict:"AE",
+				replace:true,
+				scope:{
+					
+				},
+				controller:function($scope,$element){
+					var KEY = {
+							UP:38,
+							DOWN:40
+						};
+					var month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+						updateDays = function(){
+							var monthLen = month[1],
+								months = new Array(monthLen);
+							for(var i=0,len=monthLen;i<len;i++){
+								months[i] = i+1;
+							}
+							$scope.days = months;
+						};
+					
+					$scope.weeks = ["日","一","二","三","四","五","六"];
+					$scope.days = [];
+					updateDays();
+					
+					//up和down 键修改时间
+					$scope.updateTime = function($event,m){
+						var e = $event,
+							target = e.target,
+							max = m;
+						
+						target.value = +target.value||0;
+						
+						if(e.keyCode === KEY.UP){
+							target.value++;
+						}else if(e.keyCode === KEY.DOWN){
+							target.value--;
+						}
+						
+						if(target.value > max){
+							target.value = 0;
+						}else if(target.value < 0){
+							target.value = max;
+						}
+						
+						//一位数字自动补零
+						if(target.value.length === 1)
+							target.value = "0" + target.value;
+					};
+				},
+				templateUrl:"../../../common/html/timepicker.html"
+			};
 		}]); 
 });

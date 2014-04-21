@@ -17,7 +17,8 @@
 				<div class="input-group">
    					<input type="text" class="form-control" ng-model="content" placeholder="我想..." ng-keydown="todoKeyDown($event)">
   					<span class="input-group-addon remind-btn" title="添加提醒" ng-class="{active:reminderTime}" ng-click="openTimepicker()">
-  						<span class="glyphicon glyphicon-bell"></span>
+  						<span class="glyphicon glyphicon-bell remind-icon"></span>
+  						<span  timepicker></span>
   					</span>
    					<span class="input-group-btn"><button type="submit" class="btn btn-primary col-md-12" ng-click="addTodo()">添加</button></span>
 				</div>
@@ -136,8 +137,8 @@
 				<span class="glyphicon glyphicon-remove" title="关闭" ng-click="endEdit($event,todo,'status',3)" ng-show="todo.status!=3"></span>
 				<span class="glyphicon glyphicon-bell" title="提醒" ng-show="todo.status<2"></span>
 				<span class="glyphicon glyphicon-trash" title="删除" ng-click="deleteTodo(todo.notesId)" ng-show="todo.status>1"></span>
-				<span class="tag-panel" ng-mouseenter="chooseTag = true" ng-mouseleave="chooseTag = false">
-					<span class="glyphicon glyphicon-tags tag-icon" title="标签"></span>
+				<span class="tag-panel" ng-mouseenter="chooseTag = true" ng-mouseleave="chooseTag = false" title="标签">
+					<span class="glyphicon glyphicon-tags tag-icon"></span>
 					<span class="label" ng-repeat="tag in tags" style="background:{{tag.tagColor}}" ng-class="{invaild:inTags(todo.tags,tag.tagName)<0}" ng-click="toggleTagToTodo(todo,tag)" ng-show="inTags(todo.tags,tag.tagName)>-1 || chooseTag">{{tag.tagName}}</span>
 				</span>
 			</div>

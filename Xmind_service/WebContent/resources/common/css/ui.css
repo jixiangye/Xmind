@@ -1,0 +1,113 @@
+/*timepicker style START*/
+.aui-timepicker{
+	right:0;
+	left:auto;
+	padding:10px 10px 2px;
+	min-width:200px;
+	cursor:auto;
+}
+
+.aui-tpk-label{
+	width:50px;
+	float:left;
+}
+
+.aui-tpk-label .label{
+	display:block;
+	margin-bottom:5px;
+	padding:.4em .6em;
+	cursor:pointer;
+}
+
+.aui-tpk-time{
+	font-size:4em;
+	margin-left:60px;
+	padding:5px;
+}
+
+.aui-tpk-time-ipt{
+	vertical-align: middle;
+	background-color: #ffffff;
+	background-image: none;
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+	width: 1.4em;
+	text-align: center;
+}
+
+.aui-tpk-time-ipt.left-ipt{
+	margin-right:-10px;
+}
+
+.aui-tpk-time-ipt.right-ipt{
+	margin-left:-13px;
+}
+
+.aui-tpk-toggle{
+	cursor:pointer;
+	opacity:0.5;
+}
+
+.aui-tpk-toggle:hover{
+	opacity:1;
+}
+
+.aui-tpk-box{
+	display:none;
+	padding-bottom:8px;
+}
+
+.aui-tpk-box.active{
+	display:block;
+}
+
+.aui-tpk-title{
+	padding:5px;
+	font-size:14px;
+	position:relative;
+}
+
+.aui-tpk-last,.aui-tpk-next{
+	position:absolute;
+	top:5px;
+	opacity:0.5;
+	cursor:pointer;
+}
+
+.aui-tpk-last:hover,.aui-tpk-next:hover{
+	opacity:1;
+}
+
+.aui-tpk-last{
+	left:0;
+}
+
+.aui-tpk-next{
+	right:0;
+}
+
+.aui-tpk-head{
+}
+
+.aui-tpk-head span{
+	display:inline-block;
+	width:14.285714285714285%;
+	border-right:1px solid #ccc;
+	padding:5px 0;
+}
+
+.aui-tpk-body span{
+	display: block;
+	float: left;
+	width:14.285714285714285%;
+	border-right:1px solid #ccc;
+	padding:5px 0;
+	cursor:pointer;
+}
+
+.aui-tpk-body span.active{
+	background:#5bc0de;
+	color:#fff;
+	border-color:#5bc0de;
+}
+/*timepicker style END*/
