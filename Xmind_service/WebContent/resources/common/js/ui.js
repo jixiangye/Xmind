@@ -116,25 +116,28 @@ define(function(require,exports,module){
 					$scope.updateTime = function($event,m){
 						var e = $event,
 							target = e.target,
+							value = target.value,
 							max = m;
 						
-						target.value = +target.value||0;
+						value = +value||0;
 						
 						if(e.keyCode === KEY.UP){
-							target.value++;
+							value++;
 						}else if(e.keyCode === KEY.DOWN){
-							target.value--;
+							value--;
 						}
 						
-						if(target.value > max){
-							target.value = 0;
-						}else if(target.value < 0){
-							target.value = max;
+						if(value > max){
+							value = "00";
+						}else if(value < 0){
+							value = max;
 						}
 						
 						//一位数字自动补零
-						if(target.value.length === 1)
-							target.value = "0" + target.value;
+						if((""+value).length === 1)
+							value = "0" + value;
+							
+						target.value = value;
 					};
 				},
 				templateUrl:"../../../common/html/timepicker.html"
