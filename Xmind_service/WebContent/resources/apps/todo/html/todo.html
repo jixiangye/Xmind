@@ -16,7 +16,7 @@
 			<div class="todo-input-group">
 				<div class="input-group">
    					<input type="text" class="form-control" ng-model="content" placeholder="我想..." ng-keydown="todoKeyDown($event)">
-  					<span class="input-group-addon remind-btn" title="添加提醒" ng-class="{active:reminderTime}" ng-click="openTimepicker()">
+  					<span class="input-group-addon remind-btn" title="添加提醒" reminder-time="reminderTime" timepicker>
   						<span class="glyphicon glyphicon-bell remind-icon"></span>
   						<span  timepicker></span>
   					</span>
@@ -135,7 +135,9 @@
 				<span class="glyphicon glyphicon-arrow-left" title="恢复" ng-click="endEdit($event,todo,'status',1)" ng-show="todo.status>1"></span>
 				<span class="glyphicon glyphicon-ok" title="完成" ng-click="endEdit($event,todo,'status',2)" ng-show="todo.status<2"></span>
 				<span class="glyphicon glyphicon-remove" title="关闭" ng-click="endEdit($event,todo,'status',3)" ng-show="todo.status!=3"></span>
-				<span class="glyphicon glyphicon-bell" title="提醒" ng-show="todo.status<2"></span>
+				<span ng-show="todo.status<2">
+					<span class="todo-reminder" reminder-time="todo.reminderTime" timepicker></span>
+				</span>
 				<span class="glyphicon glyphicon-trash" title="删除" ng-click="deleteTodo(todo.notesId)" ng-show="todo.status>1"></span>
 				<span class="tag-panel" ng-mouseenter="chooseTag = true" ng-mouseleave="chooseTag = false" title="标签">
 					<span class="glyphicon glyphicon-tags tag-icon"></span>
