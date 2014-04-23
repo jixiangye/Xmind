@@ -34,13 +34,16 @@ define(function(require,exports,module){
 			//初始化todo列表
 			xajax({url:URL.GET_LIST,method:"post",data:{}})
 			.success(function(d){
-				var len = 0;
-				$scope.todos = d.noteList;
+				var list = [{text:"待处理",status:1,list:[],expand:true},
+				            {text:"记事",list:[],expand:true},
+				            {text:"已完成",status:2,list:[],expand:true},
+				            {text:"已关闭",status:3,list:[],expand:true}];
+				
 				angular.forEach(d.noteList,function(v,k){
-					if(v.status == 1 && v.reminderTime)
-						len++;
+					v.old = v.content;
+					list[v.status == 1 ? 0 : (v.status||1)].list.push(v);
 				});
-				$scope.remindLength = len;
+				$scope.todos = list;
 			});
 			
 			//初始化标签
@@ -56,7 +59,6 @@ define(function(require,exports,module){
 			$scope.historyGroup = [];
 			$scope.historySpan = "";
 			$scope.todo = {};
-			$scope.remindLength = 0;
 			$scope.tags = [];
 			$scope.tagsMap = {};
 			$scope.reminderTime = "";
@@ -83,7 +85,10 @@ define(function(require,exports,module){
 				
 				xajax({url:URL.SAVE_TODO,data:data,method:"post"})
 				.success(function(d){
-					$scope.todos.unshift(d);
+					var group = $scope.todos[d.status == 1 ? 0 : 1];
+					
+					if(!group.expand) group.expand = true;
+					group.list.unshift(d);
 					$scope.content = "";
 					if($scope.reminderTime)
 						$scope.reminderTime = "";
@@ -157,7 +162,7 @@ define(function(require,exports,module){
 			};
 			
 			//结束编辑
-			$scope.endEdit = function($event,todo,key,value){
+			$scope.endEdit = function($event,todo,key,value,group){
 				var data = {notesId:todo.notesId};
 				
 				data.content = todo.content;
@@ -168,6 +173,16 @@ define(function(require,exports,module){
 				}else{
 					if(!data.content)
 						return;
+					if(todo.content === todo.old){
+						prompt({
+							type:"warning",
+							content:"未做任何修改"
+						});
+						todo.editing = false;
+						return;
+					}else{
+						todo.old = todo.content;
+					}
 				}
 				
 				if(key === "reminderTime" && !data.status){
@@ -243,7 +258,7 @@ define(function(require,exports,module){
 				data.tagColor = "rgb("+[random(),random(),random()].join(",")+")";
 				xajax({url:URL.SAVE_TAG,data:data,method:"post"})
 				.success(function(d){
-					$scope.tags.unshift(data);
+					($scope.tags || ($scope.tags=[])).unshift(data);
 					$scope.tagName = "";
 				});
 			};
