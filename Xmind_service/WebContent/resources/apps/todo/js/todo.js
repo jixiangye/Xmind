@@ -59,6 +59,7 @@ define(function(require,exports,module){
 			$scope.remindLength = 0;
 			$scope.tags = [];
 			$scope.tagsMap = {};
+			$scope.reminderTime = "";
 			
 			//添加
 			$scope.addTodo = function(){

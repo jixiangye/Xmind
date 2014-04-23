@@ -159,6 +159,10 @@
 	opacity:1;
 }
 
+.todo-list .todo-panel .todo-reminder{
+	position:relative;
+}
+
 .todo-list .todo-panel .glyphicon{
 	cursor:pointer;
 	margin-right:10px;
