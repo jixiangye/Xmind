@@ -80,6 +80,52 @@ define(function(require,exports,module){
         	};
         	
         	return notice;
+        })
+        
+        /**
+         * @param time<String> 时间字符串
+         * @param callback<Function> 回调函数
+         * @param args<Array or ArrayLike> 回调函数的参数
+         * @param context<Object> 回调函数的执行上下文
+         * @return undefined
+         */
+        .factory("timer",function(){
+        	return function timeout(time,callback,args,context){
+        		var now = (new Date).getTime(),
+			        remind = formatter(time).getTime(),
+			        gap = (remind-now)/1000,
+			        f;
+			        
+			    if(gap > 60*60){
+			        f = 50*60;
+			    }else if(gap > 10*60){
+			        f = 8*60
+			    }else if(gap > 60){
+			        f = 40
+			    }else if(gap > 0){
+			        var interval = setInterval(function(){
+			                if((new Date).getTime() >= formatter(time).getTime()){
+			                    clearInterval(interval);
+			                    callback.apply(context,args);
+			                }
+			            },1000);
+			        return;
+			    }else{
+			        return;
+			    }
+			    setTimeout(function(){timeout(time,callback)},f*1000);
+        	};
+        	
+        	//@param 时间字符串
+        	function formatter(time){
+			    var reg = /^(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)/,
+			        list = reg.exec(time),
+			        date = new Date(list.slice(1,4));
+			    date.setHours(list[4]);
+			    date.setMinutes(list[5]);
+			    date.setSeconds(list[6]);
+			    return date;
+			}
         });
     
     angular
