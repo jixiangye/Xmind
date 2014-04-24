@@ -35,6 +35,7 @@ CREATE TABLE test.tag
 tag_id int not null AUTO_INCREMENT,
 tag_name Varchar(20),
 tag_color Varchar(20),
+user_Id int,
 PRIMARY KEY (tag_id)
 );
 

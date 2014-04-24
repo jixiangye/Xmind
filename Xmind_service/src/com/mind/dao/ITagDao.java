@@ -13,6 +13,9 @@ public interface ITagDao extends Repository<Tag, Integer> {
 	List<Tag> findAll();
 
 	@Transactional(propagation = Propagation.SUPPORTS)
+	List<Tag> findByUserId(Integer userId);
+
+	@Transactional(propagation = Propagation.SUPPORTS)
 	Tag findByTagName(String tagName);
 
 	@Transactional(propagation = Propagation.SUPPORTS)

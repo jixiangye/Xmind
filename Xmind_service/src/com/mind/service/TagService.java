@@ -2,11 +2,14 @@ package com.mind.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mind.bean.ErrorBean;
 import com.mind.bean.ItemListBean;
 import com.mind.bean.TagBean;
 import com.mind.bean.TagNotesRelationBean;
@@ -23,18 +26,28 @@ public class TagService {
 	@Autowired
 	private ITagNotesRelationDao tagNotesRelationDao;
 
-	public ItemListBean<Tag> query() {
+	public ItemListBean<Tag> query(HttpSession session) {
 		ItemListBean<Tag> tagList = new ItemListBean<>();
-		List<Tag> list = tagDao.findAll();
-		tagList.setList(list);
+		if (session.getAttribute("id") == null) {
+			tagList.getErrorBeanList().add(new ErrorBean("", "用户未登录"));
+		} else {
+			List<Tag> list = tagDao.findByUserId((Integer) session
+					.getAttribute("id"));
+			tagList.setList(list);
+		}
 		return tagList;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
-	public TagBean save(Tag tag) {
+	public TagBean save(Tag tag, HttpSession session) {
 		TagBean tagBean = new TagBean();
-		tag = tagDao.save(tag);
-		tagBean.setTagId(tag.getTagId());
+		if (session.getAttribute("id") == null) {
+			tagBean.getErrorBeanList().add(new ErrorBean("", "用户未登录"));
+		} else {
+			tag.setUserId((Integer) session.getAttribute("id"));
+			tag = tagDao.save(tag);
+			tagBean.setTagId(tag.getTagId());
+		}
 		return tagBean;
 	}
 
@@ -47,24 +60,12 @@ public class TagService {
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public TagNotesRelationBean saveRelation(
 			TagNotesRelationBean tagNotesRelationBean) {
-		Tag tag = tagDao.findByTagName(tagNotesRelationBean.getTagName());
-		if (tag == null) {
-			tag = new Tag();
-			tag.setTagName(tagNotesRelationBean.getTagName());
-			tag.setTagColor(tagNotesRelationBean.getTagColor());
-			tag = tagDao.save(tag);
-		}
-		TagNotesRelation tagNotesRelation = tagNotesRelationDao
-				.findByNotesIdAndTagTagName(tagNotesRelationBean.getNotesId(),
-						tagNotesRelationBean.getTagName());
-		if (tagNotesRelation == null) {
-			tagNotesRelation = new TagNotesRelation();
-			tagNotesRelation.setNotesId(tagNotesRelationBean.getNotesId());
-			tagNotesRelation.setTagId(tag.getTagId());
-			tagNotesRelation = tagNotesRelationDao.save(tagNotesRelation);
-			tagNotesRelationBean.setTagNotesRelationId(tagNotesRelation
-					.getTagNotesRelationId());
-		}
+		TagNotesRelation tagNotesRelation = new TagNotesRelation();
+		tagNotesRelation.setNotesId(tagNotesRelationBean.getNotesId());
+		tagNotesRelation.setTagId(tagNotesRelationBean.getTagId());
+		tagNotesRelation = tagNotesRelationDao.save(tagNotesRelation);
+		tagNotesRelationBean.setTagNotesRelationId(tagNotesRelation
+				.getTagNotesRelationId());
 		return tagNotesRelationBean;
 	}
 

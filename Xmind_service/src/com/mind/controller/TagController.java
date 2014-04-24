@@ -1,5 +1,7 @@
 package com.mind.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +25,14 @@ public class TagController {
 
 	@RequestMapping(value = "/query", method = RequestMethod.POST)
 	@ResponseBody
-	public ItemListBean<Tag> query() {
-		return tagService.query();
+	public ItemListBean<Tag> query(HttpSession session) {
+		return tagService.query(session);
 	}
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
-	public TagBean save(@RequestBody Tag tag) {
-		return tagService.save(tag);
+	public TagBean save(@RequestBody Tag tag, HttpSession session) {
+		return tagService.save(tag, session);
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
