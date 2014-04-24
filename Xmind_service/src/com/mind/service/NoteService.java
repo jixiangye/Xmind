@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
 
@@ -38,6 +39,8 @@ public class NoteService {
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public NoteBean save(NoteBean noteBean, HttpSession session) {
+		TimeZone timezone = TimeZone.getTimeZone("Asia/Shanghai");
+		TimeZone.setDefault(timezone);
 		if (session.getAttribute("id") == null) {
 			noteBean.getErrorBeanList().add(new ErrorBean("", "用户未登录"));
 		} else {
