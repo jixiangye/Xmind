@@ -57,7 +57,12 @@
 } */
 
 .tag-box{
-	padding:10px;
+	padding:0px;
+}
+
+.tag-box li{
+	display:block;
+	padding:10px 15px;
 }
 
 .tag-box .label{
@@ -131,12 +136,17 @@
 	border-top:0;
 }
 
-.todo-list :last-child{
+.todo-list li:last-child{
 	border-bottom:0;
 }
 
 .todo-list li:hover{
 	background-color:#fbfafe;
+}
+
+.todo-list li:hover .todo-panel{
+	display:block;
+	opacity:1;
 }
 
 .todo-list .active{
@@ -188,11 +198,6 @@
 	-moz-transition: all 0.5s; 
 	-webkit-transition: all 0.5s; 
 	-o-transition: all 0.5s; 
-}
-
-.todo-list .active .todo-panel{
-	display:block;
-	opacity:1;
 }
 
 .todo-list .todo-panel .todo-reminder{

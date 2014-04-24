@@ -68,15 +68,19 @@ define(function(require,exports,module){
         	
         	notice.create = function(p,t,c){
         		//@param 图片，标题，描述信息
-        		window.createNotification(p,t,c);
+        		return window.webkitNotifications.createNotification(p,t,c);
         	};
         	
-        	notice.uncheck = function(){
+        	notice.check = function(){
         		return window.webkitNotifications.checkPermission();
         	};
         	
-        	notice.request = function(){
-        		window.webkitNotifications.requestPermission();
+        	notice.request = function(callback){
+        		window.webkitNotifications.requestPermission(callback);
+        	};
+        	
+        	notice.support = function(){
+        		return !!window.webkitNotifications;
         	};
         	
         	return notice;
@@ -90,9 +94,9 @@ define(function(require,exports,module){
          * @return undefined
          */
         .factory("timer",function(){
-        	return function timeout(time,callback,args,context){
+        	function timeout(time,callback,args,context){
         		var now = (new Date).getTime(),
-			        remind = formatter(time).getTime(),
+			        remind = timeout.formatter(time).getTime(),
 			        gap = (remind-now)/1000,
 			        f;
 			        
@@ -104,7 +108,7 @@ define(function(require,exports,module){
 			        f = 40
 			    }else if(gap > 0){
 			        var interval = setInterval(function(){
-			                if((new Date).getTime() >= formatter(time).getTime()){
+			                if((new Date).getTime() >= timeout.formatter(time).getTime()){
 			                    clearInterval(interval);
 			                    callback.apply(context,args);
 			                }
@@ -117,7 +121,7 @@ define(function(require,exports,module){
         	};
         	
         	//@param 时间字符串
-        	function formatter(time){
+        	timeout.formatter = function(time){
 			    var reg = /^(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)/,
 			        list = reg.exec(time),
 			        date = new Date(list.slice(1,4));
@@ -125,7 +129,9 @@ define(function(require,exports,module){
 			    date.setMinutes(list[5]);
 			    date.setSeconds(list[6]);
 			    return date;
-			}
+			};
+			
+			return timeout;
         });
     
     angular
