@@ -30,6 +30,9 @@ public class Tag implements Serializable {
 	@Column(name="tag_color")
 	private String tagColor;
 	
+	@Column(name="user_Id")
+	private Integer userId;
+	
 	public Tag() {
 	}
 
@@ -57,4 +60,11 @@ public class Tag implements Serializable {
 		this.tagId = tagId;
 	}
 
+	public Integer getUserId() {
+		return this.userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
 }

@@ -5,6 +5,8 @@ public class TagNotesRelationBean extends BaseBean {
 
 	private Integer tagNotesRelationId;
 
+	private Integer tagId;
+
 	private String tagName;
 
 	private String tagColor;
@@ -41,6 +43,14 @@ public class TagNotesRelationBean extends BaseBean {
 
 	public void setTagColor(String tagColor) {
 		this.tagColor = tagColor;
+	}
+
+	public Integer getTagId() {
+		return tagId;
+	}
+
+	public void setTagId(Integer tagId) {
+		this.tagId = tagId;
 	}
 
 }
