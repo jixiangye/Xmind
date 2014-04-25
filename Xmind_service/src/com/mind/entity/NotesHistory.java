@@ -1,34 +1,44 @@
 package com.mind.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.mind.utils.DateUtils;
 
 /**
  * The persistent class for the notes_history database table.
  * 
  */
 @Entity
-@Table(name="test.notes_history")
+@Table(name = "notes_history")
 public class NotesHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "notes_history_id")
+	private Integer notesHistoryId;
 
 	private String content;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="modify_time")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "modify_time")
 	private Date modifyTime;
 
-	@Column(name="notes_id")
+	@Column(name = "notes_id")
 	private Integer notesId;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="reminder_time")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "reminder_time")
 	private Date reminderTime;
 
 	private String status;
@@ -36,12 +46,12 @@ public class NotesHistory implements Serializable {
 	public NotesHistory() {
 	}
 
-	public Integer getId() {
-		return this.id;
+	public Integer getNotesHistoryId() {
+		return this.notesHistoryId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setNotesHistoryId(Integer notesHistoryId) {
+		this.notesHistoryId = notesHistoryId;
 	}
 
 	public String getContent() {
@@ -52,8 +62,8 @@ public class NotesHistory implements Serializable {
 		this.content = content;
 	}
 
-	public Date getModifyTime() {
-		return this.modifyTime;
+	public String getModifyTime() {
+		return DateUtils.format(this.modifyTime, "yyyy-MM-dd HH:mm:ss");
 	}
 
 	public void setModifyTime(Date modifyTime) {
@@ -68,8 +78,8 @@ public class NotesHistory implements Serializable {
 		this.notesId = notesId;
 	}
 
-	public Date getReminderTime() {
-		return this.reminderTime;
+	public String getReminderTime() {
+		return DateUtils.format(this.reminderTime, "yyyy-MM-dd HH:mm:ss");
 	}
 
 	public void setReminderTime(Date reminderTime) {

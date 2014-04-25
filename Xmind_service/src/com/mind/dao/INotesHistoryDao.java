@@ -13,5 +13,5 @@ public interface INotesHistoryDao extends Repository<NotesHistory, Integer> {
 	NotesHistory save(NotesHistory notesHistory);
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
-	List<NotesHistory> findByNotesId(Integer notesId);
+	List<NotesHistory> findByNotesIdOrderByModifyTimeDesc(Integer notesId);
 }

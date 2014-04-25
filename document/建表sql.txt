@@ -1,31 +1,48 @@
 CREATE TABLE test.user
 (
-id	int not null AUTO_INCREMENT,
+user_id	int not null AUTO_INCREMENT,
 username	Varchar(20)	,
 password	Varchar(20)	,
 email	Varchar(50)	,
-PRIMARY KEY (Id)
+PRIMARY KEY (user_id)
 );
 
 CREATE TABLE test.notes
 (
-id	int not null AUTO_INCREMENT,
+notes_id	int not null AUTO_INCREMENT,
 user_Id int,
-modify_time	Date ,
+modify_time DATETIME,
 content	Varchar(1000)	,
-status	Varchar(1) ,
-create_time	Date ,
-reminder_time Date,
-PRIMARY KEY (Id)
+status	Varchar(1),
+create_time DATETIME ,
+reminder_time DATETIME,
+PRIMARY KEY (notes_id)
 );
 
 CREATE TABLE test.notes_history
 (
-id	int not null AUTO_INCREMENT,
+notes_history_id	int not null AUTO_INCREMENT,
 notes_id int ,
-modify_time	Date ,
+modify_time DATETIME,
 content	Varchar(1000) ,
 status	Varchar(1) ,
-reminder_time Date,
-PRIMARY KEY (Id)
+reminder_time DATETIME,
+PRIMARY KEY (notes_history_id)
+);
+
+CREATE TABLE test.tag
+(
+tag_id int not null AUTO_INCREMENT,
+tag_name Varchar(20),
+tag_color Varchar(20),
+user_Id int,
+PRIMARY KEY (tag_id)
+);
+
+CREATE TABLE test.tag_notes_relation
+(
+tag_notes_relation_id	int not null AUTO_INCREMENT,
+tag_id int,
+notes_id int ,
+PRIMARY KEY (tag_notes_relation_id)
 );

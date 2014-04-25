@@ -1,21 +1,27 @@
 package com.mind.entity;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the user database table.
  * 
  */
 @Entity
-@Table(name="test.user")
+@Table(name = "user")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "user_id")
+	private Integer userId;
 
 	private String email;
 
@@ -26,12 +32,12 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public Integer getId() {
-		return this.id;
+	public Integer getUserId() {
+		return this.userId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
 	public String getEmail() {

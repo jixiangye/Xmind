@@ -3,13 +3,12 @@ package com.mind.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mind.entity.Note;
 import com.mind.entity.NotesHistory;
 
 public class NoteBean extends BaseBean {
 	private static final long serialVersionUID = 1L;
 
-	private Integer noteId;
+	private Integer notesId;
 
 	private String content;
 
@@ -17,16 +16,26 @@ public class NoteBean extends BaseBean {
 
 	private String status;
 
-	private List<Note> noteList = new ArrayList<>();
+	private List<NotesBean> noteList = new ArrayList<>();
 
 	private List<NotesHistory> noteHistoryList = new ArrayList<>();
 
-	public Integer getNoteId() {
-		return noteId;
+	private String createTime;
+
+	public String getCreateTime() {
+		return createTime;
 	}
 
-	public void setNoteId(Integer noteId) {
-		this.noteId = noteId;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public Integer getNotesId() {
+		return notesId;
+	}
+
+	public void setNotesId(Integer notesId) {
+		this.notesId = notesId;
 	}
 
 	public String getContent() {
@@ -53,7 +62,7 @@ public class NoteBean extends BaseBean {
 		this.status = status;
 	}
 
-	public List<Note> getNoteList() {
+	public List<NotesBean> getNoteList() {
 		return noteList;
 	}
 

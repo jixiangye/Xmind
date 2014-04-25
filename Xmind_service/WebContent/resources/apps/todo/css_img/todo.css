@@ -1,0 +1,288 @@
+.todo-box{
+	position:relative;
+}
+
+.todo-input-group{
+	margin-bottom:10px;
+}
+
+.todo-input-group input{
+	/* border-right:0; */
+}
+
+.todo-input-group button{
+	width:100px;
+}
+
+.todo-input-group .remind-btn{
+	border-left:0;
+	cursor:pointer;
+	position:relative;
+}
+
+.todo-input-group .remind-btn .remind-icon{
+	opacity:0.5;
+}
+
+.todo-input-group .remind-btn.active span{
+	color:#ed9c28;
+	opacity:1;
+}
+
+.todo-input-group .remind-btn:hover .remind-icon{
+	opacity:1;
+}
+
+/* .todo-input-group .remind-btn:hover .aui-timepicker{
+	display:block;
+} */
+
+.tag-box{
+	padding:10px;
+}
+
+.tag-box .label{
+	margin-right:5px;
+	cursor:pointer;
+}
+
+.tag-add{
+	opacity:0.5;
+	cursor:pointer;
+}
+
+.tag-add-box:hover .tag-add{
+	opacity:1;
+}
+
+.tag-add-box input{
+	/* display:none; */
+	width:200px;
+	display:inline-block;
+}
+
+.tag-add-box:hover input{
+}
+
+.tag-panel{
+	display:inline-block;
+}
+
+.tag-panel span{
+	cursor:pointer;
+	margin-right:5px;
+}
+
+.tag-panel .invaild{
+	background:#ccc !important;
+}
+
+.todo-list .tag-panel .tag-icon{
+	width:1.2em;
+}
+
+.todo-list .tag-panel:hover .tag-icon{
+	opacity:1;
+}
+
+.todo-list{
+	padding-left:0;
+}
+
+.todo-list li{
+	position: relative;
+	display: block;
+	padding: 10px 15px; 
+	margin-bottom: -1px;
+	background-color: #fff;
+	border:solid #ddd;
+	border-width:1px 0 1px 0;
+}
+
+.todo-list :first-child{
+	border-top:0;
+}
+
+.todo-list li:hover{
+	background-color:#fbfafe;
+}
+
+.todo-list .active{
+}
+
+.todo-list .tag-mark{
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	width:4px;
+}
+
+.todo-list .tag-mark-item{
+	width:4px;
+	display:block;
+}
+
+.todo-list .todo-status{
+	color:#aaa;
+}
+
+.todo-list .todo-status .remind-todo{
+	color:#ed9c28;
+}
+
+.todo-list .todo-status .finish-todo{
+	color:#47a447;
+}
+
+.todo-list .todo-status .close-todo{
+	color:#d2322d;
+}
+
+.todo-list li.close-todo .todo-content{
+	text-decoration: line-through;
+	color:#aaa;
+}
+
+.todo-panel{
+	padding:5px 0 0;
+	display:none;
+	opacity:0;
+	transition: all 0.5s;
+	-moz-transition: all 0.5s; 
+	-webkit-transition: all 0.5s; 
+	-o-transition: all 0.5s; 
+}
+
+.todo-list .active .todo-panel{
+	display:block;
+	opacity:1;
+}
+
+.todo-list .todo-panel .todo-reminder{
+	position:relative;
+}
+
+.todo-list .todo-panel .glyphicon{
+	cursor:pointer;
+	margin-right:10px;
+	opacity:0.5;
+}
+
+.todo-list .todo-panel .glyphicon:hover{
+	opacity:1;
+}
+
+.history-box{
+	position: relative;
+	padding: 20px 20px 0;
+}
+
+.todo-history-arrow{
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-top: 4px solid transparent;
+	border-bottom: 4px solid transparent;
+	border-right: 6px solid #39b3d7;
+	position:absolute;
+	top:10px;
+	left:-6px;
+}
+
+.todo-history-point{
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	border: 4px solid #fff;
+	left: -46px;
+	top: 6px;
+	border-radius: 8px;
+	background: #39b3d7;
+}
+
+.time-line{
+	width:3px;
+	background:#ccc;
+	position:absolute;
+	top:42px;
+	left:20px;
+	bottom:0px;
+}
+
+.group-head{
+	color: #ccc;
+	margin: 0 0 10px -10px;
+	background: #fff;
+	position: relative;
+	z-index: 1;
+}
+
+.todo-history-list{
+	
+}
+
+.todo-history-list li,.time-head li{
+	border-radius: 4px;
+	padding:10px 15px;
+	background:#39b3d7;
+	position:relative;
+	display:block;
+	color:#fff;
+	word-break:break-all;
+	margin-bottom:10px;
+}
+
+.time-head li{
+	background:#ccc;
+}
+
+.time-head li .todo-history-arrow{
+	border-right-color:#ccc;
+}
+
+.time-head-point{
+	position: absolute;
+	left: -47px;
+	top: 6px;
+	border-radius: 8px;
+	color: #ccc;
+	font-size:1.2em;
+}
+
+.todo-history-list li.remind-todo{
+	background:#ed9c28;
+}
+
+.todo-history-list li.remind-todo .todo-history-arrow{
+	border-right-color:#ed9c28;
+}
+
+.todo-history-list li.remind-todo .todo-history-point{
+	background:#ed9c28;
+}
+
+.todo-history-list li.finish-todo{
+	background:#47a447;
+}
+
+.todo-history-list li.finish-todo .todo-history-arrow{
+	border-right-color:#47a447;
+}
+
+.todo-history-list li.finish-todo .todo-history-point{
+	background:#47a447;
+}
+
+.todo-history-list li.close-todo{
+	background:#d2322d;
+}
+
+.todo-history-list li.close-todo .todo-history-arrow{
+	border-right-color:#d2322d;
+}
+
+.todo-history-list li.close-todo .todo-history-point{
+	background:#d2322d;
+}
