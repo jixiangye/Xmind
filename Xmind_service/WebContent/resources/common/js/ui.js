@@ -101,6 +101,14 @@ define(function(require,exports,module){
 						hIpt = $element.find(".aui-left-ipt .aui-tpk-time-ipt"),
 						mIpt = $element.find(".aui-right-ipt .aui-tpk-time-ipt"),
 						dateBody = $element.find(".aui-tpk-body");
+					
+					$element.on("click",function(){
+						return false;
+					});
+					
+					angular.element(document).on("click",function(){
+						$element.find(".aui-timepicker").hide();
+					});
 						
 					var now = function(){
 							var date = new Date();

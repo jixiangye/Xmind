@@ -1,1 +1,23 @@
+html,
+body,
+.note,
+.note>div{
+	height:100%;
+}
 
+body{
+	margin-top:-65px;
+	padding-top:65px;
+}
+
+.note{
+	margin-top:-5px;
+}
+
+.note-left{
+	background:#ccc;
+}
+
+.note-node-add{
+	background:#eee;
+}

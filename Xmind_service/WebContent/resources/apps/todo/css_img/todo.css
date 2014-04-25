@@ -1,5 +1,24 @@
 .todo-box{
 	position:relative;
+	padding:0;
+}
+
+.todo-box>li{
+	display:block;
+}
+
+.todo-type{
+	background-color:#fff;
+	padding: 10px 11px;
+	color:#aaa;
+	cursor:pointer;
+	border:solid #f5f4f6;
+	border-width:0 0 1px 4px;
+	border-left-color:#eee;
+}
+
+.todo-type:hover{
+	color:#39b3d7;
 }
 
 .todo-input-group{
@@ -38,7 +57,12 @@
 } */
 
 .tag-box{
-	padding:10px;
+	padding:0px;
+}
+
+.tag-box li{
+	display:block;
+	padding:10px 15px;
 }
 
 .tag-box .label{
@@ -66,11 +90,20 @@
 
 .tag-panel{
 	display:inline-block;
+	position:relative;
 }
 
-.tag-panel span{
+.tag-panel .label{
 	cursor:pointer;
 	margin-right:5px;
+	display:inline-block;
+}
+
+.tag-panel:hover .tag-panel-box{
+	position: absolute;
+	z-index: 99;
+	top: -4px;
+	left: 24px;
 }
 
 .tag-panel .invaild{
@@ -95,7 +128,7 @@
 	padding: 10px 15px; 
 	margin-bottom: -1px;
 	background-color: #fff;
-	border:solid #ddd;
+	border:solid #f5f4f6;
 	border-width:1px 0 1px 0;
 }
 
@@ -103,8 +136,17 @@
 	border-top:0;
 }
 
+.todo-list li:last-child{
+	border-bottom:0;
+}
+
 .todo-list li:hover{
 	background-color:#fbfafe;
+}
+
+.todo-list li:hover .todo-panel{
+	display:block;
+	opacity:1;
 }
 
 .todo-list .active{
@@ -121,6 +163,10 @@
 .todo-list .tag-mark-item{
 	width:4px;
 	display:block;
+}
+
+.todo-list .todo-content{
+	word-break:break-all;
 }
 
 .todo-list .todo-status{
@@ -154,22 +200,18 @@
 	-o-transition: all 0.5s; 
 }
 
-.todo-list .active .todo-panel{
-	display:block;
-	opacity:1;
-}
-
 .todo-list .todo-panel .todo-reminder{
 	position:relative;
 }
 
-.todo-list .todo-panel .glyphicon{
+.todo-list .todo-panel-primary .glyphicon{
 	cursor:pointer;
 	margin-right:10px;
 	opacity:0.5;
+	vertical-align:top;
 }
 
-.todo-list .todo-panel .glyphicon:hover{
+.todo-list .todo-panel-primary .glyphicon:hover{
 	opacity:1;
 }
 

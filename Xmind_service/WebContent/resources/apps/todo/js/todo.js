@@ -6,68 +6,81 @@ define(function(require,exports,module){
 	
 	angular
 		.module("app-todo",["utils","common","ui"])
-		//过滤器
-		.filter('status',function(){
-			return function(array,status){
-				if(!array || !array.length)return;
-				var filtered = [];
-				for(var i=0,len=array.length;i<len;i++){
-					if(array[i].status==status)
-						filtered.push(array[i]);
-				}
-				return filtered;
-			};
+		.value('URL',{
+			SAVE_TODO:"note/save",
+			GET_LIST:"note/getNotes",
+			GET_DETAIL:"note/getNotesHistory",
+			DELETE_TODO:"note/delete",
+			SAVE_TAG:"tag/save",
+			GET_TAGS:"tag/query",
+			SAVE_RELATION:"tag/saveRelation",
+			DELETE_RELATION:"tag/deleteRelation"
 		})
-		.controller("todoList",["$scope","$element","xajax","prompt",function($scope,$element,xajax,prompt){
-			var URL = {
-					SAVE_TODO:"note/save",
-					GET_LIST:"note/getNotes",
-					GET_DETAIL:"note/getNotesHistory",
-					DELETE_TODO:"note/delete",
-					SAVE_TAG:"tag/save",
-					GET_TAGS:"tag/query",
-					SAVE_RELATION:"tag/saveRelation",
-					DELETE_RELATION:"tag/deleteRelation"
-				},
-				todoPanel = angular.element(".todo-panel");
-			
-			//初始化todo列表
-			xajax({url:URL.GET_LIST,method:"post",data:{}})
-			.success(function(d){
-				var len = 0;
-				$scope.todos = d.noteList;
-				angular.forEach(d.noteList,function(v,k){
-					if(v.status == 1 && v.reminderTime)
-						len++;
-				});
-				$scope.remindLength = len;
-			});
-			
-			//初始化标签
-			xajax({url:URL.GET_TAGS,method:"post",data:{}})
-			.success(function(d){
-				$scope.tags = d.list;
-				angular.forEach($scope.tags,function(v,k){
-					$scope.tagsMap[k] = v.tagColor;
-				});
-			});
-			
-			$scope.todos = [];
-			$scope.historyGroup = [];
-			$scope.historySpan = "";
-			$scope.todo = {};
-			$scope.remindLength = 0;
-			$scope.tags = [];
-			$scope.tagsMap = {};
-			$scope.reminderTime = "";
-			
-			//添加
-			$scope.addTodo = function(){
-				var data = {content:$scope.content};
-				saveTodo(data);
+		.value('randomColor',function(){
+			var random = function(){
+				return Math.ceil(Math.random()*255);
 			};
+			return "rgb("+[random(),random(),random()].join(",")+")";
+		})
+		.value('dom',{
+			todoPanel:angular.element(".todo-panel")
+		})
+		.value('todos',[
+            {text:"待处理",status:1,list:[],expand:true},
+            {text:"记事",list:[],expand:true},
+            {text:"已完成",status:2,list:[],expand:true},
+            {text:"已关闭",status:3,list:[],expand:true}
+		])
+		.factory("addTimer",["timer","dateFilter","notice",function(timer,dateFilter,notice){
+			return function addTimer(todo){
+				if(todo.reminderTime){
+					var remind = dateFilter(timer.formatter(todo.reminderTime),"yyyy-MM-dd"),
+						now = dateFilter(new Date,"yyyy-MM-dd");
+					
+					//如果提醒时间在今天
+					if(remind === now){
+						//设置提醒
+						timer(todo.reminderTime,function(todo){
+							todo.reminderTime ="";
+							notice.create(null,"",todo.content).show();
+						},[todo]);
+					}
+				}
+			};
+		}])
+		.factory('init',["xajax","URL","todos","addTimer",function(xajax,URL,todos,addTimer){
+			return function($scope){
+				//初始化todo列表
+				xajax({url:URL.GET_LIST,method:"post",data:{}})
+				.success(function(d){
+					var list = todos;
+					angular.forEach(d.noteList,function(v,k){
+						v.old = v.content;
+						addTimer(v);
+						list[v.status == 1 ? 0 : (v.status||1)].list.push(v);
+					});
+					$scope.todos = list;
+				});
+				
+				//初始化标签
+				xajax({url:URL.GET_TAGS,method:"post",data:{}})
+				.success(function(d){
+					$scope.tags = d.list;
+				});
+			};
+		}])
+		.factory("Todo",["xajax","URL","dom","prompt","addTimer",function(xajax,URL,dom,prompt,addTimer){
+			var todo = {};
 			
-			function saveTodo(data){
+			function saveTodo(data,callback){
+				xajax({url:URL.SAVE_TODO,data:data,method:"post"})
+				.success(function(d){
+					callback(d);
+				});
+			}
+			
+			todo.add = function($scope){
+				var data = {content:$scope.content};
 				if(!data.content){
 					prompt({
 						type:"warning",
@@ -75,36 +88,82 @@ define(function(require,exports,module){
 					});
 					return;
 				}
-				
+
 				if($scope.reminderTime){
 					data.status = 1;
 					data.reminderTime = $scope.reminderTime; 
 				}
 				
-				xajax({url:URL.SAVE_TODO,data:data,method:"post"})
-				.success(function(d){
-					$scope.todos.unshift(d);
+				saveTodo(data,function(d){
+					var group = $scope.todos[d.status == 1 ? 0 : 1];
+
+					if(!group.expand) group.expand = true;
+					group.list.unshift(d);
 					$scope.content = "";
-					if($scope.reminderTime)
-						$scope.reminderTime = "";
+					if($scope.reminderTime) $scope.reminderTime = "";
+					if(d.reminderTime) addTimer(d);
 				});
-			}
-			
-			//关闭
-			$scope.removeTodo = function($index){
-				$scope.todos.splice($index,1);
 			};
 			
-			//回车添加
-			$scope.todoKeyDown = function($event){
-				if($event.keyCode === 13){
-					$scope.addTodo();
-				}
-			};
-			
-			//查看历史
-			$scope.viewDetail = function(todo){
+			todo.update = function(todo,key,value){
 				var data = {notesId:todo.notesId};
+				
+				data.content = todo.content;
+				data.reminderTime = todo.reminderTime;
+				data.status = todo.status;
+				if(key){
+					data[key] = value;
+				}else{
+					if(!data.content)
+						return;
+					if(todo.content === todo.old){
+						prompt({
+							type:"warning",
+							content:"未做任何修改"
+						});
+						todo.editing = false;
+						return;
+					}else{
+						todo.old = todo.content;
+					}
+				}
+				
+				if(key === "reminderTime" && !data.status){
+					data.status = 1;
+				}
+				
+				saveTodo(data,function(d){
+					if(!key){
+						//修改内容
+						todo.editing = false;
+					}else{
+						//修改状态，或提醒时间
+						todo[key] = value;
+					}
+				});
+			};
+			
+			todo.del = function(todoGroup,notesId){
+				var data = {},
+					i;
+				
+				angular.forEach(todoGroup,function(v,k){
+					if(v.notesId == notesId){
+						data.notesId = notesId;
+						i = k;
+						return false;
+					}
+				});
+				
+				xajax({url:URL.DELETE_TODO,data:data,method:"post"})
+				.success(function(d){
+					todoGroup.splice(i,1);
+				});
+			};
+			
+			todo.detail = function($scope,todo){
+				var data = {notesId:todo.notesId};
+				
 				xajax({url:URL.GET_DETAIL,data:data,method:"post"})
 				.success(function(d){
 					var historyGroup = [],
@@ -151,96 +210,17 @@ define(function(require,exports,module){
 				});
 			};
 			
-			//编辑内容
-			$scope.editTodo = function(todo){
-				todo.editing = true;
-			};
+			return todo;
+		}])
+		.factory("Tag",["xajax","URL","randomColor",function(xajax,URL,randomColor){
+			var tag = {};
 			
-			//结束编辑
-			$scope.endEdit = function($event,todo,key,value){
-				var data = {notesId:todo.notesId};
+			tag.add = function($scope){
+				var data = {
+						tagName:$scope.tagName,
+						tagColor:randomColor()
+					};
 				
-				data.content = todo.content;
-				data.reminderTime = todo.reminderTime;
-				data.status = todo.status;
-				if(key){
-					data[key] = value;
-				}else{
-					if(!data.content)
-						return;
-				}
-				
-				if(key === "reminderTime" && !data.status){
-					data.status = 1;
-				}
-				
-				xajax({url:URL.SAVE_TODO,data:data,method:"post"})
-				.success(function(d){
-					if(!key){
-						//修改内容
-						todo.editing = false;
-					}else{
-						//修改状态，或提醒时间
-						todo[key] = value;
-					}
-				});
-			};
-			
-			//回车结束编辑
-			$scope.editKeyDown = function($event,todo){
-				if($event.keyCode === 13){
-					$scope.endEdit($event,todo);
-				}
-			};
-			
-			//删除todo
-			$scope.deleteTodo = function(notesId){
-				var data = {},
-					i;
-				angular.forEach($scope.todos,function(v,k){
-					if(v.notesId == notesId){
-						data.notesId = notesId;
-						i = k;
-						return false;
-					}
-				});
-				
-				xajax({url:URL.DELETE_TODO,data:data,method:"post"})
-				.success(function(d){
-					$scope.todos.splice(i,1);
-				});
-			};
-			
-			//鼠标移入
-			$scope.enterTodo = function($event,todo){
-				var target = angular.element($event.target).closest("li");
-				
-				target.addClass("active");
-				$scope.todo = todo;
-				target.append(todoPanel);
-			};
-			
-			//鼠标移出
-			$scope.leaveTodo = function($event){
-				var target = angular.element($event.target);
-				
-				target.removeClass("active");
-			};
-			
-			//打开时间选择器
-			$scope.openTimepicker = function(){
-				$("#time-picker").modal("show");
-			};
-			
-			//选择时间
-			$scope.addReminder = function(){
-				
-			};
-			
-			//添加标签
-			$scope.addTag = function(){
-				var data = {tagName:$scope.tagName};
-				data.tagColor = "rgb("+[random(),random(),random()].join(",")+")";
 				xajax({url:URL.SAVE_TAG,data:data,method:"post"})
 				.success(function(d){
 					$scope.tags.unshift(data);
@@ -248,26 +228,16 @@ define(function(require,exports,module){
 				});
 			};
 			
-			$scope.tagKeyDown = function($event){
-				if($event.keyCode === 13)
-					$scope.addTag();
+			tag.del = function(){
+				
 			};
 			
-			//标签与todo关联/取消关联
-			$scope.toggleTagToTodo = function(todo,tag){
-				var data = {notesId:todo.notesId},
-					i = $scope.inTags(todo.tags,tag.tagName),
-					tagColor = tag.tagColor,
+			tag.linkToTodo = function($scope,todo,xtag){
+				var data = {notesId:todo.notesId,tagId:xtag.tagId},
+					i = tag.inTag(todo.tags,xtag.tagId),
+					tagColor = xtag.tagColor,
 					type = i>-1 ? "d":"s",
 					url = type === "d" ? URL.DELETE_RELATION : URL.SAVE_RELATION;
-				
-				if(type === "d"){
-					//删除tag
-					data.tagId = tag.tagId;
-				}else{
-					//添加tag
-					data.tagName = tag.tagName;
-				}
 				
 				xajax({url:url,data:data,method:"post"})
 				.success(function(d){
@@ -275,15 +245,15 @@ define(function(require,exports,module){
 						todo.tags.splice(i,1);
 					}else{
 						d.tagColor = tagColor;
-						todo.tags.push(d);
+						(todo.tags || (todo.tags=[])).push(d);
 					}
 				});
 			};
 			
-			$scope.inTags = function(tags,tagName){
+			tag.inTag = function(tags,tagId){
 				var i = -1;
 				angular.forEach(tags,function(v,k){
-					if(v.tagName === tagName){
+					if(v.tagId === tagId){
 						i = k;
 						return false;
 					}
@@ -291,8 +261,100 @@ define(function(require,exports,module){
 				return i;
 			};
 			
-			function random(){
-				return Math.ceil(Math.random()*255);
+			return tag;
+		}])
+		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","URL","dom","Todo",function($scope,todos,init,Tag,prompt,notice,URL,dom,Todo){
+			$scope.todos = todos;
+			$scope.historyGroup = [];//事项历史记录
+			$scope.historySpan = "";//事项历史记录跨度
+			$scope.todo = {};//todo
+			$scope.tags = [];//标签
+			$scope.reminderTime = "";//提醒时间
+			
+			init($scope);
+			
+			$scope.noticeSupport = notice.support();
+			
+			//检查是否开启桌面通知
+			if($scope.noticeSupport && notice.check() === 0){
+				$scope.noticeAllowed = true;
+			}else{
+				if($scope.noticeSupport){
+					notice.request();
+				}
+				$scope.noticeAllowed = false;
+			}
+			
+			//开启/关闭桌面通知
+			$scope.allowNotice = function(){
+				notice.request();
+			};
+			
+			//添加
+			$scope.addTodo = function(){
+				Todo.add($scope);
+			};
+			
+			//回车添加
+			$scope.todoKeyDown = function($event){
+				if($event.keyCode === 13)
+					Todo.add($scope);
+			};
+			
+			//查看历史
+			$scope.viewDetail = function(todo){
+				Todo.detail($scope,todo);
+			};
+			
+			//结束编辑
+			$scope.editTodo = function($event,todo,key,value){
+				Todo.update(todo,key,value);
+			};
+			
+			//enter结束编辑
+			$scope.editKeyDown = function($event,todo){
+				if($event.keyCode === 13)
+					$scope.endEdit($event,todo);
+			};
+			
+			//删除todo
+			$scope.deleteTodo = function(notesId){
+				Todo.del($scope.todo.group.list,notesId);
+			};
+			
+			//鼠标移入
+			$scope.enterTodo = function($event,todo,todoGroup){
+				var target = angular.element($event.target).closest("li");
+				
+				$scope.todo = todo;
+				$scope.todo.group = todoGroup;
+				target.append(dom.todoPanel);
+			};
+			
+			//打开时间选择器
+			$scope.openTimepicker = function(){
+				$("#time-picker").modal("show");
+			};
+			
+			//添加标签
+			$scope.addTag = function(){
+				Tag.add($scope);
+			};
+			
+			//enter添加标签
+			$scope.tagKeyDown = function($event){
+				if($event.keyCode === 13)
+					Tag.add($scope);
+			};
+			
+			//标签与todo关联/取消关联
+			$scope.toggleTagToTodo = function(todo,xtag){
+				Tag.linkToTodo($scope,todo,xtag);
+			};
+			
+			//判断标签是否在todo的标签列表中
+			$scope.inTags = function(tags,tagId){
+				return Tag.inTag(tags,tagId);
 			};
 		}]);
 	
