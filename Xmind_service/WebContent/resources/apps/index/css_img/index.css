@@ -1,1 +1,9 @@
-
+.top-row {
+	height:400px;
+	margin-top: 5px;
+}
+.carousel-inner {
+	position: relative;
+	width: 99%;
+	overflow: hidden;
+}
