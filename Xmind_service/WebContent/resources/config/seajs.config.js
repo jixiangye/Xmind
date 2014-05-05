@@ -8,7 +8,8 @@ seajs.config({
         'bootstrapjs':'../../../lib/bootstrap/3.0.3/js/bootstrap.js',
         'angular':'../../lib/angular/1.1.5/angular.js',
         'commonjs':'../../../common/js/common.js',
-        'uijs':'../../../common/js/ui.js'
+        'uijs':'../../../common/js/ui.js',
+        'acejs':'//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js'
     },
     preload:['bootstrapcss','commoncss','uicss','animatecss','jquery'],
     debug:true

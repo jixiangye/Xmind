@@ -1,39 +1,36 @@
-<span class="" ng-model="date">
-	<span class="glyphicon glyphicon-bell remind-icon" ng-click="openTimepicker()" ng-class="{active:reminderDate}" data-toggle="dropdown"></span>
-	<div class="aui-timepicker dropdown-menu">
-		<div class="aui-tpk-label" ng-click="quckSelectDate($event)">
-			<span class="label label-default" data-date="{{quck.today}}">今天</span>
-			<span class="label label-default" data-date="{{quck.tomorrow}}">明天</span>
-			<span class="label label-default" data-date="{{quck.nextWeek}}">下周</span>
+<div class="aui-timepicker">
+	<div class="aui-tpk-label" ng-click="quckSelectDate($event)">
+		<span class="label label-default" data-date="{{quck.today}}">今天</span>
+		<span class="label label-default" data-date="{{quck.tomorrow}}">明天</span>
+		<span class="label label-default" data-date="{{quck.nextWeek}}">下周</span>
+	</div>
+	<div class="aui-tpk-time">
+		<span class="aui-ipt-box aui-left-ipt">
+			<input type="text" class="aui-tpk-time-ipt" maxlength=2 ng-keydown="updateTime($event,23)" ng-model="date.hour">
+			<span class="aui-up-btn" ng-mousedown="updateTime('up',23,'h')"><span class="glyphicon glyphicon-chevron-up"></span></span>
+			<span class="aui-down-btn" ng-mousedown="updateTime('down',23,'h')"><span class="glyphicon glyphicon-chevron-down"></span></span>
+		</span>
+		:
+		<span class="aui-ipt-box aui-right-ipt">
+			<input type="text" class="aui-tpk-time-ipt" maxlength=2 ng-keydown="updateTime($event,59)" ng-model="date.minute">
+			<span class="aui-up-btn" ng-mousedown="updateTime('up',59,'m')"><span class="glyphicon glyphicon-chevron-up"></span></span>
+			<span class="aui-down-btn" ng-mousedown="updateTime('down',59,'m')"><span class="glyphicon glyphicon-chevron-down"></span></span>
+		</span>
+	</div>
+	<div class="aui-tpk-box" ng-class="{'active':boxShow}">
+		<div class="aui-tpk-title">
+			<span class="aui-tpk-last glyphicon glyphicon-chevron-left" ng-click="lastMonth()"></span>
+			<span class="aui-tpk-next glyphicon glyphicon-chevron-right" ng-click="nextMonth()"></span>
+			{{date.month}}月{{date.year}}年
 		</div>
-		<div class="aui-tpk-time">
-			<span class="aui-ipt-box aui-left-ipt">
-				<input type="text" class="aui-tpk-time-ipt" maxlength=2 ng-keydown="updateTime($event,23)" ng-model="date.hour">
-				<span class="aui-up-btn" ng-mousedown="updateTime('up',23,'h')"><span class="glyphicon glyphicon-chevron-up"></span></span>
-				<span class="aui-down-btn" ng-mousedown="updateTime('down',23,'h')"><span class="glyphicon glyphicon-chevron-down"></span></span>
-			</span>
-			:
-			<span class="aui-ipt-box aui-right-ipt">
-				<input type="text" class="aui-tpk-time-ipt" maxlength=2 ng-keydown="updateTime($event,59)" ng-model="date.minute">
-				<span class="aui-up-btn" ng-mousedown="updateTime('up',59,'m')"><span class="glyphicon glyphicon-chevron-up"></span></span>
-				<span class="aui-down-btn" ng-mousedown="updateTime('down',59,'m')"><span class="glyphicon glyphicon-chevron-down"></span></span>
-			</span>
+		<div class="aui-tpk-head">
+			<span ng-repeat="week in weeks">{{week}}</span>
 		</div>
-		<div class="aui-tpk-box" ng-class="{'active':boxShow}">
-			<div class="aui-tpk-title">
-				<span class="aui-tpk-last glyphicon glyphicon-chevron-left" ng-click="lastMonth()"></span>
-				<span class="aui-tpk-next glyphicon glyphicon-chevron-right" ng-click="nextMonth()"></span>
-				{{date.month}}月{{date.year}}年
-			</div>
-			<div class="aui-tpk-head">
-				<span ng-repeat="week in weeks">{{week}}</span>
-			</div>
-			<div class="aui-tpk-body clearfix" ng-click="selectDate($event)">
-				<span ng-repeat="day in days track by $index" ng-class="{today:day==today,day:day !== 0}">{{day !== 0 ? day:''}}</span>
-			</div>
-		</div>
-		<div class="aui-tpk-toggle" ng-click="boxShow = !boxShow">
-			<span class="glyphicon glyphicon-chevron-up" ng-class="{'glyphicon-chevron-down':!boxShow}"></span>
+		<div class="aui-tpk-body clearfix" ng-click="selectDate($event)">
+			<span ng-repeat="day in days track by $index" ng-class="{today:day==today,day:day !== 0}">{{day !== 0 ? day:''}}</span>
 		</div>
 	</div>
-</span>
+	<div class="aui-tpk-toggle" ng-click="boxShow = !boxShow">
+		<span class="glyphicon glyphicon-chevron-up" ng-class="{'glyphicon-chevron-down':!boxShow}"></span>
+	</div>
+</div>

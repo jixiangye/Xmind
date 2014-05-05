@@ -1,15 +1,22 @@
 /*timepicker style START*/
 .aui-timepicker{
-	right:0;
-	left:auto;
+	position:absolute;
 	padding:10px 10px 2px;
-	min-width:200px;
+	width:277px;
 	cursor:auto;
-}
-
-span.remind-icon.active{
-	color:#ed9c28;
-	opacity:1;
+	text-align:center;
+	top: 100%;
+	left: 0;
+	z-index: 1000;
+	font-size: 12px;
+	background-color: #ffffff;
+	border: 1px solid #cccccc;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+	background-clip: padding-box;
+	display:none;
 }
 
 .aui-tpk-label{
@@ -27,7 +34,7 @@ span.remind-icon.active{
 .aui-tpk-time{
 	font-size:4em;
 	margin-right:60px;
-	padding:5px;
+	padding:0 5px 5px;
 }
 
 .aui-tpk-time-ipt{
@@ -36,9 +43,9 @@ span.remind-icon.active{
 	background-image: none;
 	border: 1px solid #cccccc;
 	border-radius: 4px;
-	width: 1.4em;
-	text-align: center;
+	width: 80px;
 	padding-right:16px;
+	vertical-align: top;
 }
 
 .aui-left-ipt{
@@ -155,8 +162,8 @@ span.remind-icon.active{
 	float: left;
 	width:14.285714285714285%;
 	border-right:1px solid #ccc;
-	padding:5px 0;
-	height:1.7em;
+	padding:3px 0;
+	height: 2em;
 }
 
 .aui-tpk-body span.day{

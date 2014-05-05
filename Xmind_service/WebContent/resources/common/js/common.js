@@ -91,14 +91,34 @@ define(function(require,exports,module){
          * @param callback<Function> 回调函数
          * @param args<Array or ArrayLike> 回调函数的参数
          * @param context<Object> 回调函数的执行上下文
-         * @return undefined
+         * @return Timer<Object> 计时对象
          */
         .factory("timer",function(){
-        	function timeout(time,callback,args,context){
+        	function Timer(time,callback,args,context){
+        		this.timer;
+        		this.timerType = "timeout";
+        		this.callback = callback;
+        		this.args = args;
+        		this.context = context;
+        		this.run(time);
+        	}
+        	
+        	Timer.prototype.stop = function(){
+        		if(this.timerType === "timeout"){
+        			clearTimeout(this.timer);
+        		}else{
+        			clearInterval(this.timer);
+        		}
+        	};
+        	
+        	Timer.prototype.run = function(time){
         		var now = (new Date).getTime(),
-			        remind = timeout.formatter(time).getTime(),
+			        remind = fun.formatter(time).getTime(),
 			        gap = (remind-now)/1000,
+			        self = this,
 			        f;
+        		
+        		self.timerType = "timeout";
 			        
 			    if(gap > 60*60){
 			        f = 50*60;
@@ -107,21 +127,25 @@ define(function(require,exports,module){
 			    }else if(gap > 60){
 			        f = 40
 			    }else if(gap > 0){
-			        var interval = setInterval(function(){
-			                if((new Date).getTime() >= timeout.formatter(time).getTime()){
-			                    clearInterval(interval);
-			                    callback.apply(context,args);
-			                }
-			            },1000);
+			    	self.timerType = "interval";
+			    	self.timer = setInterval(function(){
+		                if((new Date).getTime() >= fun.formatter(time).getTime()){
+		                    self.callback.apply(self.context,self.args);
+		                    self.stop();
+		                }
+		            },1000);
 			        return;
 			    }else{
 			        return;
 			    }
-			    setTimeout(function(){timeout(time,callback)},f*1000);
+			    self.timer = setTimeout(function(){self.run(time);},f*1000);
         	};
         	
-        	//@param 时间字符串
-        	timeout.formatter = function(time){
+        	function fun(time,callback,args,context){
+				return new Timer(time,callback,args,context);
+			};
+			
+			fun.formatter = function(time){
 			    var reg = /^(\d+)-(\d+)-(\d+)\s(\d+):(\d+):(\d+)/,
 			        list = reg.exec(time),
 			        date = new Date(list.slice(1,4));
@@ -130,8 +154,8 @@ define(function(require,exports,module){
 			    date.setSeconds(list[6]);
 			    return date;
 			};
-			
-			return timeout;
+				
+			return fun;
         });
     
     angular
@@ -170,11 +194,12 @@ define(function(require,exports,module){
 				.success(function(d){
 					$scope.username = data.username;
 					$('#login-box').modal('hide');
-					$scope.loginCallback && $scope.loginCallback();
 					prompt({
 						type:"success",
 						content:"登陆成功"
 					});
+					//广播登录 
+					$scope.$parent.$broadcast("login");
 				})
 				.fail(function(data){
 
@@ -191,12 +216,13 @@ define(function(require,exports,module){
 				.success(function(data){
 					$scope.username = data.username;
 					$('#login-box').modal('hide');
-					$scope.loginCallback && $scope.loginCallback();
 					prompt({
 						type:"success",
 						title:"恭喜你",
 						content:"注册成功"
 					});
+					//广播登陆
+					$scope.$parent.$broadcast("login");
 				})
 				.fail(function(data){
 
@@ -208,6 +234,8 @@ define(function(require,exports,module){
 				.success(function(d){
 					$scope.logoutCallback && $scope.logoutCallback();
 					$scope.username = "";
+					//广播退出登录
+					$scope.$parent.$broadcast("logout");
 				})
 				.fail(function(data){
 

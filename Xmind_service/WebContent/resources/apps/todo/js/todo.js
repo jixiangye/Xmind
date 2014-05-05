@@ -42,7 +42,7 @@ define(function(require,exports,module){
 						//设置提醒
 						timer(todo.reminderTime,function(todo){
 							todo.reminderTime ="";
-							notice.create(null,"",todo.content).show();
+							console.log( n = notice.create(null,"事项提醒",todo.content));n.show();
 						},[todo]);
 					}
 				}
@@ -53,13 +53,11 @@ define(function(require,exports,module){
 				//初始化todo列表
 				xajax({url:URL.GET_LIST,method:"post",data:{}})
 				.success(function(d){
-					var list = todos;
 					angular.forEach(d.noteList,function(v,k){
 						v.old = v.content;
 						addTimer(v);
-						list[v.status == 1 ? 0 : (v.status||1)].list.push(v);
+						$scope.todos[v.status == 1 ? 0 : (v.status||1)].list.push(v);
 					});
-					$scope.todos = list;
 				});
 				
 				//初始化标签
@@ -263,7 +261,7 @@ define(function(require,exports,module){
 			
 			return tag;
 		}])
-		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","URL","dom","Todo",function($scope,todos,init,Tag,prompt,notice,URL,dom,Todo){
+		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","dom","Todo",function($scope,todos,init,Tag,prompt,notice,dom,Todo){
 			$scope.todos = todos;
 			$scope.historyGroup = [];//事项历史记录
 			$scope.historySpan = "";//事项历史记录跨度
@@ -272,6 +270,23 @@ define(function(require,exports,module){
 			$scope.reminderTime = "";//提醒时间
 			
 			init($scope);
+			
+			//监听登陆事件
+			$scope.$on("login",function(){
+				init($scope);
+			});
+			
+			//监听登出事件
+			$scope.$on("logout",function(){
+				$scope.historyGroup = [];//事项历史记录
+				$scope.historySpan = "";//事项历史记录跨度
+				$scope.todo = {};//todo
+				$scope.tags = [];//标签
+				$scope.reminderTime = "";//提醒时间
+				angular.forEach($scope.todos,function(v){
+					v.list = [];
+				});
+			});
 			
 			$scope.noticeSupport = notice.support();
 			
@@ -331,11 +346,6 @@ define(function(require,exports,module){
 				target.append(dom.todoPanel);
 			};
 			
-			//打开时间选择器
-			$scope.openTimepicker = function(){
-				$("#time-picker").modal("show");
-			};
-			
 			//添加标签
 			$scope.addTag = function(){
 				Tag.add($scope);
@@ -356,6 +366,21 @@ define(function(require,exports,module){
 			$scope.inTags = function(tags,tagId){
 				return Tag.inTag(tags,tagId);
 			};
+			
+			var nowTimeObj = {};
+			//打开时间选择器
+			$scope.openTimepicker = function($event,time,obj){
+				$scope.$parent.$broadcast('timepicker.open',$event,time);
+				nowTimeObj = obj || $scope;
+			};
+			
+			//
+			$scope.$on("timepicker.select",function(event,time){
+				nowTimeObj.reminderTime = time;
+				if(nowTimeObj !== $scope){
+					Todo.update(nowTimeObj,"reminderTime",time);
+				}
+			});
 		}]);
 	
 	angular.bootstrap(document,["app-todo"]);

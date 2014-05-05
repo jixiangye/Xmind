@@ -86,13 +86,98 @@ define(function(require,exports,module){
 		/**
 		 * 
 		 */
-		.directive("timepicker",['dateFilter',function(dateFilter){
+		.factory("calender",['dateFilter',function(dateFilter){
+			var now = new Date,
+				date = {
+					year:now.getFullYear(),
+					month:now.getMonth(),
+					week:now.getDay(),
+					day:now.getDate(),
+					hour:now.getHours(),
+					minute:now.getMinutes(),
+					second:now.getSeconds()
+				},
+				months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+				leapYear = function (c){
+	              	return (c%4===0 && c%100!==0 || c%400===0)?true:false;
+	            };
+			
+			var self = {
+					y:date.year,
+					m:date.month,
+					w:date.week,
+					d:date.day,
+					now:date,
+					weeks:["日","一","二","三","四","五","六"],
+					months:months,
+					render:function(){
+						var y = self.y,
+							m = self.m,
+							w = self.w,
+							d = self.d,
+							start = w-d%7,
+						    mA = months[m],
+						    day = 0,
+						    days = [],
+						    inMonth = y === date.year && m === date.month,
+						    t;
+						
+						m === 1 && leapYear(y) && (mA = 29);
+						
+						start<0 && (start = start+7) || (start===7 && (start = 0));
+						start===6 && (start = -1);
+	
+						for(var i=0,len=start+mA;i<=len;i++){
+							if(i<=start){
+							    days.push(0);
+							}else if(i<=start+mA){
+							    days.push(day = i-start);
+							    inMonth && day === date.day && (t = day);
+							}
+						}
+	
+						return {
+						    today:t,
+						    month:m+1,
+						    active:d,
+						    year:y,
+						    days:days
+						};
+					},
+					getAnyDate:function(y,m,d){
+						var newDate = new Date(y||self.y,m||self.m,d||self.d);
+						self.y = newDate.getFullYear();
+						self.m = newDate.getMonth();
+						self.w = newDate.getDay();
+						self.d = newDate.getDate();
+						return self.render();
+					},
+					lastWeek : function(){
+						return self.getAnyDate(null,null,this.d-7);
+					},
+					nextWeek : function(){
+						return self.getAnyDate(null,null,this.d+7);
+					},
+					lastMonth : function(){
+						return self.getAnyDate(null,--this.m,null);
+					},
+					nextMonth : function(){
+						return self.getAnyDate(null,++this.m,null);
+					},
+					lastYear : function(){
+						return self.getAnyDate(--this.y);
+					},
+					nextYear : function(){
+						return self.getAnyDate(++this.y);
+					}
+				};
+			
+			return self;
+		}])
+		.directive("timepicker",['dateFilter','calender',function(dateFilter,calender){
 			return {
 				restrict:"AE",
 				replace:true,
-				scope:{
-					reminderDate:"=reminderTime"
-				},
 				controller:function($scope,$element){
 					var KEY = {
 							UP:38,
@@ -100,130 +185,10 @@ define(function(require,exports,module){
 						},
 						hIpt = $element.find(".aui-left-ipt .aui-tpk-time-ipt"),
 						mIpt = $element.find(".aui-right-ipt .aui-tpk-time-ipt"),
-						dateBody = $element.find(".aui-tpk-body");
-					
-					$element.on("click",function(){
-						return false;
-					});
-					
-					angular.element(document).on("click",function(){
-						$element.find(".aui-timepicker").hide();
-					});
+						dateBody = $element.find(".aui-tpk-body"),
+						body = dateBody.closest("body");
 						
-					var now = function(){
-							var date = new Date();
-							return {
-								day:date.getDate(),
-								week:date.getDay(),
-								month:date.getMonth(),
-								year:date.getFullYear(),
-								hour:date.getHours(),
-								minute:date.getMinutes()
-							};
-						},
-						date = now(),
-						calender = {
-							months:[31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-					        d:date.day,
-					        w:date.week,
-					        m:date.month,
-					        y:date.year,
-					        lastIndex:0,
-					        render:function(y,m,w,d){
-					        	var startI = w-d%7,
-					              mA = this.months,
-					              day = 0,
-					              days = [],
-					              active,
-					              t;
-					          startI<0 && (startI = startI+7) || (startI===7 && (startI = 0));
-					          startI===6 && (startI = -1);
-					          this.lastIndex = startI+d;
-					          
-					          for(var i=0,len=startI+mA[m];i<=len;i++){
-					            if(i<=startI){
-					            	days.push(0);
-					            }else if(i<=startI+mA[m]){
-					            	days.push(day = i-startI);
-					            	day===date.day && m===date.month && y===date.year && (t = day);
-					            	i === this.lastIndex && (active = day);
-					            }
-					          }
-					          
-					          return {
-					        	  today:t,
-					        	  active:active,
-					        	  month:m+1,
-					        	  year:y,
-					        	  days:days
-					          };
-					        },
-					        getAnyDate : function(y,m,d){
-					            var date,
-					                that = this,
-					                mA = that.months;
-					            y&&(that.y = y);
-					            m != undefined&&(that.m = m);
-					            d != undefined&&(that.d = d);
-					            leapYear(that.y);
-					            while(that.m>11){
-					              that.m = that.m-12;
-					              leapYear(++that.y);
-					            }
-					            while(that.m<0){
-					              that.m = that.m+12;
-					              leapYear(--that.y);
-					            }
-					            while(that.d>mA[that.m]){
-					              that.m++;
-					              that.m>11&&(that.m = that.m-12,leapYear(++that.y));
-					              that.d = that.d - mA[that.m?that.m-1:11];
-					            }
-					            while(that.d<1){
-					              that.m--;
-					              that.m<0&&(that.m = that.m+12,leapYear(--that.y));
-					              that.d = that.d + mA[that.m];
-					            }
-					            date = new Date(that.y,that.m,that.d);
-					            while(date.getDate() !== that.d){
-					              date = new Date(that.y,that.m,--that.d);
-					            }
-					            lastIndex = that.d;
-					            that.w = date.getDay();
-					            return that.render(that.y,that.m,that.w,that.d);
-					            function leapYear(c){
-					              c%4===0?mA[1]=29:mA[1]=28;
-					            }
-					          },
-					          lastWeek : function(){
-					            return this.getAnyDate(null,null,this.d-7);
-					          },
-					          nextWeek : function(){
-					            return this.getAnyDate(null,null,this.d+7);
-					          },
-					          lastMonth : function(){
-					            return this.getAnyDate(null,--this.m,null);
-					          },
-					          nextMonth : function(){
-					            return this.getAnyDate(null,++this.m,null);
-					          },
-					          lastYear : function(){
-					            return this.getAnyDate(--this.y);
-					          },
-					          nextYear : function(){
-					            return this.getAnyDate(++this.y);
-					          },
-					          goToday : function(){
-					            this.d = date.today;
-					            this.y = date.year;
-					            this.m = date.month;
-					            this.w = date.week;
-					            return this.render(year,month,week,today);
-					          },
-					          getDate : function(){
-					            return {y:this.y,m:this.m+1,d:this.d,w:(this.w||7)};
-					          }
-						},
+					var now = calender.now,
 						initDate = calender.getAnyDate(),
 						updateCalender = function(date){
 							$scope.today = date.today;
@@ -243,10 +208,10 @@ define(function(require,exports,module){
 								item = item ? item.length === 1?0+item:item:"00";
 								str += item+split;
 							}
-							return str+"00";
+							return str+":00";
 						};
 					
-					$scope.weeks = ["日","一","二","三","四","五","六"];
+					$scope.weeks = calender.weeks;
 					$scope.today = initDate.today;
 					$scope.activeDay = initDate.active;
 					$scope.date = {
@@ -257,9 +222,9 @@ define(function(require,exports,module){
 					};
 					$scope.days = initDate.days;
 					$scope.quck = {
-						today:dateFilter(new Date(date.year,date.month,date.day),"yyyy-MM-dd"),
-						tomorrow:dateFilter(new Date(date.year,date.month,date.day+1),"yyyy-MM-dd"),
-						nextWeek:dateFilter(new Date(date.year,date.month,date.day+7),"yyyy-MM-dd"),
+						today:dateFilter(new Date(now.year,now.month,now.day),"yyyy-MM-dd"),
+						tomorrow:dateFilter(new Date(now.year,now.month,now.day+1),"yyyy-MM-dd"),
+						nextWeek:dateFilter(new Date(now.year,now.month,now.day+7),"yyyy-MM-dd"),
 					};
 					
 					//up和down 键修改时间
@@ -298,14 +263,6 @@ define(function(require,exports,module){
 						$scope.date[m==23?"hour":"minute"] = value;
 					};
 					
-					//打开时间选择器
-					$scope.openTimepicker = function(){
-						var hour = now().hour+1;
-						$scope.date.hour = hour>23 ? "00" : hour;
-						$scope.date.minute = "00";
-						$element.find(".aui-timepicker").show();
-					};
-					
 					//上个月
 					$scope.lastMonth = function(){
 						updateCalender(calender.lastMonth());
@@ -319,23 +276,50 @@ define(function(require,exports,module){
 					//选择日期
 					$scope.selectDate = function(e){
 						if(e.target.tagName === "SPAN" && e.target.textContent !== ""){
+							var time;
 							dateBody.find(".active").removeClass("active");
 							angular.element(e.target).addClass("active");
 							$scope.date.day = e.target.textContent;
-							$scope.reminderDate = format($scope.date);
-							$element.find(".aui-timepicker").hide();
+							time = format($scope.date);
+							$element.hide();
+							$scope.$parent.$broadcast("timepicker.select",time);
 						}
 					};
 					
 					//快速选择日期
 					$scope.quckSelectDate = function(e){
 						if(e.target.tagName === "SPAN"){
-							var span = angular.element(e.target); 
+							var span = angular.element(e.target),
+								time; 
 							angular.element(".label-info").removeClass("label-info");
-							$scope.reminderDate = span.addClass("label-info").data("date")+" "+$scope.date.hour+":"+$scope.date.minute+":00";
-							$element.find(".aui-timepicker").hide();
+							time = span.addClass("label-info").data("date")+" "+$scope.date.hour+":"+$scope.date.minute+":00";
+							$element.hide();
+							$scope.$parent.$broadcast("timepicker.select",time);
 						}
 					};
+					
+					$scope.$on("timepicker.open",function(scope,$event,time){
+						var rect = angular.element($event.currentTarget).offset();
+						var hour = now.hour+1;
+						$scope.date.hour = hour>23 ? "00" : hour;
+						$scope.date.minute = "00";
+						if(rect.left > body.width() - rect.left){
+							$element.css({top:rect.top,left:rect.left-$element.width()});
+						}else{
+							$element.css({top:rect.top,left:rect.left});
+						}
+						
+						$element.show();
+						
+						angular.element(document).on("mousedown.timepicker",function(){
+							angular.element(document).off("mousedown.timepicker");
+							$element.hide();
+						});
+					});
+					
+					$element.on("mousedown",function(){
+						return false;
+					});
 				},
 				templateUrl:"../../../common/html/timepicker.html"
 			};
