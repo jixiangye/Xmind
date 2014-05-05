@@ -346,11 +346,6 @@ define(function(require,exports,module){
 				target.append(dom.todoPanel);
 			};
 			
-			//打开时间选择器
-			$scope.openTimepicker = function(){
-				$("#time-picker").modal("show");
-			};
-			
 			//添加标签
 			$scope.addTag = function(){
 				Tag.add($scope);
@@ -371,6 +366,21 @@ define(function(require,exports,module){
 			$scope.inTags = function(tags,tagId){
 				return Tag.inTag(tags,tagId);
 			};
+			
+			var nowTimeObj = {};
+			//打开时间选择器
+			$scope.openTimepicker = function($event,time,obj){
+				$scope.$parent.$broadcast('timepicker.open',$event,time);
+				nowTimeObj = obj || $scope;
+			};
+			
+			//
+			$scope.$on("timepicker.select",function(event,time){
+				nowTimeObj.reminderTime = time;
+				if(nowTimeObj !== $scope){
+					Todo.update(nowTimeObj,"reminderTime",time);
+				}
+			});
 		}]);
 	
 	angular.bootstrap(document,["app-todo"]);

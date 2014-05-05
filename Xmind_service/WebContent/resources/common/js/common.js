@@ -117,6 +117,8 @@ define(function(require,exports,module){
 			        gap = (remind-now)/1000,
 			        self = this,
 			        f;
+        		
+        		self.timerType = "timeout";
 			        
 			    if(gap > 60*60){
 			        f = 50*60;

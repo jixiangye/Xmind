@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+        <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.5, user-scalable=yes">
 		<title>todo</title>
 		<script type="text/javascript" src="../../../lib/seajs/2.2.1/sea-debug.js"></script>
 		<script type="text/javascript" src="../../../config/seajs.config.js"></script>
@@ -11,18 +12,16 @@
 	</head>
 	<body>
 		<publicheader></publicheader>
-		<div class="container" ng-controller="todoList">
+		<div class="container" ng-controller="todoList" ng-cloak>
 			<div class="todo-input-group">
-				<div class="input-group">
-   					<input type="text" class="form-control" ng-model="content" placeholder="我想..." ng-keydown="todoKeyDown($event)">
-  					<span class="input-group-addon remind-btn" title="添加提醒" reminder-time="reminderTime" timepicker>
-  						<span class="glyphicon glyphicon-bell remind-icon"></span>
-  						<span  timepicker></span>
-  					</span>
-   					<span class="input-group-btn"><button type="submit" class="btn btn-primary col-md-12" ng-click="addTodo()">添加</button></span>
-				</div>
+ 				<input type="text" class="form-control" ng-model="content" placeholder="我想..." ng-keydown="todoKeyDown($event)" x-webkit-speech>
 			</div>
-			<ul class="todo-box">
+			<div class="btn-group  btn-group-justified" ng-show="content">
+			  <!-- <a class="btn btn-default">Left</a> -->
+			  <a class="btn btn-warning" title="添加提醒" ng-click="openTimepicker($event)"><span class="glyphicon glyphicon-bell"></span> {{reminderTime}}</a>
+			  <a class="btn btn-primary" ng-click="addTodo()">添加</a>
+			</div>
+			<ul class="todo-box" ng-show="!content">
 				<li ng-repeat="todoGroup in todos" ng-animate="'todo'">
 					<div class="todo-type" ng-click="todoGroup.expand = !todoGroup.expand">{{todoGroup.text}} <span class="badge" ng-show="!$index">{{todos[0].list.length}}</span></div>
 					<ul class="todo-list" ng-show="todoGroup.expand">
@@ -105,7 +104,7 @@
 					<span class="glyphicon glyphicon-ok" title="完成" ng-click="editTodo($event,todo,'status',2)" ng-show="todo.status<2"></span>
 					<span class="glyphicon glyphicon-remove" title="关闭" ng-click="editTodo($event,todo,'status',3)" ng-show="todo.status!=3"></span>
 					<span ng-show="todo.status<2">
-						<span class="todo-reminder" reminder-time="todo.reminderTime" timepicker></span>
+						<span class="glyphicon glyphicon-bell" ng-click="openTimepicker($event,todo.reminderTime,todo)"></span>
 					</span>
 					<span class="glyphicon glyphicon-trash" title="删除" ng-click="deleteTodo(todo.notesId)" ng-show="todo.status>1"></span>
 					<span class="tag-panel" ng-mouseenter="chooseTag = true" ng-mouseleave="chooseTag = false" title="标签">
@@ -124,6 +123,7 @@
 					</button>
 				</div>
 			</div>
+			<div timepicker></div>
 		</div>
 	</body>
 </html>
