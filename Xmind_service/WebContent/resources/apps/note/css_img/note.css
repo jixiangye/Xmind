@@ -15,7 +15,24 @@ body{
 }
 
 .note-left{
+	width:200px;
+	float:left;
 	background:#ccc;
+}
+
+.note-left div{
+	padding:10px;
+	background:#eee;
+}
+
+.note-slidebar{
+	width:200px;
+	float:left;
+	background:#eee;
+}
+
+.note-right{
+	
 }
 
 .note-node-add{

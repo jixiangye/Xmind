@@ -23,9 +23,9 @@
 			</div>
 			<ul class="todo-box" ng-show="!content">
 				<li ng-repeat="todoGroup in todos" ng-animate="'todo'">
-					<div class="todo-type" ng-click="todoGroup.expand = !todoGroup.expand">{{todoGroup.text}} <span class="badge" ng-show="!$index">{{todos[0].list.length}}</span></div>
+					<div class="todo-type" ng-class={active:todoGroup.expand} ng-click="todoGroup.expand = !todoGroup.expand">{{todoGroup.text}} <span ng-show="!$index">{{todos[0].list.length}}</span></div>
 					<ul class="todo-list" ng-show="todoGroup.expand">
-						<li ng-repeat="todo in todoGroup.list track by todo.notesId" ng-mouseenter="enterTodo($event,todo,todoGroup)" ng-animate="'todo'" ng-class="{'close-todo':todo.status==4}">
+						<li ng-repeat="todo in todoGroup.list track by todo.notesId" ng-mouseenter="enterTodo($event,todo,todoGroup)" ng-mouseleave="leaveTodo()" ng-animate="'todo'" ng-class="{'close-todo':todo.status==4}">
 							<span class="tag-mark">
 								<span class="tag-mark-item" ng-repeat="mTag in todo.tags" style="height:{{100/todo.tags.length+'%'}};background-color:{{mTag.tagColor}}"></span>
 							</span>
@@ -96,7 +96,7 @@
 				</div><!-- /.modal-dialog -->
 			</div><!-- /.modal -->
 			<!--todo历史modal END-->
-			<div class="todo-panel" ng-animate="'animate'">
+			<div class="todo-panel" ng-animate="'animate'" ng-show="operaing">
 				<div class="todo-panel-primary" ng-show="!todo.editing">
 					<span class="glyphicon glyphicon-list-alt" title="查看历史" ng-click="viewDetail(todo)"></span>
 					<span class="glyphicon glyphicon-pencil" title="编辑" ng-click="todo.editing = true" ng-show="todo.status<3"></span>

@@ -8,7 +8,8 @@ define(function(require,exports,module){
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/chrome");
     editor.getSession().setMode("ace/mode/markdown");
-	
+    editor.setAutoScrollEditorIntoView(true);
+    
 	angular
 		.module("app-note",["utils","common"]);
 	

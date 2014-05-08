@@ -266,13 +266,14 @@ define(function(require,exports,module){
 			
 			return tag;
 		}])
-		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","dom","Todo",function($scope,todos,init,Tag,prompt,notice,dom,Todo){
+		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","dom","Todo","$timeout",function($scope,todos,init,Tag,prompt,notice,dom,Todo,$timeout){
 			$scope.todos = todos;
 			$scope.historyGroup = [];//事项历史记录
 			$scope.historySpan = "";//事项历史记录跨度
 			$scope.todo = {};//todo
 			$scope.tags = [];//标签
 			$scope.reminderTime = "";//提醒时间
+			$scope.operaing = false;
 			
 			init($scope);
 			
@@ -342,13 +343,24 @@ define(function(require,exports,module){
 				Todo.del($scope.todo.group.list,notesId);
 			};
 			
+			var timer;
 			//鼠标移入
 			$scope.enterTodo = function($event,todo,todoGroup){
 				var target = angular.element($event.target).closest("li");
 				
-				$scope.todo = todo;
-				$scope.todo.group = todoGroup;
-				target.append(dom.todoPanel);
+				timer = $timeout(function(){
+					$scope.todo = todo;
+					$scope.todo.group = todoGroup;
+					$scope.operaing = true;
+					target.append(dom.todoPanel);
+				},300);
+			};
+			
+			//鼠标移出
+			$scope.leaveTodo = function(){
+				$scope.operaing = false;
+				if(timer)
+					$timeout.cancel(timer);
 			};
 			
 			//添加标签
