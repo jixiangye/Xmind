@@ -26,10 +26,10 @@ define(function(require,exports,module){
 			todoPanel:angular.element(".todo-panel")
 		})
 		.value('todos',[
-            {text:"待处理",status:2,list:[],expand:true},
-            {text:"记事",status:1,list:[],expand:true},
-            {text:"已完成",status:3,list:[],expand:true},
-            {text:"已关闭",status:4,list:[],expand:true}
+            {text:"待处理",status:2,list:[],color:"text-warning",expand:true},
+            {text:"记事",status:1,list:[],color:"text-primary",expand:true},
+            {text:"已完成",status:3,list:[],color:"text-success",expand:true},
+            {text:"已关闭",status:4,list:[],color:"text-danger",expand:true}
 		])
 		.factory("addTimer",["timer","dateFilter","notice",function(timer,dateFilter,notice){
 			return function addTimer(todo){
@@ -226,7 +226,7 @@ define(function(require,exports,module){
 				
 				xajax({url:URL.SAVE_TAG,data:data,method:"post"})
 				.success(function(d){
-					$scope.tags.unshift(data);
+					$scope.tags.push(data);
 					$scope.tagName = "";
 				});
 			};

@@ -10,14 +10,14 @@
 .todo-type{
 	background-color:#fff;
 	padding: 10px 11px;
-	color:#aaa;
 	cursor:pointer;
 	border:dashed #f5f4f6;
 	border-width:0 0 1px 1px;
 	border-left-color:#eee;
+	font-weight:700;
 }
 
-.todo-type:hover,.todo-type.active{
+.todo-type:hover{
 	color:#39b3d7;
 }
 

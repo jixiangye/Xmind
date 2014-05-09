@@ -13,6 +13,22 @@ input.ng-valid.ng-dirty {
 
 }
 
+.text-primary{
+	color:#428BCA;
+}
+
+.text-warning{
+	color:#F0AD4E;
+}
+
+.text-success{
+	color:#47A447;
+}
+
+.text-danger{
+	color:#D2322D;
+}
+
 .error{
     color: #A94442;
     background-color: #F2DEDE;

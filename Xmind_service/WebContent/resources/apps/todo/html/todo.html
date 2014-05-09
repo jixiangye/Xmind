@@ -23,7 +23,7 @@
 			</div>
 			<ul class="todo-box" ng-show="!content">
 				<li ng-repeat="todoGroup in todos" ng-animate="'todo'">
-					<div class="todo-type" ng-class={active:todoGroup.expand} ng-click="todoGroup.expand = !todoGroup.expand">{{todoGroup.text}} <span ng-show="!$index">{{todos[0].list.length}}</span></div>
+					<div class="todo-type {{todoGroup.color}}" ng-class={active:todoGroup.list.length} ng-click="todoGroup.expand = !todoGroup.expand">{{todoGroup.text}} <span>{{todoGroup.list.length}}</span></div>
 					<ul class="todo-list" ng-show="todoGroup.expand">
 						<li ng-repeat="todo in todoGroup.list track by todo.notesId" ng-mouseenter="enterTodo($event,todo,todoGroup)" ng-mouseleave="leaveTodo()" ng-animate="'todo'" ng-class="{'close-todo':todo.status==4}">
 							<span class="tag-mark">
