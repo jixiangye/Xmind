@@ -12,12 +12,12 @@
 	padding: 10px 11px;
 	color:#aaa;
 	cursor:pointer;
-	border:solid #f5f4f6;
-	border-width:0 0 1px 4px;
+	border:dashed #f5f4f6;
+	border-width:0 0 1px 1px;
 	border-left-color:#eee;
 }
 
-.todo-type:hover{
+.todo-type:hover,.todo-type.active{
 	color:#39b3d7;
 }
 

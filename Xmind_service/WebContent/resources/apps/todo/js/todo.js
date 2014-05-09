@@ -26,10 +26,10 @@ define(function(require,exports,module){
 			todoPanel:angular.element(".todo-panel")
 		})
 		.value('todos',[
-            {text:"待处理",status:1,list:[],expand:true},
-            {text:"记事",list:[],expand:true},
-            {text:"已完成",status:2,list:[],expand:true},
-            {text:"已关闭",status:3,list:[],expand:true}
+            {text:"待处理",status:2,list:[],expand:true},
+            {text:"记事",status:1,list:[],expand:true},
+            {text:"已完成",status:3,list:[],expand:true},
+            {text:"已关闭",status:4,list:[],expand:true}
 		])
 		.factory("addTimer",["timer","dateFilter","notice",function(timer,dateFilter,notice){
 			return function addTimer(todo){
@@ -42,7 +42,8 @@ define(function(require,exports,module){
 						//设置提醒
 						timer(todo.reminderTime,function(todo){
 							todo.reminderTime ="";
-							console.log( n = notice.create(null,"事项提醒",todo.content));n.show();
+							console.log( n = notice.create(null,"事项提醒",todo.content));
+							n.show();
 						},[todo]);
 					}
 				}
@@ -56,7 +57,7 @@ define(function(require,exports,module){
 					angular.forEach(d.noteList,function(v,k){
 						v.old = v.content;
 						addTimer(v);
-						$scope.todos[v.status == 1 ? 0 : (v.status||1)].list.push(v);
+						$scope.todos[v.status == 2 ? 0 : (v.status == 1 ? 1 : v.status - 1)].list.push(v);
 					});
 				});
 				
@@ -78,7 +79,7 @@ define(function(require,exports,module){
 			}
 			
 			todo.add = function($scope){
-				var data = {content:$scope.content};
+				var data = {content:$scope.content,status:1};
 				if(!data.content){
 					prompt({
 						type:"warning",
@@ -88,12 +89,12 @@ define(function(require,exports,module){
 				}
 
 				if($scope.reminderTime){
-					data.status = 1;
+					data.status = 2;
 					data.reminderTime = $scope.reminderTime; 
 				}
 				
 				saveTodo(data,function(d){
-					var group = $scope.todos[d.status == 1 ? 0 : 1];
+					var group = $scope.todos[d.status == 2 ? 0 : 1];
 
 					if(!group.expand) group.expand = true;
 					group.list.unshift(d);
@@ -167,28 +168,32 @@ define(function(require,exports,module){
 					var historyGroup = [],
 						last = "";
 					
-					$scope.historySpan = Math.floor(((new Date).getTime()-(new Date(d.noteHistoryList[0].modifyTime)).getTime())/(3600*1000*24));
+					$scope.historySpan = Math.floor(((new Date).getTime()-(new Date(d.noteHistoryList[d.noteHistoryList.length-1].modifyTime)).getTime())/(3600*1000*24));
 					$scope.historySpan = $scope.historySpan ? $scope.historySpan+"天前":"今天";
 					
 					//整合历史数据
 					angular.forEach(d.noteHistoryList.reverse(),function(v,k){
-						v.changeContent = " ";
+						v.changeContent = [];
 						if(last && last.content !== v.content){
-							v.changeContent += "您将内容更新为："+v.content;
-						}else if(last.status !== v.status){
-							if(v.status == 1){
-								if(!last){
-									v.changeContent += "您新增事项："+v.content;
-									v.changeContent += "并设置提醒时间为："+v.reminderTime;
-								}else{
-									v.changeContent += "您将事项提醒时间更改为："+v.reminderTime;
-								}
-							}else if(v.status == 2){
-								v.changeContent += "您将事项标记为：完成";
-							}else if(v.status == 3){
-								v.changeContent += "您将事项标记为：关闭";
-							}else{
-								v.changeContent += "您新增事项："+v.content;
+							v.changeContent.push("您将内容更新为："+v.content);
+						}else if(!last){
+							v.changeContent.push("您新增事项："+v.content);
+						}
+						if(last.status !== v.status){
+							if(v.changeContent)
+							switch(+v.status){
+								case 1:
+									v.changeContent.push("您将事项恢复为正常状态");
+									break;
+								case 2:
+									v.changeContent.push("您添加提醒："+v.reminderTime);
+									break;
+								case 3:
+									v.changeContent.push("您将事项标记为：完成");
+									break;
+								case 4:
+									v.changeContent.push("您将事项标记为：关闭");
+									break;
 							}
 						}
 						
@@ -261,13 +266,14 @@ define(function(require,exports,module){
 			
 			return tag;
 		}])
-		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","dom","Todo",function($scope,todos,init,Tag,prompt,notice,dom,Todo){
+		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","dom","Todo","$timeout",function($scope,todos,init,Tag,prompt,notice,dom,Todo,$timeout){
 			$scope.todos = todos;
 			$scope.historyGroup = [];//事项历史记录
 			$scope.historySpan = "";//事项历史记录跨度
 			$scope.todo = {};//todo
 			$scope.tags = [];//标签
 			$scope.reminderTime = "";//提醒时间
+			$scope.operaing = false;
 			
 			init($scope);
 			
@@ -337,13 +343,24 @@ define(function(require,exports,module){
 				Todo.del($scope.todo.group.list,notesId);
 			};
 			
+			var timer;
 			//鼠标移入
 			$scope.enterTodo = function($event,todo,todoGroup){
 				var target = angular.element($event.target).closest("li");
 				
-				$scope.todo = todo;
-				$scope.todo.group = todoGroup;
-				target.append(dom.todoPanel);
+				timer = $timeout(function(){
+					$scope.todo = todo;
+					$scope.todo.group = todoGroup;
+					$scope.operaing = true;
+					target.append(dom.todoPanel);
+				},300);
+			};
+			
+			//鼠标移出
+			$scope.leaveTodo = function(){
+				$scope.operaing = false;
+				if(timer)
+					$timeout.cancel(timer);
 			};
 			
 			//添加标签

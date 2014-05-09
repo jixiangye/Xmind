@@ -51,6 +51,58 @@
         margin-top: 0px;
     }
 }
+ 
+.animate-show { 
+    -webkit-animation: show 300ms linear;
+    animation: show 300ms linear;
+} 
+@-webkit-keyframes show {
+    to {
+     /*    opacity: 1; */
+        height: auto;
+        padding: 5px 0 0;
+    }
+    from {
+        /* opacity: 0; */
+        height: 0px;
+        padding: 0 0;
+    }
+}
+@keyframes show {
+    to {
+       /*  opacity: 1; */
+        height: auto;
+        padding: 5px 0 0;
+    }
+    from {
+        /* opacity: 0; */
+        height: 0px;
+        padding: 0 0;
+    }
+}
+ 
+.animate-hide { 
+    -webkit-animation: hide 600ms linear;
+    animation: hide 600ms linear;
+} 
+@-webkit-keyframes hide {
+    to {
+        opacity: 0;
+        height: 0;
+    }
+    from {
+        opacity: 1;
+    }
+}
+@keyframes hide {
+  	to {
+        opacity: 0;
+        height: 0;
+    }
+    from {
+        opacity: 1;
+    }
+}
 
 /*todo*/
 .todo-enter { 
