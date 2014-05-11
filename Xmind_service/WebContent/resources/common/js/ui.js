@@ -36,6 +36,7 @@ define(function(require,exports,module){
 				queue = [],
 				queueCount = 0,
 				showQueue = [],
+				boxTimeout,
 				addSpan = 2000,
 				removeSpan = 3000,
 				max = 2,
@@ -60,28 +61,42 @@ define(function(require,exports,module){
 								$item.remove();
 							},600);
 							showQueue.shift();
-							showQueue.length || $timeout(function(){box.hide();},600);
+							if(!showQueue.length){
+								boxTimeout = $timeout(function(){box.hide();boxTimeout=null;},600);
+							}
 						},removeSpan));
 					}else{
 						return;
 					}
 				},
-				box = angular.element("<div class='prompt-box'></div>");
+				box = angular.element("<div class='prompt-box'></div>"),
+				prompt = function(options){
+					if(!angular.element(".prompt-box").length){
+						angular.element("body").append(box);
+					}
+					
+					if(!queue.length){
+						if(boxTimeout){
+							$timeout.cancel(boxTimeout);
+							boxTimeout = null;
+						}else{
+							box.show();
+						}
+						queue.push(options);
+						action();
+					}else{
+						queue.push(options);
+					}
+				};
 			
-			return function(options){
-				
-				if(!angular.element(".prompt-box").length){
-					angular.element("body").append(box);
-				}
-				
-				if(!queue.length){
-					box.show();
-					queue.push(options);
-					action();
-				}else{
-					queue.push(options);
+			prompt.clear = function(){
+				queue = [];
+				while(showQueue.length){
+					$timeout.cancel(showQueue.unshift());
 				}
 			};
+				
+			return prompt;
 		}])
 		/**
 		 * 
@@ -323,5 +338,54 @@ define(function(require,exports,module){
 				},
 				templateUrl:"../../../common/html/timepicker.html"
 			};
+		}])
+		
+		.factory("msg",[function(){
+			
+			function msg(opts){
+				return new msg.prototype._init(opts);
+			}
+			
+			msg.prototype = {
+				constructor:msg,
+				_init:function(opts){
+					var self = this;
+					this.$head = angular.element("<div class='aui-msg-head clearfix'>");
+					this.$title = angular.element("<span class='aui-msg-title'>");
+					this.$con = angular.element("<div class='aui-msg-con'>");
+					this.$box = angular.element("<div class='aui-msg-box'>");
+					this.$close = angular.element("<button type='button' class='close'>×</button>");
+					this.$modal = angular.element("<div class='aui-msg-modal'>");
+					
+					opts.title&&this.$title.html(opts.title);
+					this.$head.append(this.$close).append(this.$title);
+					this.$box.append(this.$head).append(this.$con);
+					angular.element("body").append(this.$box).append(this.$modal);
+					
+					this.$close.on("click",function(){
+						self.close();
+					});
+					
+					return this;
+				},
+				options:function(){
+					
+				},
+				close:function(){
+					this.$box.add(this.$modal).hide();
+				},
+				open:function(){
+					this.$box.add(this.$modal).show();
+				},
+				destory:function(){
+					this.$box.remove();
+					this.$modal.remove();
+					this.$box = this.$modal = null;
+				}
+			};
+			
+			msg.prototype._init.prototype = msg.prototype;
+			
+			return msg;
 		}]); 
 });

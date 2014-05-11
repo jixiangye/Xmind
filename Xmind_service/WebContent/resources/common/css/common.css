@@ -1,5 +1,17 @@
+@charset "UTF-8";
+
+[ng\:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak{display:none;}
+ng\:form{display:block;}
+
 body{
 	position:relative;
+	color:#666;
+	border-top: 1px solid #ccc;
 }
 
 input.ng-invalid.ng-dirty {
@@ -13,6 +25,22 @@ input.ng-valid.ng-dirty {
 
 }
 
+.text-primary{
+	color:#428BCA;
+}
+
+.text-warning{
+	color:#F0AD4E;
+}
+
+.text-success{
+	color:#47A447;
+}
+
+.text-danger{
+	color:#D2322D;
+}
+
 .error{
     color: #A94442;
     background-color: #F2DEDE;
@@ -21,22 +49,6 @@ input.ng-valid.ng-dirty {
     margin-top:5px;
     border: 1px solid rgba(0, 0, 0, 0);
     border-radius: 4px;
-}
-
-.prompt-box{
-	position: fixed;
-	top:30px;
-	left:0;
-	right:0;
-	z-index: 1050;
-	width: auto;
-	margin: 10px;
-	text-align:center;
-}
-
-.prompt-box .alert{
-	display:inline-block;
-	padding:5px 20px;
 }
 
 @media screen and (min-width: 768px){
@@ -66,4 +78,21 @@ input.ng-valid.ng-dirty {
 
 .nav-slide-hide{
 	margin-top:0px;
+}
+
+/*bootstrap*/
+.modal-backdrop{
+	background:#fff;
+}
+
+.modal-content{
+	border:none 0;
+	-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+	border-radius:0;
+}
+
+.modal-backdrop.in {
+	opacity: 0.8;
+	filter: alpha(opacity=80);
 }

@@ -1,3 +1,60 @@
+/*prompt style START*/
+.prompt-box{
+	position: fixed;
+	top:30px;
+	left:0;
+	right:0;
+	z-index: 1050;
+	width: auto;
+	margin: 10px;
+	text-align:center;
+}
+
+.prompt-box .alert{
+	display:inline-block;
+	padding:5px 20px;
+}
+/*prompt style END*/
+
+/*msg style START*/
+.aui-msg-box{
+	position: fixed;
+	top:30px;
+	left:0;
+	right:0;
+	z-index: 1050;
+	width: 500px;
+	max-width:100%;
+	margin: auto;
+	text-align:center;
+	background:#fff;
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.aui-msg-head{
+	padding: 10px;
+	font-size: 16px;
+	border-bottom: 1px solid #eee;
+	text-align:left;
+	color:#666;
+}
+
+.aui-msg-con{
+	padding:10px;
+}
+
+.aui-msg-modal{
+	position: fixed;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	background:rgba(255,255,255,0.7);
+	z-index: 1049;
+}
+/*msg style END*/
+
 /*timepicker style START*/
 .aui-timepicker{
 	position:absolute;
@@ -7,7 +64,7 @@
 	text-align:center;
 	top: 100%;
 	left: 0;
-	z-index: 1000;
+	z-index: 1051;
 	font-size: 12px;
 	background-color: #ffffff;
 	border: 1px solid #cccccc;
