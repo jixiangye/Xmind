@@ -31,25 +31,32 @@ define(function(require,exports,module){
             {text:"已完成",status:3,list:[],color:"text-success",expand:true},
             {text:"已关闭",status:4,list:[],color:"text-danger",expand:true}
 		])
-		.factory("addTimer",["timer","dateFilter","notice",function(timer,dateFilter,notice){
+		.value('remindMsg',[])
+		.factory("addTimer",["timer","dateFilter","notice","remindMsg",function(timer,dateFilter,notice,remindMsg){
 			return function addTimer(todo){
 				if(todo.reminderTime){
-					var remind = dateFilter(timer.formatter(todo.reminderTime),"yyyy-MM-dd"),
-						now = dateFilter(new Date,"yyyy-MM-dd");
+					var nowTime = new Date,
+						remindTime = timer.formatter(todo.reminderTime),
+						remind = dateFilter(remindTime,"yyyy-MM-dd"),
+						now = dateFilter(nowTime,"yyyy-MM-dd");
 					
 					//如果提醒时间在今天
 					if(remind === now){
 						//设置提醒
 						timer(todo.reminderTime,function(todo){
-							todo.reminderTime ="";
-							console.log( n = notice.create(null,"事项提醒",todo.content));
+							n = notice.create(null,"事项提醒",todo.content);
 							n.show();
+							remindMsg.push(todo);
 						},[todo]);
+					}
+					
+					if(todo.status == 2 && nowTime.getTime() > remindTime.getTime()){
+						remindMsg.push(todo);
 					}
 				}
 			};
 		}])
-		.factory('init',["xajax","URL","todos","addTimer",function(xajax,URL,todos,addTimer){
+		.factory('init',["xajax","URL","todos","addTimer","remindMsg",function(xajax,URL,todos,addTimer,remindMsg){
 			return function($scope){
 				//初始化todo列表
 				xajax({url:URL.GET_LIST,method:"post",data:{}})
@@ -104,7 +111,7 @@ define(function(require,exports,module){
 				});
 			};
 			
-			todo.update = function(todo,key,value){
+			todo.update = function(todo,key,value,fun){
 				var data = {notesId:todo.notesId};
 				
 				data.content = todo.content;
@@ -127,8 +134,8 @@ define(function(require,exports,module){
 					}
 				}
 				
-				if(key === "reminderTime" && !data.status){
-					data.status = 1;
+				if(key === "reminderTime"){
+					data.status = 2;
 				}
 				
 				saveTodo(data,function(d){
@@ -138,7 +145,12 @@ define(function(require,exports,module){
 					}else{
 						//修改状态，或提醒时间
 						todo[key] = value;
+						
+						if(key === "reminderTime"){
+							todo.status = 2;
+						}
 					}
+					fun && fun(d);
 				});
 			};
 			
@@ -181,20 +193,22 @@ define(function(require,exports,module){
 						}
 						if(last.status !== v.status){
 							if(v.changeContent)
-							switch(+v.status){
-								case 1:
-									v.changeContent.push("您将事项恢复为正常状态");
-									break;
-								case 2:
-									v.changeContent.push("您添加提醒："+v.reminderTime);
-									break;
-								case 3:
-									v.changeContent.push("您将事项标记为：完成");
-									break;
-								case 4:
-									v.changeContent.push("您将事项标记为：关闭");
-									break;
-							}
+								switch(+v.status){
+									case 1:
+										v.changeContent.push("您将事项标记为：正常");
+										break;
+									case 2:
+										v.changeContent.push("您添加提醒："+v.reminderTime);
+										break;
+									case 3:
+										v.changeContent.push("您将事项标记为：完成");
+										break;
+									case 4:
+										v.changeContent.push("您将事项标记为：关闭");
+										break;
+								}
+						}else if(v.status == 2 && v.reminderTime !== last.reminderTime){
+							v.changeContent.push("您更新提醒时间为："+v.reminderTime);
 						}
 						
 						var timeArray = v.modifyTime.split(" ");
@@ -266,7 +280,8 @@ define(function(require,exports,module){
 			
 			return tag;
 		}])
-		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","dom","Todo","$timeout",function($scope,todos,init,Tag,prompt,notice,dom,Todo,$timeout){
+		.controller("todoList",["$scope","todos","init","Tag","prompt","notice","dom","Todo","$timeout","remindMsg",
+		function($scope,todos,init,Tag,prompt,notice,dom,Todo,$timeout,remindMsg){
 			$scope.todos = todos;
 			$scope.historyGroup = [];//事项历史记录
 			$scope.historySpan = "";//事项历史记录跨度
@@ -274,6 +289,15 @@ define(function(require,exports,module){
 			$scope.tags = [];//标签
 			$scope.reminderTime = "";//提醒时间
 			$scope.operaing = false;
+			$scope.btnStatus = false;
+			$scope.filterTag = false;
+			$scope.remindMsg = remindMsg;
+			
+			$scope.$watch("remindMsg.length",function(n,old){
+				if(!old && n){
+					angular.element("#remind-msg").modal("show");
+				}
+			});
 			
 			init($scope);
 			
@@ -318,8 +342,42 @@ define(function(require,exports,module){
 			
 			//回车添加
 			$scope.todoKeyDown = function($event){
-				if($event.keyCode === 13)
-					Todo.add($scope);
+				if($scope.btnStatus !== "filter"){
+					if($event.keyCode === 13)
+						Todo.add($scope);
+				}
+			};
+			
+			//过滤
+			$scope.filterKeyDown = function(){
+				var $li = angular.element(".todo-list li"),
+					selector = !$scope.content?"":"[data-title*='"+($scope.content||"")+"']";
+				selector += !$scope.filterTag ? "": "[data-tags*=' "+$scope.filterTag+" ']";
+				
+				if(selector){
+					$li.addClass("hidden");
+					$li.filter(selector).removeClass("hidden");
+				}else{
+					$li.removeClass("hidden");
+				}
+			};
+			
+			$scope.returnTags = function(tags){
+				return ' '+$scope.map(tags,function(n){return n.tagName;}).join(' ')+' ';
+			};
+			
+			//map
+			$scope.map = function(list,fun){
+				var i=0,len,arr=[],item;
+				if(list && (len = list.length)){
+					for(;i<len;i++){
+						item = fun(list[i],i,list);
+						if(item !== undefined){
+							arr.push(item);
+						}
+					}
+				}
+				return arr;
 			};
 			
 			//查看历史
@@ -384,20 +442,41 @@ define(function(require,exports,module){
 				return Tag.inTag(tags,tagId);
 			};
 			
-			var nowTimeObj = {};
+			//处理事务
+			$scope.dealTodo = function(key,value){
+				var todo = $scope.remindMsg[0];
+				Todo.update(todo,key,value,function(d){
+					$scope.remindMsg.shift();
+					if(!$scope.remindMsg.length){
+						angular.element("#remind-msg").modal("hide");
+					}
+				});
+			};
+			
+			var nowTimeObj = {},
+				nowSelector = "";
 			//打开时间选择器
-			$scope.openTimepicker = function($event,time,obj){
+			$scope.openTimepicker = function($event,time,obj,selector){
 				$scope.$parent.$broadcast('timepicker.open',$event,time);
 				nowTimeObj = obj || $scope;
+				nowSelector = selector;
 			};
 			
 			//
 			$scope.$on("timepicker.select",function(event,time){
 				nowTimeObj.reminderTime = time;
-				if(nowTimeObj !== $scope){
+				if(nowSelector === "remindMsg"){
+					Todo.update(nowTimeObj,"reminderTime",time,function(d){
+						$scope.remindMsg.shift();
+						if(!$scope.remindMsg.length){
+							angular.element("#remind-msg").modal("hide");
+						}
+					});
+				}else if(nowSelector === "todo"){
 					Todo.update(nowTimeObj,"reminderTime",time);
 				}
 			});
+			
 		}]);
 	
 	angular.bootstrap(document,["app-todo"]);

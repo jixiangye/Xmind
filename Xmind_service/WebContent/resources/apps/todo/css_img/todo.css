@@ -14,15 +14,15 @@
 	border:dashed #f5f4f6;
 	border-width:0 0 1px 1px;
 	border-left-color:#eee;
-	font-weight:700;
 }
 
 .todo-type:hover{
-	color:#39b3d7;
+	font-weight:bold;
 }
 
 .todo-input-group{
 	margin-bottom:10px;
+	margin-left:90px;
 }
 
 .todo-input-group input{
@@ -99,14 +99,30 @@
 	display:inline-block;
 }
 
-.tag-panel:hover .tag-panel-box{
-	position: absolute;
-	z-index: 99;
+.tag-panel-box{
+	position:relative;
 	top: -4px;
-	left: 24px;
+	left: -5px;
 }
 
-.tag-panel .invaild{
+.tag-panel:hover .tag-panel-box{
+	/* position: absolute; */
+	z-index: 99;
+	max-width: 200px;
+	display: inline-block;
+	/* left: 24px; */
+}
+
+.todo-filter-tag{
+	padding:0 15px 5px;
+}
+
+.todo-filter-tag span{
+	margin-right:5px;
+	cursor:pointer;
+}
+
+.tag-panel .invaild,.todo-filter-tag .invaild{
 	background:#ccc !important;
 }
 
@@ -132,7 +148,7 @@
 	border-width:1px 0 1px 0;
 }
 
-.todo-list :first-child{
+.todo-list li:first-child{
 	border-top:0;
 }
 
@@ -161,20 +177,32 @@
 }
 
 .todo-list .tag-mark-item{
-	width:4px;
+	width:3px;
 	display:block;
+	border-top: 1px solid #fff;
 }
 
 .todo-list .todo-content{
 	word-break:break-all;
+	font-size:1.2em;
 }
 
 .todo-list .todo-status{
 	color:#aaa;
 }
 
+.todo-list .todo-status .remind-hover{
+	display:none;
+	cursor:pointer;
+}
+
+.todo-list li:hover .remind-hover{
+	display:inline-block;
+}
+
 .todo-list .todo-status .remind-todo{
 	color:#ed9c28;
+	cursor:pointer;
 }
 
 .todo-list .todo-status .finish-todo{
@@ -327,4 +355,32 @@
 
 .todo-history-list li.close-todo .todo-history-point{
 	background:#d2322d;
+}
+
+.reminder-msg-step{
+	padding:10px;
+	text-align:center;
+}
+
+.reminder-msg-step span{
+	display:inline-block;
+	text-align:left;
+	word-break: break-all;
+}
+
+.reminder-msg-btn{
+	padding:10px;
+	text-align:center;
+}
+
+.reminder-msg-btn span.glyphicon{
+	width: 60px;
+	height: 60px;
+	display: inline-block;
+	border-radius: 30px;
+	border: 3px solid;
+	font-size: 30px;
+	line-height: 50px;
+	margin:0 10px;
+	cursor:pointer;
 }
