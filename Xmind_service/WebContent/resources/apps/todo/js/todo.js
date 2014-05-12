@@ -352,15 +352,17 @@ define(function(require,exports,module){
 			
 			//过滤
 			$scope.filterKeyDown = function(){
-				var $li = angular.element(".todo-list li"),
-					selector = !$scope.content?"":"[data-title*='"+($scope.content||"")+"']";
-				selector += !$scope.filterTag ? "": "[data-tags*=' "+$scope.filterTag+" ']";
-				
-				if(selector){
-					$li.addClass("hidden");
-					$li.filter(selector).removeClass("hidden");
-				}else{
-					$li.removeClass("hidden");
+				if($scope.btnStatus === "filter"){
+					var $li = angular.element(".todo-list li"),
+						selector = !$scope.content?"":"[data-title*='"+($scope.content||"")+"']";
+					selector += !$scope.filterTag ? "": "[data-tags*=' "+$scope.filterTag+" ']";
+					
+					if(selector){
+						$li.addClass("hidden");
+						$li.filter(selector).removeClass("hidden");
+					}else{
+						$li.removeClass("hidden");
+					}
 				}
 			};
 			
