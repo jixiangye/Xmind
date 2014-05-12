@@ -23,4 +23,7 @@ public interface ITagDao extends Repository<Tag, Integer> {
 
 	@Transactional(propagation = Propagation.SUPPORTS)
 	void delete(Integer tagId);
+	
+	@Transactional(propagation = Propagation.SUPPORTS)
+	Tag findByTagId(Integer tagId);
 }
