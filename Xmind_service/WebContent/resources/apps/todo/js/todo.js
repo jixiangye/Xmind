@@ -240,6 +240,7 @@ define(function(require,exports,module){
 				
 				xajax({url:URL.SAVE_TAG,data:data,method:"post"})
 				.success(function(d){
+					data.tagId = d.tagId;
 					$scope.tags.push(data);
 					$scope.tagName = "";
 				});
