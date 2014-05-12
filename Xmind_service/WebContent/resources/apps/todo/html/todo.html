@@ -16,11 +16,11 @@
 			<!-- 输入框 -->
 			<div>
 				<div class="btn-group pull-left">
-					<button type="button" class="btn btn-default" ng-class="{active:btnStatus=='filter'}" ng-click="btnStatus = btnStatus=='filter'? false:'filter';content='';filterKeyDown();"><span class="glyphicon glyphicon-filter"></span></button>
+					<button type="button" class="btn btn-default" ng-class="{active:btnStatus=='filter'}" ng-click="content='';filterTag='';filterKeyDown();btnStatus = btnStatus=='filter'? false:'filter';"><span class="glyphicon glyphicon-filter"></span></button>
 					<button type="button" class="btn btn-default" ng-class="{active:btnStatus=='set'}" ng-click="btnStatus = btnStatus=='set'? false:'set'"><span class="glyphicon glyphicon-cog"></span></button>
 				</div>
 				<div class="todo-input-group">
-	 				<input type="text" class="form-control" ng-model="content" placeholder="{{btnStatus=='filter'?'输入关键字搜索':'我想...'}}" ng-keydown="todoKeyDown($event)" ng-keyup="filterKeyDown()" x-webkit-speech>
+	 				<input type="text" class="form-control" ng-model="content" placeholder="{{btnStatus=='filter'?'输入关键字搜索':'我想...'}}" ng-keydown="todoKeyDown($event)" ng-keyup="filterKeyDown()" x-webkit-speech maxlength=800>
 				</div>
 			</div>
 			<!-- 添加按钮 -->
@@ -37,9 +37,9 @@
 			<!-- todo list -->
 			<ul class="todo-box" ng-show="(!content && btnStatus!='set')||btnStatus=='filter'">
 				<li ng-repeat="todoGroup in todos" ng-animate="'todo'">
-					<div class="todo-type {{todoGroup.color}}" ng-show="btnStatus!='filter'" ng-click="todoGroup.expand = !todoGroup.expand">{{todoGroup.text}} <span ng-show="todoGroup.list.length">{{todoGroup.list.length}}</span></div>
+					<div class="todo-type {{todoGroup.color}}" ng-show="btnStatus!='filter'" ng-click="todoGroup.expand = !todoGroup.expand">{{todoGroup.text}}<span ng-show="todoGroup.list.length">（{{todoGroup.list.length}}）</span></div>
 					<ul class="todo-list" ng-show="todoGroup.list.length && (todoGroup.expand || btnStatus=='filter')">
-						<li ng-repeat="todo in todoGroup.list track by todo.notesId" data-title="{{todo.content}}" data-tags="{{returnTags(todo.tags)}}" ng-mouseenter="enterTodo($event,todo,todoGroup)" ng-mouseleave="leaveTodo()" ng-animate="'todo'" ng-class="{'close-todo':todo.status==4}">
+						<li ng-repeat="todo in todoGroup.list track by todo.notesId" data-title="{{todo.content}}" data-tags="{{todo.tagsStr}}" ng-mouseenter="enterTodo($event,todo,todoGroup)" ng-mouseleave="leaveTodo()" ng-animate="'todo'" ng-class="{'close-todo':todo.status==4}">
 							<span class="tag-mark">
 								<span class="tag-mark-item" ng-repeat="mTag in todo.tags" style="height:{{100/todo.tags.length+'%'}};background-color:{{mTag.tagColor}}"></span>
 							</span>
@@ -49,7 +49,7 @@
 								<span class="glyphicon" ng-class="{'glyphicon-ok finish-todo':todo.status==3,'glyphicon-remove close-todo':todo.status==4}" ng-show="todo.status > 2"></span>
 							</span>
 							<span class="todo-content" ng-show="!todo.editing">{{todo.content}}</span>
-							<input class="form-control" ng-model="todo.content" ng-show="todo.editing" ng-keydown="editKeyDown($event,todo)" ng-blur="editTodo($event,todo)" required>
+							<input class="form-control" ng-model="todo.content" ng-show="todo.editing" ng-keydown="editKeyDown($event,todo)" ng-blur="editTodo($event,todo)" required maxlength=800>
 						</li>
 					</ul>
 				</li>
@@ -60,7 +60,7 @@
 					<span>标签：</span>
 					<span class="tag-add-box">
 						<span class="glyphicon glyphicon-plus-sign  tag-add"></span>
-						<input type="text" class="form-control" id="tag-name-ipt" ng-model="tagName" ng-keydown="tagKeyDown($event)" placeholder="给标签取个名字吧...">
+						<input type="text" class="form-control" id="tag-name-ipt" ng-model="tagName" ng-keydown="tagKeyDown($event)" placeholder="给标签取个名字吧..." maxlength=20>
 					</span>
 					<span class="label label-info" ng-repeat="tag in tags" style="background-color:{{tag.tagColor}}">{{tag.tagName}}</span>
 				</li>

@@ -58,7 +58,7 @@ define(function(require,exports,module){
 			};
 		}])
 		.factory('init',["xajax","URL","todos","addTimer","remindMsg",function(xajax,URL,todos,addTimer,remindMsg){
-			return function($scope){
+			return function($scope,tag){
 				//初始化todo列表
 				xajax({url:URL.GET_LIST,method:"post",data:{}})
 				.success(function(d){
@@ -66,6 +66,7 @@ define(function(require,exports,module){
 						v.old = v.content;
 						addTimer(v);
 						$scope.todos[v.status == 2 ? 0 : (v.status == 1 ? 1 : v.status - 1)].list.push(v);
+						v.tagsStr = tag.returntagsStr(v.tags);
 					});
 				});
 				
@@ -266,6 +267,7 @@ define(function(require,exports,module){
 						d.tagColor = tagColor;
 						(todo.tags || (todo.tags=[])).push(d);
 					}
+					todo.tagsStr = tag.returntagsStr(todo.tags);
 				});
 			};
 			
@@ -278,6 +280,17 @@ define(function(require,exports,module){
 					}
 				});
 				return i;
+			};
+			
+			tag.returntagsStr = function(list){
+				var arr = [];
+				if(list){
+					for(var i=0,len=list.length;i<len;i++){
+						arr.push(list[i].tagName);
+					}
+				}
+				
+				return ' '+arr.join(' ')+' ';
 			};
 			
 			return tag;
@@ -301,11 +314,11 @@ define(function(require,exports,module){
 				}
 			});
 			
-			init($scope);
+			init($scope,Tag);
 			
 			//监听登陆事件
 			$scope.$on("login",function(){
-				init($scope);
+				init($scope,Tag);
 			});
 			
 			//监听登出事件
@@ -366,7 +379,7 @@ define(function(require,exports,module){
 				}
 			};
 			
-			$scope.returnTags = function(tags){
+			var returnTags = function(tags){
 				return ' '+$scope.map(tags,function(n){return n.tagName;}).join(' ')+' ';
 			};
 			
@@ -413,8 +426,8 @@ define(function(require,exports,module){
 				timer = $timeout(function(){
 					$scope.todo = todo;
 					$scope.todo.group = todoGroup;
-					$scope.operaing = true;
 					target.append(dom.todoPanel);
+					$scope.operaing = true;
 				},300);
 			};
 			
@@ -438,7 +451,9 @@ define(function(require,exports,module){
 			
 			//标签与todo关联/取消关联
 			$scope.toggleTagToTodo = function(todo,xtag){
-				Tag.linkToTodo($scope,todo,xtag);
+				Tag.linkToTodo($scope,todo,xtag,function(){
+					
+				});
 			};
 			
 			//判断标签是否在todo的标签列表中
