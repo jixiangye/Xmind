@@ -66,6 +66,8 @@ public class TagService {
 		tagNotesRelation = tagNotesRelationDao.save(tagNotesRelation);
 		tagNotesRelationBean.setTagNotesRelationId(tagNotesRelation
 				.getTagNotesRelationId());
+		tagNotesRelationBean.setTagName(tagDao.findByTagId(
+				tagNotesRelationBean.getTagId()).getTagName());
 		return tagNotesRelationBean;
 	}
 
