@@ -45,6 +45,7 @@ define(function(require,exports,module){
 						//设置提醒
 						timer(todo.reminderTime,function(todo){
 							n = notice.create(null,"事项提醒",todo.content);
+							n.onclick = function(){window.focus();};
 							n.show();
 							remindMsg.push(todo);
 						},[todo]);
