@@ -306,22 +306,23 @@ define(function(require,exports,module){
 						if(e.target.tagName === "SPAN"){
 							var span = angular.element(e.target),
 								time; 
-							angular.element(".label-info").removeClass("label-info");
-							time = span.addClass("label-info").data("date")+" "+$scope.date.hour+":"+$scope.date.minute+":00";
+							angular.element(".label.active").removeClass("active");
+							time = span.addClass("active").data("date")+" "+$scope.date.hour+":"+$scope.date.minute+":00";
 							$element.hide();
 							$scope.$parent.$broadcast("timepicker.select",time);
 						}
 					};
 					
 					$scope.$on("timepicker.open",function(scope,$event,time){
-						var rect = angular.element($event.currentTarget).offset();
+						var $this = angular.element($event.currentTarget); 
+						var rect = $this.offset();
 						var hour = now.hour+1;
 						$scope.date.hour = hour>23 ? "00" : hour;
 						$scope.date.minute = "00";
 						if(rect.left > body.width() - rect.left){
-							$element.css({top:rect.top,left:rect.left-$element.width()});
+							$element.css({top:rect.top+$this.height(),left:rect.left-$element.width()});
 						}else{
-							$element.css({top:rect.top,left:rect.left});
+							$element.css({top:rect.top+$this.height(),left:rect.left});
 						}
 						
 						$element.show();

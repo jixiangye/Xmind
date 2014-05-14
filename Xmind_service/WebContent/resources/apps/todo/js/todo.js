@@ -13,6 +13,7 @@ define(function(require,exports,module){
 			DELETE_TODO:"note/delete",
 			SAVE_TAG:"tag/save",
 			GET_TAGS:"tag/query",
+			DEL_TAG:"tag/delete",
 			SAVE_RELATION:"tag/saveRelation",
 			DELETE_RELATION:"tag/deleteRelation"
 		})
@@ -32,7 +33,8 @@ define(function(require,exports,module){
             {text:"已关闭",status:4,list:[],color:"text-danger",expand:true}
 		])
 		.value('remindMsg',[])
-		.factory("addTimer",["timer","dateFilter","notice","remindMsg",function(timer,dateFilter,notice,remindMsg){
+		.value('timerMap',{})
+		.factory("addTimer",["timer","dateFilter","notice","remindMsg","timerMap",function(timer,dateFilter,notice,remindMsg,timerMap){
 			return function addTimer(todo){
 				if(todo.reminderTime){
 					var nowTime = new Date,
@@ -41,9 +43,13 @@ define(function(require,exports,module){
 						now = dateFilter(nowTime,"yyyy-MM-dd");
 					
 					//如果提醒时间在今天
-					if(remind === now){
+					if(remind === now && nowTime.getTime() < remindTime.getTime()){
+						if(todo.notesId in timerMap){
+							timerMap[todo.notesId].stop();
+						}
 						//设置提醒
-						timer(todo.reminderTime,function(todo){
+						timerMap[todo.notesId] = timer(todo.reminderTime,function(todo){
+							delete timerMap[todo.notesId];
 							n = notice.create(null,"事项提醒",todo.content);
 							n.onclick = function(){window.focus();};
 							n.show();
@@ -150,6 +156,7 @@ define(function(require,exports,module){
 						
 						if(key === "reminderTime"){
 							todo.status = 2;
+							addTimer(todo);
 						}
 					}
 					fun && fun(d);
@@ -231,7 +238,7 @@ define(function(require,exports,module){
 			
 			return todo;
 		}])
-		.factory("Tag",["xajax","URL","randomColor",function(xajax,URL,randomColor){
+		.factory("Tag",["xajax","URL","randomColor","prompt",function(xajax,URL,randomColor,prompt){
 			var tag = {};
 			
 			tag.add = function($scope){
@@ -239,6 +246,14 @@ define(function(require,exports,module){
 						tagName:$scope.tagName,
 						tagColor:randomColor()
 					};
+				
+				if(tag.inTag($scope.tags,data.tagName,"tagName")>-1){
+					prompt({
+						type:"warning",
+						content:"标签已存在"
+					});
+					return;
+				}
 				
 				xajax({url:URL.SAVE_TAG,data:data,method:"post"})
 				.success(function(d){
@@ -248,8 +263,13 @@ define(function(require,exports,module){
 				});
 			};
 			
-			tag.del = function(){
+			tag.del = function(tagObj,$scope,index){
+				var data = tagObj;
 				
+				xajax({url:URL.DEL_TAG,data:data,method:"post"})
+				.success(function(d){
+					$scope.tags.splice(index,1);
+				});
 			};
 			
 			tag.linkToTodo = function($scope,todo,xtag){
@@ -271,11 +291,12 @@ define(function(require,exports,module){
 				});
 			};
 			
-			tag.inTag = function(tags,tagId){
-				var i = -1;
-				angular.forEach(tags,function(v,k){
-					if(v.tagId === tagId){
-						i = k;
+			tag.inTag = function(tags,value,key){
+				var i = -1,
+					k = key || "tagId";
+				angular.forEach(tags,function(v,n){
+					if(v[k] === value){
+						i = n;
 						return false;
 					}
 				});
@@ -306,6 +327,7 @@ define(function(require,exports,module){
 			$scope.operaing = false;
 			$scope.btnStatus = false;
 			$scope.filterTag = false;
+			$scope.tagBtnStatus = false;
 			$scope.remindMsg = remindMsg;
 			
 			$scope.$watch("remindMsg.length",function(n,old){
@@ -441,6 +463,11 @@ define(function(require,exports,module){
 			//添加标签
 			$scope.addTag = function(){
 				Tag.add($scope);
+			};
+			
+			//删除标签
+			$scope.delTag = function(tag,index){
+				Tag.del(tag,$scope,index);
 			};
 			
 			//enter添加标签

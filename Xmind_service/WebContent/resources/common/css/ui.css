@@ -86,6 +86,20 @@
 	margin-bottom:5px;
 	padding:.4em .6em;
 	cursor:pointer;
+	color: #bbb;
+	border: 1px solid #bbb;
+	background: none;
+}
+
+.aui-tpk-label .label:hover{
+	color:#666;
+	border-color:#666;
+}
+
+.aui-tpk-label .label.active{
+	color:#fff;
+	border-color:#bbb;
+	background-color:#bbb;
 }
 
 .aui-tpk-time{
@@ -95,7 +109,6 @@
 }
 
 .aui-tpk-time-ipt{
-	vertical-align: middle;
 	background-color: #ffffff;
 	background-image: none;
 	border: 1px solid #cccccc;
@@ -103,6 +116,7 @@
 	width: 80px;
 	padding-right:16px;
 	vertical-align: top;
+	text-align:center;
 }
 
 .aui-left-ipt{
