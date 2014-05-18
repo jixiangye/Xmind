@@ -1,7 +1,5 @@
 html,
-body,
-.note,
-.note>div{
+body{
 	height:100%;
 }
 
@@ -11,45 +9,87 @@ body{
 }
 
 .note{
-	margin-top:-5px;
+	height:100%;
+	position:relative;
 }
 
-.note-left{
+.note-nav{
+	position:absolute;
+	background-color:#fff;
+	border:1px solid #CCC;
+	top:0;
+	bottom:0;
+	left:15px;
+	z-index:999;
+	border-radius:4px;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+	overflow:hidden;
+}
+
+.note-list{
+	position:absolute;
+	top:0;
+	left:0;
+	bottom:200px;
 	width:200px;
-	float:left;
 }
 
-.note-left div{
-	padding:10px 0;
-}
-
-.note-left input{
-	width:100%;
-}
-
-.note-left a{
-	padding:10px;
-	position: relative;
-	display: block;
+.note-list-head{
+	display:block;
 	padding: 10px 15px;
-	margin-bottom: -1px;
-	background-color: #ffffff;
-	/* border: 1px solid #dddddd; */
 }
 
-.note-left a.active{
-	background-color:#d9edf7;
-	color:#31708f;
+.note-list ul{
+	padding:0;
+}
+
+.note-list li{
+	padding:10px 15px;
+	display:block;
+	border-bottom:1px solid #eee;
+}
+
+.note-list li.active{
+	margin-right: -1px;
+	border-right: 1px solid #FFF;
+	box-shadow:-2px 0px 5px 1px #efefef;
+	border-left: 3px solid #EDDE0F;
+}
+
+.note-cache{
+	position:absolute;
+	width:200px;
+	left:0;
+	bottom:0;
+	height:199px;
+	border-top:1px solid #eee;
+	padding:0;
+}
+
+.note-cache li{
+	display:block;
+	padding:5px 15px;
+	border-bottom:1px solid #eee;
+}
+
+.note-cache li:first-child{
+	border-bottom:0;
 }
 
 .note-slidebar{
 	width:200px;
-	float:left;
-	background-color:#d9edf7;
+	height:100%;
+	margin-left:200px;
+	border-left:1px solid #eee;
+}
+
+.note-slidebar-head{
+	padding:10px 15px;
 }
 
 .note-slidebar li{
-	padding:10px;
+	padding:0 0 0 15px;
 	display:block;
 }
 
@@ -59,8 +99,8 @@ body{
 
 .note-slidebar li a{
 	display: block;
-	margin: 0 -10px;
-	padding: 0 0 0 10px;
+	margin: 0 0 0 -10px;
+	padding: 5px 0 5px 10px;
 }
 
 .note-slidebar li a.active{
@@ -68,10 +108,13 @@ body{
 	color:#31708f;
 }
 
-.note-right{
-	
+.note-input-group{
+	margin-left:85px;
 }
 
-.note-node-add{
-	background:#eee;
+.note-content{
+	margin-top:10px;
+	height:100%;
+	border-radius:4px;
+	border:1px solid #CCC;
 }

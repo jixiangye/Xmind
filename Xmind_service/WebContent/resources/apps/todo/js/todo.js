@@ -50,7 +50,7 @@ define(function(require,exports,module){
 						//设置提醒
 						timerMap[todo.notesId] = timer(todo.reminderTime,function(todo){
 							delete timerMap[todo.notesId];
-							n = notice.create(null,"事项提醒",todo.content);
+							n = notice.create("../../../common/img/xmind-todo.png","事项提醒",todo.content);
 							n.onclick = function(){window.focus();};
 							n.show();
 							remindMsg.push(todo);
@@ -401,24 +401,6 @@ define(function(require,exports,module){
 				}
 			};
 			
-			var returnTags = function(tags){
-				return ' '+$scope.map(tags,function(n){return n.tagName;}).join(' ')+' ';
-			};
-			
-			//map
-			$scope.map = function(list,fun){
-				var i=0,len,arr=[],item;
-				if(list && (len = list.length)){
-					for(;i<len;i++){
-						item = fun(list[i],i,list);
-						if(item !== undefined){
-							arr.push(item);
-						}
-					}
-				}
-				return arr;
-			};
-			
 			//查看历史
 			$scope.viewDetail = function(todo){
 				Todo.detail($scope,todo);
@@ -438,6 +420,7 @@ define(function(require,exports,module){
 			//删除todo
 			$scope.deleteTodo = function(notesId){
 				Todo.del($scope.todo.group.list,notesId);
+				angular.element(".container").append(dom.todoPanel);
 			};
 			
 			var timer;

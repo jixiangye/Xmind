@@ -17,7 +17,7 @@
 			<div class="clearfix">
 				<div class="btn-group pull-left">
 					<button type="button" class="btn btn-default" ng-class="{active:btnStatus=='filter'}" ng-click="content='';filterTag='';filterKeyDown();btnStatus = btnStatus=='filter'? false:'filter';"><span class="glyphicon glyphicon-filter"></span></button>
-					<button type="button" class="btn btn-default" ng-class="{active:btnStatus=='set'}" ng-click="btnStatus = btnStatus=='set'? false:'set'"><span class="glyphicon glyphicon-cog"></span></button>
+					<button type="button" class="btn btn-default" ng-class="{active:btnStatus=='set'}" ng-click="content='';btnStatus = btnStatus=='set'? false:'set'"><span class="glyphicon glyphicon-cog"></span></button>
 				</div>
 				<div class="todo-input-group">
 	 				<input type="text" class="form-control" ng-show="btnStatus!='set'" ng-model="content" placeholder="{{btnStatus=='filter'?'输入关键字搜索':'我想...'}}" ng-keydown="todoKeyDown($event)" ng-keyup="filterKeyDown()" x-webkit-speech maxlength=800>
@@ -59,7 +59,7 @@
 				<li>
 					<span>标签：</span>
 					<span class="btn-group">
-						<button type="button" class="btn btn-default btn-sm" ng-click="tagBtnStatus = tagBtnStatus=='add'?false:'add'" ng-class="{active:tagBtnStatus=='add'}" ng-show="tagBtnStatus!='del'"><span class="glyphicon glyphicon-plus"></span></button>
+						<button type="button" class="btn btn-default btn-sm" ng-click="tagBtnStatus = tagBtnStatus=='add'?false:'add'" ng-class="{active:tagBtnStatus=='add'}"><span class="glyphicon glyphicon-plus"></span></button>
 						<button type="button" class="btn btn-default btn-sm" ng-click="tagBtnStatus = tagBtnStatus=='del'?false:'del'" ng-class="{active:tagBtnStatus=='del'}" ng-show="tagBtnStatus!='add'"><span class="glyphicon glyphicon-trash"></span></button>
 					</span><input type="text" class="form-control input-sm tag-ipt" ng-show="tagBtnStatus=='add'" ng-model="tagName" ng-keydown="tagKeyDown($event)" placeholder="请输入标签名，回车添加" maxlength=20>
 					<span class="label label-info" ng-repeat="tag in tags track by $index" style="background-color:{{tag.tagColor}}">{{tag.tagName}} <span class="glyphicon glyphicon-remove tag-remove" ng-click="delTag(tag,$index)" ng-show="tagBtnStatus=='del'"></span></span>
