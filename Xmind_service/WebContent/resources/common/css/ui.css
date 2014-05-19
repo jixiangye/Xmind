@@ -5,14 +5,20 @@
 	left:0;
 	right:0;
 	z-index: 1050;
-	width: auto;
-	margin: 10px;
+	margin: auto;
 	text-align:center;
 }
 
 .prompt-box .alert{
 	display:inline-block;
 	padding:5px 20px;
+}
+
+@media screen and (min-width: 768px){
+	.prompt-box {
+		width: 600px;
+		margin: auto;
+	}
 }
 /*prompt style END*/
 
@@ -84,11 +90,15 @@
 .aui-tpk-label .label{
 	display:block;
 	margin-bottom:5px;
-	padding:.4em .6em;
+	padding:.3em .6em;
 	cursor:pointer;
 	color: #bbb;
 	border: 1px solid #bbb;
 	background: none;
+}
+
+.aui-tpk-label .label:last-child{
+	margin-bottom:0;
 }
 
 .aui-tpk-label .label:hover{
@@ -146,12 +156,12 @@
 	border: 1px solid #cccccc;
 	font-size: 0.2em;
 	line-height:35px;
-	cursor:pointer;
+	cursor:pointer;/* 
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	-o-user-select: none;
-	user-select: none;
+	user-select: none; */
 }
 
 .aui-up-btn:active,.aui-down-btn:active{
