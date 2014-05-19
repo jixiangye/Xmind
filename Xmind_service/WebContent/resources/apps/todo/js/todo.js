@@ -13,6 +13,7 @@ define(function(require,exports,module){
 			DELETE_TODO:"note/delete",
 			SAVE_TAG:"tag/save",
 			GET_TAGS:"tag/query",
+			DEL_TAG:"tag/delete",
 			SAVE_RELATION:"tag/saveRelation",
 			DELETE_RELATION:"tag/deleteRelation"
 		})
@@ -32,7 +33,8 @@ define(function(require,exports,module){
             {text:"已关闭",status:4,list:[],color:"text-danger",expand:true}
 		])
 		.value('remindMsg',[])
-		.factory("addTimer",["timer","dateFilter","notice","remindMsg",function(timer,dateFilter,notice,remindMsg){
+		.value('timerMap',{})
+		.factory("addTimer",["timer","dateFilter","notice","remindMsg","timerMap",function(timer,dateFilter,notice,remindMsg,timerMap){
 			return function addTimer(todo){
 				if(todo.reminderTime){
 					var nowTime = new Date,
@@ -41,10 +43,15 @@ define(function(require,exports,module){
 						now = dateFilter(nowTime,"yyyy-MM-dd");
 					
 					//如果提醒时间在今天
-					if(remind === now){
+					if(remind === now && nowTime.getTime() < remindTime.getTime()){
+						if(todo.notesId in timerMap){
+							timerMap[todo.notesId].stop();
+						}
 						//设置提醒
-						timer(todo.reminderTime,function(todo){
-							n = notice.create(null,"事项提醒",todo.content);
+						timerMap[todo.notesId] = timer(todo.reminderTime,function(todo){
+							delete timerMap[todo.notesId];
+							n = notice.create("../../../common/img/xmind-todo.png","事项提醒",todo.content);
+							n.onclick = function(){window.focus();};
 							n.show();
 							remindMsg.push(todo);
 						},[todo]);
@@ -57,7 +64,7 @@ define(function(require,exports,module){
 			};
 		}])
 		.factory('init',["xajax","URL","todos","addTimer","remindMsg",function(xajax,URL,todos,addTimer,remindMsg){
-			return function($scope){
+			return function($scope,tag){
 				//初始化todo列表
 				xajax({url:URL.GET_LIST,method:"post",data:{}})
 				.success(function(d){
@@ -65,6 +72,7 @@ define(function(require,exports,module){
 						v.old = v.content;
 						addTimer(v);
 						$scope.todos[v.status == 2 ? 0 : (v.status == 1 ? 1 : v.status - 1)].list.push(v);
+						v.tagsStr = tag.returntagsStr(v.tags);
 					});
 				});
 				
@@ -148,6 +156,7 @@ define(function(require,exports,module){
 						
 						if(key === "reminderTime"){
 							todo.status = 2;
+							addTimer(todo);
 						}
 					}
 					fun && fun(d);
@@ -229,7 +238,7 @@ define(function(require,exports,module){
 			
 			return todo;
 		}])
-		.factory("Tag",["xajax","URL","randomColor",function(xajax,URL,randomColor){
+		.factory("Tag",["xajax","URL","randomColor","prompt",function(xajax,URL,randomColor,prompt){
 			var tag = {};
 			
 			tag.add = function($scope){
@@ -238,15 +247,29 @@ define(function(require,exports,module){
 						tagColor:randomColor()
 					};
 				
+				if(tag.inTag($scope.tags,data.tagName,"tagName")>-1){
+					prompt({
+						type:"warning",
+						content:"标签已存在"
+					});
+					return;
+				}
+				
 				xajax({url:URL.SAVE_TAG,data:data,method:"post"})
 				.success(function(d){
+					data.tagId = d.tagId;
 					$scope.tags.push(data);
 					$scope.tagName = "";
 				});
 			};
 			
-			tag.del = function(){
+			tag.del = function(tagObj,$scope,index){
+				var data = tagObj;
 				
+				xajax({url:URL.DEL_TAG,data:data,method:"post"})
+				.success(function(d){
+					$scope.tags.splice(index,1);
+				});
 			};
 			
 			tag.linkToTodo = function($scope,todo,xtag){
@@ -264,18 +287,31 @@ define(function(require,exports,module){
 						d.tagColor = tagColor;
 						(todo.tags || (todo.tags=[])).push(d);
 					}
+					todo.tagsStr = tag.returntagsStr(todo.tags);
 				});
 			};
 			
-			tag.inTag = function(tags,tagId){
-				var i = -1;
-				angular.forEach(tags,function(v,k){
-					if(v.tagId === tagId){
-						i = k;
+			tag.inTag = function(tags,value,key){
+				var i = -1,
+					k = key || "tagId";
+				angular.forEach(tags,function(v,n){
+					if(v[k] === value){
+						i = n;
 						return false;
 					}
 				});
 				return i;
+			};
+			
+			tag.returntagsStr = function(list){
+				var arr = [];
+				if(list){
+					for(var i=0,len=list.length;i<len;i++){
+						arr.push(list[i].tagName);
+					}
+				}
+				
+				return ' '+arr.join(' ')+' ';
 			};
 			
 			return tag;
@@ -291,6 +327,7 @@ define(function(require,exports,module){
 			$scope.operaing = false;
 			$scope.btnStatus = false;
 			$scope.filterTag = false;
+			$scope.tagBtnStatus = false;
 			$scope.remindMsg = remindMsg;
 			
 			$scope.$watch("remindMsg.length",function(n,old){
@@ -299,11 +336,11 @@ define(function(require,exports,module){
 				}
 			});
 			
-			init($scope);
+			init($scope,Tag);
 			
 			//监听登陆事件
 			$scope.$on("login",function(){
-				init($scope);
+				init($scope,Tag);
 			});
 			
 			//监听登出事件
@@ -350,34 +387,18 @@ define(function(require,exports,module){
 			
 			//过滤
 			$scope.filterKeyDown = function(){
-				var $li = angular.element(".todo-list li"),
-					selector = !$scope.content?"":"[data-title*='"+($scope.content||"")+"']";
-				selector += !$scope.filterTag ? "": "[data-tags*=' "+$scope.filterTag+" ']";
-				
-				if(selector){
-					$li.addClass("hidden");
-					$li.filter(selector).removeClass("hidden");
-				}else{
-					$li.removeClass("hidden");
-				}
-			};
-			
-			$scope.returnTags = function(tags){
-				return ' '+$scope.map(tags,function(n){return n.tagName;}).join(' ')+' ';
-			};
-			
-			//map
-			$scope.map = function(list,fun){
-				var i=0,len,arr=[],item;
-				if(list && (len = list.length)){
-					for(;i<len;i++){
-						item = fun(list[i],i,list);
-						if(item !== undefined){
-							arr.push(item);
-						}
+				if($scope.btnStatus === "filter"){
+					var $li = angular.element(".todo-list li"),
+						selector = !$scope.content?"":"[data-title*='"+($scope.content||"")+"']";
+					selector += !$scope.filterTag ? "": "[data-tags*=' "+$scope.filterTag+" ']";
+					
+					if(selector){
+						$li.addClass("hidden");
+						$li.filter(selector).removeClass("hidden");
+					}else{
+						$li.removeClass("hidden");
 					}
 				}
-				return arr;
 			};
 			
 			//查看历史
@@ -399,6 +420,7 @@ define(function(require,exports,module){
 			//删除todo
 			$scope.deleteTodo = function(notesId){
 				Todo.del($scope.todo.group.list,notesId);
+				angular.element(".container").append(dom.todoPanel);
 			};
 			
 			var timer;
@@ -409,8 +431,8 @@ define(function(require,exports,module){
 				timer = $timeout(function(){
 					$scope.todo = todo;
 					$scope.todo.group = todoGroup;
-					$scope.operaing = true;
 					target.append(dom.todoPanel);
+					$scope.operaing = true;
 				},300);
 			};
 			
@@ -426,6 +448,11 @@ define(function(require,exports,module){
 				Tag.add($scope);
 			};
 			
+			//删除标签
+			$scope.delTag = function(tag,index){
+				Tag.del(tag,$scope,index);
+			};
+			
 			//enter添加标签
 			$scope.tagKeyDown = function($event){
 				if($event.keyCode === 13)
@@ -434,7 +461,9 @@ define(function(require,exports,module){
 			
 			//标签与todo关联/取消关联
 			$scope.toggleTagToTodo = function(todo,xtag){
-				Tag.linkToTodo($scope,todo,xtag);
+				Tag.linkToTodo($scope,todo,xtag,function(){
+					
+				});
 			};
 			
 			//判断标签是否在todo的标签列表中

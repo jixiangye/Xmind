@@ -9,7 +9,8 @@ seajs.config({
         'angular':'../../lib/angular/1.1.5/angular.js',
         'commonjs':'../../../common/js/common.js',
         'uijs':'../../../common/js/ui.js',
-        'acejs':'//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js'
+        'acejs':'//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js',
+        'showdownjs':'../../../lib/showdown/showdown.js'
     },
     preload:['bootstrapcss','commoncss','uicss','animatecss','jquery'],
     debug:true

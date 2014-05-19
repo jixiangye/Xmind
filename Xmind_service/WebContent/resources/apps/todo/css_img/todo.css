@@ -56,6 +56,11 @@
 	display:block;
 } */
 
+.label{
+	display: inline-block;
+	padding: 4px 7px;
+}
+
 .tag-box{
 	padding:0px;
 }
@@ -67,25 +72,19 @@
 
 .tag-box .label{
 	margin-right:5px;
-	cursor:pointer;
 }
 
-.tag-add{
-	opacity:0.5;
-	cursor:pointer;
-}
-
-.tag-add-box:hover .tag-add{
-	opacity:1;
-}
-
-.tag-add-box input{
+.tag-ipt{
 	/* display:none; */
 	width:200px;
+	margin-left:-1px;
 	display:inline-block;
+	border-top-left-radius:0;
+	border-bottom-left-radius:0;
 }
 
-.tag-add-box:hover input{
+.tag-remove{
+	cursor:pointer;
 }
 
 .tag-panel{

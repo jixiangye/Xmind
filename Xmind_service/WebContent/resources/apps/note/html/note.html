@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Xmind</title>
+		<title>note</title>
 		<script type="text/javascript" src="../../../lib/seajs/2.2.1/sea-debug.js"></script>
 		<script type="text/javascript" src="../../../config/seajs.config.js"></script>
 		<script>
@@ -11,16 +11,91 @@
 	</head>
 	<body>
 		<publicheader></publicheader>
-		<div class="note">
+		<div class="container note" ng-controller="note">
+			<div class="">
+		    	<div class="btn-group pull-left">
+					<button type="button" class="btn btn-default" ng-click="status.list=!status.list"><span class="glyphicon glyphicon-list"></span></button>
+					<button type="button" class="btn btn-default" ng-click="status.edit=!status.edit"><span class="glyphicon glyphicon-pencil" ng-class={'glyphicon-eye-open':status.edit}></span></button>
+				</div>
+			    <div class="input-group note-input-group">
+				    <input type="text" class="form-control" ng-modal="note.title" placeholder="输入文件名">
+					<div class="input-group-btn">
+					  <button type="button" class="btn btn-default">类型：javascript</button>
+					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					    <span class="caret"></span>
+					    <span class="sr-only">类型选择</span>
+					  </button>
+					  <ul class="dropdown-menu pull-right" role="menu">
+					    <li><a href="#">html</a></li>
+					  </ul>
+					</div>
+			  	</div>
+		  	</div>
+		  	<div id="editor" class="note-content" ng-show="status.edit"></div>
+		  	<div class="note-view" ng-show="!status.edit"></div>
+		  	<div class="note-nav" ng-show="status.list">
+			  	<div class="note-list">
+			  		<div class="note-list-head">
+						<span class="glyphicon glyphicon-plus pull-right" ng-click="status.addNoteBook=true"></span>
+						笔记本
+			  			<div ng-show="status.addNoteBook"><input type="text" ng-model="noteBookName" ng-keydown="addNoteBook($event)"></div>
+			  		</div>
+			  		<ul>
+			  			<li ng-repeat="book in noteBooks">{{book.name}}</li>
+			  		</ul>
+			  	</div>
+			  	<ul class="note-cache">
+			  		<li>
+						<span class="glyphicon glyphicon-plus pull-right" ng-click="status.list=false"></span>未分类</li>
+			  		<li>javascript性能分析</li>
+			  	</ul>
+			  	<div class="note-slidebar">
+			  		<div class="note-slidebar-head">
+						<span class="glyphicon glyphicon-plus pull-right" ng-click="status.list=false"></span>
+						笔记
+			  		</div>
+					<ul>
+						<li>
+							<a class="active">node.js</a>
+							<ul>
+								<li><a><span class="glyphicon glyphicon-folder-open"></span>var</a></li>
+								<li><a><span class="glyphicon glyphicon-file"></span></>var</a></li>
+								<li><a>var</a></li>
+								<li><a>var</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="note-set">
+			
+			</div>
+		</div>
+		<!-- <div class="note">
 			<div class="note-left">
-				<div>javascirpt</div>
+			  	<div>
+			  		<input type="text">
+			  	</div>
+			  	<a href="#" class="active">
+			    	Cras justo odio
+			  	</a>
+			  	<a href="#">Dapibus ac facilisis in</a>
+			  	<a href="#">Morbi leo risus</a>
+			  	<a href="#">Porta ac consectetur ac</a>
+			  	<a href="#">Vestibulum at eros</a>
 			</div>
 			<div class="note-slidebar">
 				<ul>
-					<li>node.js</li>
+					<li>
+						<a class="active">node.js</a>
+						<ul>
+							<li><a>var</a></li>
+						</ul>
+					</li>
 				</ul>
 			</div>
 			<div id="editor" class="note-right"></div>
-		</div>
+			<div class="note-view"></div>
+		</div> -->
 	</body>
 </html>
