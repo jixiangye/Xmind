@@ -1,8 +1,6 @@
 <div class="aui-timepicker">
-	<div class="aui-tpk-label" ng-click="quckSelectDate($event)">
-		<span class="label label-default" data-date="{{quck.today}}">今天</span>
-		<span class="label label-default" data-date="{{quck.tomorrow}}">明天</span>
-		<span class="label label-default" data-date="{{quck.nextWeek}}">下周</span>
+	<div class="aui-tpk-label">
+		<span class="label label-default" ng-repeat="quckDate in quck" ng-click="quckSelectDate(quckDate.span)">{{quckDate.text}}</span>
 	</div>
 	<div class="aui-tpk-time">
 		<span class="aui-ipt-box aui-left-ipt">
@@ -27,7 +25,7 @@
 			<span ng-repeat="week in weeks">{{week}}</span>
 		</div>
 		<div class="aui-tpk-body clearfix" ng-click="selectDate($event)">
-			<span ng-repeat="day in days track by $index" ng-class="{today:day==today,day:day !== 0}">{{day !== 0 ? day:''}}</span>
+			<span ng-repeat="day in days track by $index" ng-class="{today:day==date.today,day:day !== 0}">{{day !== 0 ? day:''}}</span>
 		</div>
 	</div>
 	<div class="aui-tpk-toggle" ng-click="boxShow = !boxShow">

@@ -157,6 +157,10 @@ define(function(require,exports,module){
 						if(key === "reminderTime"){
 							todo.status = 2;
 							addTimer(todo);
+							prompt({
+								type:"success",
+								content:"设置提醒成功"
+							});
 						}
 					}
 					fun && fun(d);

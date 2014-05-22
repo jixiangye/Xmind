@@ -27,6 +27,14 @@ body{
 	overflow:hidden;
 }
 
+.note-box{
+	height:100%;
+}
+
+.note-box.active{
+	margin-left:410px;
+}
+
 .note-list{
 	position:absolute;
 	top:0;
@@ -112,9 +120,22 @@ body{
 	margin-left:85px;
 }
 
+.mode-select{
+	width:120px!important;
+}
+
 .note-content{
 	margin-top:10px;
 	height:100%;
 	border-radius:4px;
 	border:1px solid #CCC;
+}
+
+.note-view{
+	margin-top: 10px;
+	height: 100%;
+	border-radius: 4px;
+	border: 1px solid #CCC;
+	overflow: auto;
+	padding: 10px;
 }

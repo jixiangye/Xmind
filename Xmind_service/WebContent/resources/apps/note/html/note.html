@@ -12,32 +12,13 @@
 	<body>
 		<publicheader></publicheader>
 		<div class="container note" ng-controller="note">
-			<div class="">
-		    	<div class="btn-group pull-left">
-					<button type="button" class="btn btn-default" ng-click="status.list=!status.list"><span class="glyphicon glyphicon-list"></span></button>
-					<button type="button" class="btn btn-default" ng-click="status.edit=!status.edit"><span class="glyphicon glyphicon-pencil" ng-class={'glyphicon-eye-open':status.edit}></span></button>
-				</div>
-			    <div class="input-group note-input-group">
-				    <input type="text" class="form-control" ng-modal="note.title" placeholder="输入文件名">
-					<div class="input-group-btn">
-					  <button type="button" class="btn btn-default">类型：javascript</button>
-					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					    <span class="caret"></span>
-					    <span class="sr-only">类型选择</span>
-					  </button>
-					  <ul class="dropdown-menu pull-right" role="menu">
-					    <li><a href="#">html</a></li>
-					  </ul>
-					</div>
-			  	</div>
-		  	</div>
-		  	<div id="editor" class="note-content" ng-show="status.edit"></div>
-		  	<div class="note-view" ng-show="!status.edit"></div>
-		  	<div class="note-nav" ng-show="status.list">
+			<div class="note-nav" ng-show="status.list" ng-animate="'notenav'">
 			  	<div class="note-list">
 			  		<div class="note-list-head">
-						<span class="glyphicon glyphicon-plus pull-right" ng-click="status.addNoteBook=true"></span>
-						笔记本
+			  			<div ng-show="!status.addNoteBook">
+							<span class="glyphicon glyphicon-plus pull-right" ng-click="status.addNoteBook=true"></span>
+							笔记本
+						</div>
 			  			<div ng-show="status.addNoteBook"><input type="text" ng-model="noteBookName" ng-keydown="addNoteBook($event)"></div>
 			  		</div>
 			  		<ul>
@@ -67,35 +48,26 @@
 					</ul>
 				</div>
 			</div>
+			<div class="note-box" ng-class="{active:status.list}">
+				<div>
+			    	<div class="btn-group pull-left">
+						<button type="button" class="btn btn-default" ng-click="status.list=!status.list" ng-class="{active:status.list}"><span class="glyphicon glyphicon-list"></span></button>
+						<button type="button" class="btn btn-default" ng-click="status.edit=!status.edit;status.edit || changeToView()" ng-class={'active':!status.edit}><span class="glyphicon glyphicon-eye-open"></span></button>
+					</div>
+				    <div class="input-group note-input-group">
+					    <input type="text" class="form-control" ng-model="note.title" placeholder="输入文件名">
+						<div class="input-group-btn">
+							<select class="mode-select form-control" ng-model="note.type"></select>
+						</div>
+				  	</div>
+			  	</div>
+		  		<div id="editor" class="note-content" ng-show="status.edit"></div>
+		  		<div class="note-view" ng-show="!status.edit"></div>
+		  	</div>
+		  	
 			<div class="note-set">
 			
 			</div>
 		</div>
-		<!-- <div class="note">
-			<div class="note-left">
-			  	<div>
-			  		<input type="text">
-			  	</div>
-			  	<a href="#" class="active">
-			    	Cras justo odio
-			  	</a>
-			  	<a href="#">Dapibus ac facilisis in</a>
-			  	<a href="#">Morbi leo risus</a>
-			  	<a href="#">Porta ac consectetur ac</a>
-			  	<a href="#">Vestibulum at eros</a>
-			</div>
-			<div class="note-slidebar">
-				<ul>
-					<li>
-						<a class="active">node.js</a>
-						<ul>
-							<li><a>var</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-			<div id="editor" class="note-right"></div>
-			<div class="note-view"></div>
-		</div> -->
 	</body>
 </html>

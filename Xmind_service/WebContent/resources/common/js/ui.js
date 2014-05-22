@@ -168,28 +168,48 @@ define(function(require,exports,module){
 						return self.render();
 					},
 					lastWeek : function(){
-						return self.getAnyDate(null,null,this.d-7);
+						return self.getAnyDate(null,null,self.d-7);
 					},
 					nextWeek : function(){
-						return self.getAnyDate(null,null,this.d+7);
+						return self.getAnyDate(null,null,self.d+7);
 					},
 					lastMonth : function(){
-						return self.getAnyDate(null,--this.m,null);
+						return self.getAnyDate(null,--self.m,null);
 					},
 					nextMonth : function(){
-						return self.getAnyDate(null,++this.m,null);
+						return self.getAnyDate(null,++self.m,null);
 					},
 					lastYear : function(){
-						return self.getAnyDate(--this.y);
+						return self.getAnyDate(--self.y);
 					},
 					nextYear : function(){
-						return self.getAnyDate(++this.y);
+						return self.getAnyDate(++self.y);
 					}
 				};
 			
 			return self;
 		}])
 		.directive("timepicker",['dateFilter','calender',function(dateFilter,calender){
+			var now = calender.now,
+				initDate = calender.getAnyDate(),
+				format = function(date){
+					var list = ["year","month","day","hour","minute"],
+						item,
+						split="-",
+						str = "";
+					for(var i=0,len=list.length;i<len;i++){
+						split = i>1 ? i>2 ? i>3 ? "" : ":" : " " : "-";
+						item = ""+date[list[i]];
+						item = item ? item.length === 1?0+item:item:"00";
+						str += item+split;
+					}
+					return str+":00";
+				},
+				updateCalender = function(source,date){
+					angular.extend(source.date,date);
+					source.days = date.days;
+				};
+				
 			return {
 				restrict:"AE",
 				replace:true,
@@ -202,45 +222,18 @@ define(function(require,exports,module){
 						mIpt = $element.find(".aui-right-ipt .aui-tpk-time-ipt"),
 						dateBody = $element.find(".aui-tpk-body"),
 						body = dateBody.closest("body");
-						
-					var now = calender.now,
-						initDate = calender.getAnyDate(),
-						updateCalender = function(date){
-							$scope.today = date.today;
-							$scope.activeDay = date.active;
-							$scope.date.month = date.month;
-							$scope.date.year = date.year;
-							$scope.days = date.days;
-						},
-						format = function(date){
-							var list = ["year","month","day","hour","minute"],
-								item,
-								split="-",
-								str = "";
-							for(var i=0,len=list.length;i<len;i++){
-								split = i>1 ? i>2 ? i>3 ? "" : ":" : " " : "-";
-								item = ""+date[list[i]];
-								item = item ? item.length === 1?0+item:item:"00";
-								str += item+split;
-							}
-							return str+":00";
-						};
 					
 					$scope.weeks = calender.weeks;
-					$scope.today = initDate.today;
-					$scope.activeDay = initDate.active;
-					$scope.date = {
-						month:initDate.month,
-						year:initDate.year,
+					$scope.date = angular.extend(angular.copy(initDate),{
 						minute:"",
-						hour:"",
-					};
+						hour:""
+					}); 
 					$scope.days = initDate.days;
-					$scope.quck = {
-						today:dateFilter(new Date(now.year,now.month,now.day),"yyyy-MM-dd"),
-						tomorrow:dateFilter(new Date(now.year,now.month,now.day+1),"yyyy-MM-dd"),
-						nextWeek:dateFilter(new Date(now.year,now.month,now.day+7),"yyyy-MM-dd"),
-					};
+					$scope.quck = [
+						{text:"今天",span:"0"},
+						{text:"明天",span:"1"},
+						{text:"下周",span:"7"},
+					];
 					
 					//up和down 键修改时间
 					$scope.updateTime = function(event,m,k){
@@ -280,20 +273,18 @@ define(function(require,exports,module){
 					
 					//上个月
 					$scope.lastMonth = function(){
-						updateCalender(calender.lastMonth());
+						updateCalender($scope,calender.lastMonth());
 					};
 					
 					//下个月
 					$scope.nextMonth = function(){
-						updateCalender(calender.nextMonth());
+						updateCalender($scope,calender.nextMonth());
 					};
 					
 					//选择日期
 					$scope.selectDate = function(e){
 						if(e.target.tagName === "SPAN" && e.target.textContent !== ""){
 							var time;
-							dateBody.find(".active").removeClass("active");
-							angular.element(e.target).addClass("active");
 							$scope.date.day = e.target.textContent;
 							time = format($scope.date);
 							$element.hide();
@@ -302,15 +293,10 @@ define(function(require,exports,module){
 					};
 					
 					//快速选择日期
-					$scope.quckSelectDate = function(e){
-						if(e.target.tagName === "SPAN"){
-							var span = angular.element(e.target),
-								time; 
-							angular.element(".label.active").removeClass("active");
-							time = span.addClass("active").data("date")+" "+$scope.date.hour+":"+$scope.date.minute+":00";
+					$scope.quckSelectDate = function(span){
+							var time = dateFilter(new Date(now.year,now.month,now.day+(+span)),"yyyy-MM-dd")+" "+$scope.date.hour+":"+$scope.date.minute+":00";
 							$element.hide();
 							$scope.$parent.$broadcast("timepicker.select",time);
-						}
 					};
 					
 					$scope.$on("timepicker.open",function(scope,$event,time){
