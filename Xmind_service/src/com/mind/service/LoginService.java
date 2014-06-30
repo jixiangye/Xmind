@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mind.bean.BaseBean;
 import com.mind.bean.ErrorBean;
-import com.mind.bean.LoginBean;
 import com.mind.dao.ILoginDao;
 import com.mind.entity.User;
 import com.mind.utils.StringUtils;
@@ -17,19 +16,19 @@ public class LoginService {
 	@Autowired
 	private ILoginDao loginDao;
 
-	public LoginBean checkUsernameAndPassword(User user) {
-		LoginBean loginBean = new LoginBean();
+	public BaseBean checkUsernameAndPassword(User user) {
+	    BaseBean baseBean = new BaseBean();
 		User user2 = loginDao.findByUsernameAndPassword(user.getUsername(),
 				user.getPassword());
 		if (user2 == null) {
-			loginBean.getErrorBeanList().add(new ErrorBean("", "用户名或密码错误"));
+		    baseBean.getErrorBeanList().add(new ErrorBean("", "用户名或密码错误"));
 		} else {
-			loginBean.setUser(user2);
+		    baseBean.getResult().put("user", user2);
 		}
-		if (loginBean.getErrorBeanList().size() > 0) {
-			loginBean.setSuccess(false);
+		if (baseBean.getErrorBeanList().size() > 0) {
+		    baseBean.setSuccess(false);
 		}
-		return loginBean;
+		return baseBean;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)

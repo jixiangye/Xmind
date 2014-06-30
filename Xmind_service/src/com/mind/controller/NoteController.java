@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mind.bean.BaseBean;
 import com.mind.bean.ErrorBean;
 import com.mind.bean.NoteBean;
 import com.mind.service.NoteService;
@@ -45,25 +46,27 @@ public class NoteController {
 
 	@RequestMapping(value = "/getNotes", method = RequestMethod.POST)
 	@ResponseBody
-	public NoteBean getNotes(@RequestBody NoteBean noteBean, HttpSession session) {
+	public BaseBean getNotes(@RequestBody NoteBean noteBean, HttpSession session) {
+	    BaseBean baseBean = new BaseBean();
 		try {
-			noteBean = noteService.getNotes(session);
+		    baseBean = noteService.getNotes(session);
 		} catch (Exception e) {
-			noteBean.setSuccess(false);
-			noteBean.getErrorBeanList().add(new ErrorBean("", "查询失败"));
+		    baseBean.setSuccess(false);
+		    baseBean.getErrorBeanList().add(new ErrorBean("", "查询失败"));
 		}
-		return noteBean;
+		return baseBean;
 	}
 
 	@RequestMapping(value = "/getNotesHistory", method = RequestMethod.POST)
 	@ResponseBody
-	public NoteBean getNotesHistory(@RequestBody NoteBean noteBean) {
+	public BaseBean getNotesHistory(@RequestBody NoteBean noteBean) {
+	    BaseBean baseBean = new BaseBean();
 		try {
-			noteBean = noteService.getNotesHistory(noteBean);
+		    baseBean = noteService.getNotesHistory(noteBean);
 		} catch (Exception e) {
-			noteBean.setSuccess(false);
-			noteBean.getErrorBeanList().add(new ErrorBean("", "查询失败"));
+		    baseBean.setSuccess(false);
+		    baseBean.getErrorBeanList().add(new ErrorBean("", "查询失败"));
 		}
-		return noteBean;
+		return baseBean;
 	}
 }
