@@ -12,9 +12,6 @@
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving 
-		up static resources in the ${webappRoot}/resources directory -->
-	<resources mapping="/resources/**" location="/resources/" />
 	<default-servlet-handler/>
 	<context:component-scan base-package="com.mind" />
 
@@ -43,6 +40,7 @@
 		<beans:property name="statusCodes">
 			<beans:props>
 				<beans:prop key="error/errorNotLoggedIn">401</beans:prop>
+				<beans:prop key="error/error">500</beans:prop>
 			</beans:props>
 		</beans:property>
 	</beans:bean>

@@ -21,77 +21,76 @@ import com.mind.utils.DateUtils;
 @Entity
 @Table(name = "notes_history")
 public class NotesHistory implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "notes_history_id")
-	private Integer notesHistoryId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "notes_history_id")
+    private Integer           notesHistoryId;
 
-	private String content;
+    private String            content;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "modify_time")
-	private Date modifyTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modify_time")
+    private Date              modifyTime;
 
-	@Column(name = "notes_id")
-	private Integer notesId;
+    @Column(name = "notes_id")
+    private Integer           notesId;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "reminder_time")
-	private Date reminderTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "reminder_time")
+    private Date              reminderTime;
 
-	private String status;
+    private String            status;
 
-	public NotesHistory() {
-	}
+    public NotesHistory() {}
 
-	public Integer getNotesHistoryId() {
-		return this.notesHistoryId;
-	}
+    public Integer getNotesHistoryId() {
+        return this.notesHistoryId;
+    }
 
-	public void setNotesHistoryId(Integer notesHistoryId) {
-		this.notesHistoryId = notesHistoryId;
-	}
+    public void setNotesHistoryId(Integer notesHistoryId) {
+        this.notesHistoryId = notesHistoryId;
+    }
 
-	public String getContent() {
-		return this.content;
-	}
+    public String getContent() {
+        return this.content;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public String getModifyTime() {
-		return DateUtils.format(this.modifyTime, "yyyy-MM-dd HH:mm:ss");
-	}
+    public String getModifyTime() {
+        return DateUtils.format(this.modifyTime, "yyyy-MM-dd HH:mm:ss");
+    }
 
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
-	}
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
+    }
 
-	public Integer getNotesId() {
-		return this.notesId;
-	}
+    public Integer getNotesId() {
+        return this.notesId;
+    }
 
-	public void setNotesId(Integer notesId) {
-		this.notesId = notesId;
-	}
+    public void setNotesId(Integer notesId) {
+        this.notesId = notesId;
+    }
 
-	public String getReminderTime() {
-		return DateUtils.format(this.reminderTime, "yyyy-MM-dd HH:mm:ss");
-	}
+    public String getReminderTime() {
+        return DateUtils.format(this.reminderTime, "yyyy-MM-dd HH:mm:ss");
+    }
 
-	public void setReminderTime(Date reminderTime) {
-		this.reminderTime = reminderTime;
-	}
+    public void setReminderTime(Date reminderTime) {
+        this.reminderTime = reminderTime;
+    }
 
-	public String getStatus() {
-		return this.status;
-	}
+    public String getStatus() {
+        return this.status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
 }

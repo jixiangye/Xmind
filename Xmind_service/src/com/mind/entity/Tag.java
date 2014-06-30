@@ -9,62 +9,60 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
 /**
  * The persistent class for the tag database table.
  * 
  */
 @Entity
-@Table(name="tag")
+@Table(name = "tag")
 public class Tag implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="tag_id")
-	private Integer tagId;
-	
-	@Column(name="tag_name")
-	private String tagName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "tag_id")
+    private Integer           tagId;
 
-	@Column(name="tag_color")
-	private String tagColor;
-	
-	@Column(name="user_Id")
-	private Integer userId;
-	
-	public Tag() {
-	}
+    @Column(name = "tag_name")
+    private String            tagName;
 
-	public String getTagName() {
-		return this.tagName;
-	}
+    @Column(name = "tag_color")
+    private String            tagColor;
 
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
-	}
+    @Column(name = "user_Id")
+    private Integer           userId;
 
-	public String getTagColor() {
-		return tagColor;
-	}
+    public Tag() {}
 
-	public void setTagColor(String tagColor) {
-		this.tagColor = tagColor;
-	}
+    public String getTagName() {
+        return this.tagName;
+    }
 
-	public Integer getTagId() {
-		return tagId;
-	}
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
 
-	public void setTagId(Integer tagId) {
-		this.tagId = tagId;
-	}
+    public String getTagColor() {
+        return tagColor;
+    }
 
-	public Integer getUserId() {
-		return this.userId;
-	}
+    public void setTagColor(String tagColor) {
+        this.tagColor = tagColor;
+    }
 
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
+    public Integer getTagId() {
+        return tagId;
+    }
+
+    public void setTagId(Integer tagId) {
+        this.tagId = tagId;
+    }
+
+    public Integer getUserId() {
+        return this.userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 }
